@@ -460,8 +460,8 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 .genie-sidebar__nav a .nav-icon { width: 18px; display: inline-block; text-align: center; }
 .genie-main { min-width: 0; }
 
-/* Creative detail modal */
-.creative-modal {
+/* Creative detail modal (use .modal.creative-modal to override .modal's max-width) */
+.modal.creative-modal {
   max-width: 960px;
   padding: 0;
   border-radius: 16px;
