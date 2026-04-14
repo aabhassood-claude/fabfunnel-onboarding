@@ -105,29 +105,105 @@
       </div>
     </div>
 
-    <!-- Mode tabs (friendlier labels + helper text) -->
+    <!-- Output format (Static/Video) -->
     <div class="friendly-section">
       <div class="friendly-section__head">
         <div class="step-num">1</div>
+        <div>
+          <div class="step-title">What do you want to generate?</div>
+          <div class="step-desc">Pick a format — fields below will adapt.</div>
+        </div>
+      </div>
+      <div class="format-cards" style="margin-top:14px;">
+        <button class="format-card active" id="fmtImage" onclick="setFormat('image')">
+          <div class="format-card__icon">🖼️</div>
+          <div class="format-card__title">Static Image</div>
+          <div class="format-card__desc">Product shots, ads, social posts. 4 variations in ~15s.</div>
+        </button>
+        <button class="format-card" id="fmtVideo" onclick="setFormat('video')">
+          <div class="format-card__icon">🎬</div>
+          <div class="format-card__title">Video</div>
+          <div class="format-card__desc">Short-form reels, UGC-style, product demos. 6–30 sec.</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode tabs (friendlier labels + helper text) -->
+    <div class="friendly-section">
+      <div class="friendly-section__head">
+        <div class="step-num">2</div>
         <div>
           <div class="step-title">Choose what you're creating for</div>
           <div class="step-desc">Switch modes anytime — your inputs are saved.</div>
         </div>
       </div>
-      <div class="mode-tabs" style="margin-top:14px;">
+      <div class="mode-tabs" id="subTabs" style="margin-top:14px;">
         <button class="tab tab--active" data-mode="ecom">🛒 E-com</button>
         <button class="tab" data-mode="affiliate">⚡ Affiliate</button>
         <span class="tab-divider"></span>
-        <button class="tab tab--active">Product Ads</button>
-        <button class="tab">Brand Ads</button>
-        <button class="tab">Product Asset Creative</button>
+        <!-- Image sub-tabs -->
+        <button class="tab tab--active fmt-image">Product Ads</button>
+        <button class="tab fmt-image">Brand Ads</button>
+        <button class="tab fmt-image">Product Asset Creative</button>
+        <!-- Video sub-tabs (hidden by default) -->
+        <button class="tab tab--active fmt-video hidden">Product Demo</button>
+        <button class="tab fmt-video hidden">UGC-style Reel</button>
+        <button class="tab fmt-video hidden">Brand Story</button>
+      </div>
+    </div>
+
+    <!-- Video-specific settings (only shown for Video) -->
+    <div class="friendly-section fmt-video-only hidden">
+      <div class="friendly-section__head">
+        <div class="step-num">2b</div>
+        <div>
+          <div class="step-title">Video settings</div>
+          <div class="step-desc">Set duration, aspect ratio, and audio style.</div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Duration</label>
+        <div class="chip-group">
+          <span class="chip" onclick="selectOne(this)">6 sec</span>
+          <span class="chip active" onclick="selectOne(this)">15 sec</span>
+          <span class="chip" onclick="selectOne(this)">30 sec</span>
+          <span class="chip" onclick="selectOne(this)">60 sec</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Aspect ratio</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="selectOne(this)">📱 9:16 (Reels/TikTok)</span>
+          <span class="chip" onclick="selectOne(this)">⬛ 1:1 (Square)</span>
+          <span class="chip" onclick="selectOne(this)">🖥 16:9 (YouTube)</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Voiceover / Music</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="selectOne(this)">🎵 Trending music</span>
+          <span class="chip" onclick="selectOne(this)">🎙 AI voiceover</span>
+          <span class="chip" onclick="selectOne(this)">🤐 No audio</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:0;">
+        <label>Scene count <span style="color:var(--muted); font-weight:400;">(we'll auto-storyboard)</span></label>
+        <div class="chip-group">
+          <span class="chip" onclick="selectOne(this)">2 scenes</span>
+          <span class="chip active" onclick="selectOne(this)">3 scenes</span>
+          <span class="chip" onclick="selectOne(this)">4–6 scenes</span>
+        </div>
       </div>
     </div>
 
     <!-- Brand search panel -->
     <div class="friendly-section">
       <div class="friendly-section__head">
-        <div class="step-num">2</div>
+        <div class="step-num">3</div>
         <div>
           <div class="step-title">Pick a brand or paste a product URL</div>
           <div class="step-desc">We'll auto-pull images, colors, and product info.</div>
@@ -163,7 +239,7 @@
     <!-- Strategies -->
     <div class="friendly-section">
       <div class="friendly-section__head">
-        <div class="step-num">3</div>
+        <div class="step-num">4</div>
         <div>
           <div class="step-title">Pick a strategy <span class="badge-optional">Select at least 1</span></div>
           <div class="step-desc">Proven ad angles — we'll apply them to your brand.</div>
@@ -219,38 +295,47 @@
     <!-- Prompt + suggestions -->
     <div class="friendly-section">
       <div class="friendly-section__head">
-        <div class="step-num">4</div>
+        <div class="step-num">5</div>
         <div>
           <div class="step-title">Describe your vision <span class="badge-optional">optional</span></div>
-          <div class="step-desc">Add any specific ideas — or let Genie decide.</div>
+          <div class="step-desc" id="promptDesc">Add any specific ideas — or let Genie decide.</div>
         </div>
       </div>
 
       <div style="padding: 12px 0 8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
         <span style="font-size:12px; color:var(--muted);">Quick vibes:</span>
-        <span class="chip">Product Focus</span>
-        <span class="chip">Lifestyle</span>
-        <span class="chip">UGC Style</span>
-        <span class="chip">Offer Highlight</span>
-        <span class="chip">Bold & Eye-catching</span>
+        <div id="vibeChips" style="display:contents;">
+          <!-- Image vibes -->
+          <span class="chip fmt-image">Product Focus</span>
+          <span class="chip fmt-image">Lifestyle</span>
+          <span class="chip fmt-image">UGC Style</span>
+          <span class="chip fmt-image">Offer Highlight</span>
+          <span class="chip fmt-image">Bold & Eye-catching</span>
+          <!-- Video vibes -->
+          <span class="chip fmt-video hidden">Unboxing</span>
+          <span class="chip fmt-video hidden">Before/After</span>
+          <span class="chip fmt-video hidden">Day in the life</span>
+          <span class="chip fmt-video hidden">Problem → Solution</span>
+          <span class="chip fmt-video hidden">Testimonial</span>
+        </div>
       </div>
 
       <div class="prompt-area">
-        <textarea placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."></textarea>
+        <textarea id="promptText" placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."></textarea>
       </div>
     </div>
 
     <!-- Generate bar (friendlier) -->
     <div class="genbar">
       <div class="genbar__left">
-        <span class="genbar__chip" title="Aspect ratio">Auto ▾</span>
-        <span class="genbar__chip" title="Number of outputs">🖼 4</span>
+        <span class="genbar__chip" id="barFormat">🖼 Static Image</span>
+        <span class="genbar__chip" id="barOutputs">4 outputs</span>
         <span class="genbar__chip">E-com</span>
-        <span class="genbar__chip">Product Ads</span>
+        <span class="genbar__chip" id="barSubMode">Product Ads</span>
       </div>
       <div class="genbar__right">
-        <span style="color:var(--muted); font-size:13px;">⚡ Uses 4 credits</span>
-        <button class="btn btn--primary">✨ Generate →</button>
+        <span style="color:var(--muted); font-size:13px;" id="barCredits">⚡ Uses 4 credits</span>
+        <button class="btn btn--primary" id="barBtn">✨ Generate →</button>
       </div>
     </div>
 
@@ -310,6 +395,38 @@
       t.textContent = '✓ ' + msg;
       document.body.appendChild(t);
       setTimeout(() => t.remove(), 3500);
+    }
+
+    // Format switcher (Static Image vs Video)
+    function setFormat(fmt) {
+      document.getElementById('fmtImage').classList.toggle('active', fmt === 'image');
+      document.getElementById('fmtVideo').classList.toggle('active', fmt === 'video');
+      document.querySelectorAll('.fmt-image').forEach(el => el.classList.toggle('hidden', fmt !== 'image'));
+      document.querySelectorAll('.fmt-video').forEach(el => el.classList.toggle('hidden', fmt !== 'video'));
+      document.querySelectorAll('.fmt-video-only').forEach(el => el.classList.toggle('hidden', fmt !== 'video'));
+
+      // Update generate bar + prompt hint based on format
+      if (fmt === 'video') {
+        document.getElementById('barFormat').textContent = '🎬 Video';
+        document.getElementById('barOutputs').textContent = '1 video';
+        document.getElementById('barSubMode').textContent = 'Product Demo';
+        document.getElementById('barCredits').textContent = '⚡ Uses 20 credits';
+        document.getElementById('barBtn').textContent = '🎬 Generate Video →';
+        document.getElementById('promptText').placeholder = 'e.g., Quick 15s product demo, bright studio lighting, pacy cuts...';
+        document.getElementById('promptDesc').textContent = 'Describe the story or vibe — we\'ll storyboard and render.';
+      } else {
+        document.getElementById('barFormat').textContent = '🖼 Static Image';
+        document.getElementById('barOutputs').textContent = '4 outputs';
+        document.getElementById('barSubMode').textContent = 'Product Ads';
+        document.getElementById('barCredits').textContent = '⚡ Uses 4 credits';
+        document.getElementById('barBtn').textContent = '✨ Generate →';
+        document.getElementById('promptText').placeholder = 'e.g., Summer vibes, people laughing on a beach, warm colors...';
+        document.getElementById('promptDesc').textContent = 'Add any specific ideas — or let Genie decide.';
+      }
+    }
+    function selectOne(el) {
+      el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
     }
 
     document.querySelectorAll('.mode-tabs .tab').forEach(t => {
