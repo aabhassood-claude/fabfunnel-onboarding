@@ -12,7 +12,7 @@
       <a href="done.html" id="dashBack" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Brand Details</a>
       <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
     </div>
-    <div style="display:flex; align-items:center; gap:12px; font-size:13px;">
+    <div class="topbar__right">
       <div class="credits-pill" title="Credits remaining · enough for ~10 images / 2 videos">
         <span class="credits-pill__bolt">⚡</span>
         <span class="credits-pill__count">42</span>
@@ -349,10 +349,11 @@
     if (setupPending) {
       document.getElementById('setupBanner').classList.remove('hidden');
       document.getElementById('dashBack').href = 'login.html';
+      document.getElementById('dashBack').textContent = '← Sign in';
     } else if (isExisting) {
-      // Existing user lands with brand summary pre-populated
       document.getElementById('brandSummary').classList.remove('hidden');
       document.getElementById('dashBack').href = 'login.html';
+      document.getElementById('dashBack').textContent = '← Sign in';
     }
 
     function openSetupModal() {
