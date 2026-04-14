@@ -439,7 +439,8 @@
         t.classList.add('tab--active');
       });
     });
-    document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
+    // Only attach the toggle handler to chips that don't already have an inline onclick handler
+    document.querySelectorAll('.chip:not([onclick])').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
     document.querySelectorAll('.strategy-card').forEach(c => c.addEventListener('click', () => c.classList.toggle('selected')));
     document.querySelectorAll('.approach-toggle button, .view-toggle button, .tabs-mini button').forEach(b => {
       b.addEventListener('click', () => {
