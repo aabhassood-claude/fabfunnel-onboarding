@@ -146,21 +146,40 @@
       </select>
     </div>
 
-    <!-- Brand input (primary) -->
+    <!-- Brand selection (primary) -->
     <div class="work-section">
-      <label class="work-label">Brand <span class="work-label__hint">or paste a product URL</span></label>
-      <div class="search-box search-box--highlight">
-        <span style="color:var(--muted);">🔍</span>
-        <input type="text" placeholder="Paste URL or search..." />
-        <span class="kbd-hint">↵</span>
+      <label class="work-label">Select your brand <span class="work-label__hint">which brand is this creative for?</span></label>
+
+      <div class="brand-picker">
+        <button class="brand-option active" onclick="selectBrand(this)">
+          <div class="brand-option__logo">T</div>
+          <div class="brand-option__info">
+            <div class="brand-option__name">test</div>
+            <div class="brand-option__meta">24 products · Apparel</div>
+          </div>
+          <span class="brand-option__check">✓</span>
+        </button>
+        <button class="brand-option" onclick="selectBrand(this)">
+          <div class="brand-option__logo">G</div>
+          <div class="brand-option__info">
+            <div class="brand-option__name">Glossier</div>
+            <div class="brand-option__meta">12 products · Beauty</div>
+          </div>
+          <span class="brand-option__check">✓</span>
+        </button>
+        <button class="brand-option brand-option--add" onclick="toggleAddBrand()">
+          <div class="brand-option__logo brand-option__logo--plus">+</div>
+          <div class="brand-option__info">
+            <div class="brand-option__name">Add new brand</div>
+            <div class="brand-option__meta">Paste a URL — we'll analyze it</div>
+          </div>
+        </button>
       </div>
-      <div class="brand-pills" style="margin-top:10px;">
-        <span class="pill">🅰 Airbnb</span>
-        <span class="pill">✺ amalfa.com</span>
-        <span class="pill">🍎 Apple</span>
-        <span class="pill">🦉 Duolingo</span>
-        <span class="pill">◐ Glossier</span>
-        <span class="pill">L Lululemon</span>
+
+      <div id="addBrandInput" class="search-box hidden" style="margin-top:12px;">
+        <span style="color:var(--muted);">🔗</span>
+        <input type="text" placeholder="https://newstore.com" />
+        <button class="btn btn--primary" style="padding:6px 14px; font-size:12px;">Analyze</button>
       </div>
     </div>
 
@@ -184,9 +203,9 @@
       </div>
     </div>
 
-    <!-- Advanced (collapsed by default) -->
+    <!-- Advanced Options (collapsed by default) -->
     <details class="advanced">
-      <summary>⚙️ More options <span class="advanced__hint">— strategy, video settings, research</span></summary>
+      <summary>⚙️ Advanced Options <span class="advanced__hint">— strategy, video settings, research</span></summary>
 
       <!-- Video settings -->
       <div class="adv-block fmt-video-only hidden">
@@ -355,6 +374,17 @@
     function selectOne(el) {
       el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
+    }
+    function selectBrand(btn) {
+      if (btn.classList.contains('brand-option--add')) return;
+      document.querySelectorAll('.brand-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('addBrandInput').classList.add('hidden');
+    }
+    function toggleAddBrand() {
+      const input = document.getElementById('addBrandInput');
+      input.classList.toggle('hidden');
+      if (!input.classList.contains('hidden')) input.querySelector('input').focus();
     }
 
     document.querySelectorAll('.mode-tabs .tab').forEach(t => {
