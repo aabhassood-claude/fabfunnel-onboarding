@@ -62,9 +62,10 @@
 
         <div class="gallery-toolbar">
           <div class="pill-toggle">
-            <button class="active" data-filter="all">All <span class="count">12</span></button>
-            <button data-filter="image">🖼 Images <span class="count">9</span></button>
-            <button data-filter="video">🎬 Videos <span class="count">3</span></button>
+            <button class="active" data-filter="all">All <span class="count" id="countAll">12</span></button>
+            <button data-filter="image">🖼 Images <span class="count" id="countImage">9</span></button>
+            <button data-filter="video">🎬 Videos <span class="count" id="countVideo">3</span></button>
+            <button data-filter="fav">⭐ Favorites <span class="count" id="countFav">0</span></button>
           </div>
 
           <div class="toolbar-right">
@@ -89,84 +90,84 @@
 
         <div class="creatives-grid" id="creativesGrid">
           <div class="creative" data-type="image" data-brand="test">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👕</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👕</span></div>
             <div class="creative__info">
               <div class="creative__title">Summer Tee Launch</div>
               <div class="creative__meta">test · Product Ads · 2 days ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👟</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👟</span></div>
             <div class="creative__info">
               <div class="creative__title">Sneaker Hero Shot</div>
               <div class="creative__meta">test · Brand Ads · 3 days ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="video">
-            <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🧥</span><span class="creative__duration">15s</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🧥</span><span class="creative__duration">15s</span></div>
             <div class="creative__info">
               <div class="creative__title">Linen Jacket Reel</div>
               <div class="creative__meta">test · Product Demo · 4 days ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👖</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👖</span></div>
             <div class="creative__info">
               <div class="creative__title">Slim Trousers Lifestyle</div>
               <div class="creative__meta">test · Product Ads · 5 days ago</div>
             </div>
           </div>
           <div class="creative" data-brand="Glossier" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🧢</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🧢</span></div>
             <div class="creative__info">
               <div class="creative__title">Canvas Cap Social Post</div>
               <div class="creative__meta">Glossier · Product Asset · 1 week ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="video">
-            <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">👜</span><span class="creative__duration">30s</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">👜</span><span class="creative__duration">30s</span></div>
             <div class="creative__info">
               <div class="creative__title">Tote Bag Unboxing</div>
               <div class="creative__meta">test · UGC-style Reel · 1 week ago</div>
             </div>
           </div>
           <div class="creative" data-brand="Glossier" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">💄</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">💄</span></div>
             <div class="creative__info">
               <div class="creative__title">Lipstick Promo</div>
               <div class="creative__meta">Glossier · Brand Ads · 1 week ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🌸</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🌸</span></div>
             <div class="creative__info">
               <div class="creative__title">Spring Collection</div>
               <div class="creative__meta">test · Offer Highlight · 2 weeks ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">✨</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">✨</span></div>
             <div class="creative__info">
               <div class="creative__title">Brand Story Hero</div>
               <div class="creative__meta">test · Brand Ads · 2 weeks ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="video">
-            <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🏃</span><span class="creative__duration">6s</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🏃</span><span class="creative__duration">6s</span></div>
             <div class="creative__info">
               <div class="creative__title">Flash Sale Teaser</div>
               <div class="creative__meta">test · Brand Story · 3 weeks ago</div>
             </div>
           </div>
           <div class="creative" data-brand="test" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🎁</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🎁</span></div>
             <div class="creative__info">
               <div class="creative__title">Holiday Gift Set</div>
               <div class="creative__meta">test · Product Ads · 1 month ago</div>
             </div>
           </div>
           <div class="creative" data-brand="Glossier" data-type="image">
-            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">📸</span></div>
+            <div class="creative__thumb"><button class="fav-btn" onclick="toggleFav(event, this)" aria-label="Favorite">☆</button><span class="creative__tag">🖼 Image</span><span class="creative__emoji">📸</span></div>
             <div class="creative__info">
               <div class="creative__title">Campaign Launch</div>
               <div class="creative__meta">Glossier · Product Asset · 1 month ago</div>
@@ -188,7 +189,8 @@
       const brandFilter = document.getElementById('brandFilter').value;
       let visibleCount = 0;
       document.querySelectorAll('.creative').forEach(c => {
-        const typeOk = typeFilter === 'all' || c.dataset.type === typeFilter;
+        const isFav = c.classList.contains('creative--fav');
+        const typeOk = typeFilter === 'all' || (typeFilter === 'fav' ? isFav : c.dataset.type === typeFilter);
         const brandOk = brandFilter === 'all' || c.dataset.brand === brandFilter;
         const show = typeOk && brandOk;
         c.classList.toggle('hidden', !show);
@@ -196,6 +198,28 @@
       });
       document.getElementById('emptyGallery').classList.toggle('hidden', visibleCount > 0);
     }
+
+    function toggleFav(e, btn) {
+      e.stopPropagation();
+      const creative = btn.closest('.creative');
+      creative.classList.toggle('creative--fav');
+      btn.textContent = creative.classList.contains('creative--fav') ? '★' : '☆';
+      updateCounts();
+      // Re-apply filter in case favorites filter is active
+      applyFilters();
+    }
+
+    function updateCounts() {
+      const all = document.querySelectorAll('.creative').length;
+      const img = document.querySelectorAll('.creative[data-type="image"]').length;
+      const vid = document.querySelectorAll('.creative[data-type="video"]').length;
+      const fav = document.querySelectorAll('.creative--fav').length;
+      document.getElementById('countAll').textContent = all;
+      document.getElementById('countImage').textContent = img;
+      document.getElementById('countVideo').textContent = vid;
+      document.getElementById('countFav').textContent = fav;
+    }
+    updateCounts();
 
     document.querySelectorAll('.gallery-toolbar .pill-toggle button[data-filter]').forEach(btn => {
       btn.addEventListener('click', () => {

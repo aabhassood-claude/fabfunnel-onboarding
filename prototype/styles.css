@@ -549,6 +549,22 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   border-radius: 10px;
   color: var(--text);
 }
+.fav-btn {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.95);
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  transition: color .15s, transform .15s;
+}
+.fav-btn:hover { transform: scale(1.1); color: var(--text); }
+.creative--fav .fav-btn { color: #d4a017; }
 .creative__tag--video { background: var(--active); color: #fff; }
 .creative__duration {
   position: absolute;
