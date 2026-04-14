@@ -350,6 +350,82 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   display: flex; justify-content: space-between; align-items: center;
   padding: 10px 0 18px;
 }
+.genie-welcome {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  flex-wrap: wrap; gap: 12px;
+}
+
+/* Friendly stepped sections */
+.friendly-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.friendly-section__head {
+  display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap;
+}
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--active);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-title { font-weight: 600; font-size: 15px; }
+.step-desc { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.badge-optional {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--accent-bg);
+  color: var(--muted);
+  font-weight: 500;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.friendly-section .panel { border-radius: 10px; border: 1px solid var(--border); }
+
+.search-box--highlight {
+  border: 2px solid var(--border-strong);
+  padding: 12px 14px;
+}
+.kbd-hint {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--accent-bg);
+}
+.tabs-mini button.active {
+  background: var(--active);
+  color: #fff;
+  border-color: var(--active);
+}
+
+.approach-row {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.help-row {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 24px 0;
+  display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+}
+.help-row a { text-decoration: underline; }
 .view-toggle {
   display: inline-flex;
   background: var(--surface);

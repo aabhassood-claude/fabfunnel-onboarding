@@ -19,137 +19,172 @@
   </div>
 
   <div class="genie-wrap">
-    <!-- Header -->
-    <div class="genie-header">
-      <h1 style="font-size:22px;">✨ Genie 5.0</h1>
+    <!-- Friendly welcome header -->
+    <div class="genie-welcome">
+      <div>
+        <h1 style="font-size:22px; margin-bottom:2px;">👋 Welcome, let's create your first ad</h1>
+        <p style="color:var(--muted); font-size:13px; margin:0;">Follow the 3 steps below — it takes about a minute.</p>
+      </div>
       <div class="view-toggle">
         <button class="active">▦ Cards</button>
         <button>▥ Split</button>
       </div>
     </div>
 
-    <!-- Mode + sub-mode tabs -->
-    <div class="mode-tabs">
-      <button class="tab tab--active" data-mode="ecom">🛒 E-com</button>
-      <button class="tab" data-mode="affiliate">⚡ Affiliate</button>
-      <span class="tab-divider"></span>
-      <button class="tab tab--active">Product Ads</button>
-      <button class="tab">Brand Ads</button>
-      <button class="tab">Product Asset Creative</button>
+    <!-- Mode tabs (friendlier labels + helper text) -->
+    <div class="friendly-section">
+      <div class="friendly-section__head">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Choose what you're creating for</div>
+          <div class="step-desc">Switch modes anytime — your inputs are saved.</div>
+        </div>
+      </div>
+      <div class="mode-tabs" style="margin-top:14px;">
+        <button class="tab tab--active" data-mode="ecom">🛒 E-com</button>
+        <button class="tab" data-mode="affiliate">⚡ Affiliate</button>
+        <span class="tab-divider"></span>
+        <button class="tab tab--active">Product Ads</button>
+        <button class="tab">Brand Ads</button>
+        <button class="tab">Product Asset Creative</button>
+      </div>
     </div>
 
     <!-- Brand search panel -->
-    <div class="panel">
-      <div class="panel__label">BRAND / URL</div>
-      <div class="search-box">
-        <span style="color:var(--muted);">🔍</span>
-        <input type="text" placeholder="Search brand or paste product URL..." />
-        <span style="color:var(--muted);">▾</span>
+    <div class="friendly-section">
+      <div class="friendly-section__head">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Pick a brand or paste a product URL</div>
+          <div class="step-desc">We'll auto-pull images, colors, and product info.</div>
+        </div>
       </div>
-      <div class="brand-pills">
-        <span class="pill">🅰 Airbnb</span>
-        <span class="pill">✺ amalfa.com</span>
-        <span class="pill">🍎 Apple</span>
-        <span class="pill">🦉 Duolingo</span>
-        <span class="pill">◐ Glossier</span>
-        <span class="pill">G google</span>
-        <span class="pill">L Lululemon</span>
-        <span class="pill pill--muted">— Nil</span>
-      </div>
-    </div>
 
-    <!-- Research enrichment (collapsible) -->
-    <div class="panel panel--collapse">
-      <div class="panel__head" onclick="this.parentElement.classList.toggle('open')">
-        <span>▸ RESEARCH ENRICHMENT <span style="color:var(--muted); font-weight:400; font-size:12px;">optional</span></span>
+      <div class="panel" style="margin-top:14px;">
+        <div class="search-box search-box--highlight">
+          <span style="color:var(--muted);">🔍</span>
+          <input type="text" placeholder="Paste a URL or search..." />
+          <span class="kbd-hint">↵ Enter</span>
+        </div>
+        <div style="font-size:12px; color:var(--muted); margin:10px 0 8px;">Or try one of these:</div>
+        <div class="brand-pills">
+          <span class="pill">🅰 Airbnb</span>
+          <span class="pill">✺ amalfa.com</span>
+          <span class="pill">🍎 Apple</span>
+          <span class="pill">🦉 Duolingo</span>
+          <span class="pill">◐ Glossier</span>
+          <span class="pill">G google</span>
+          <span class="pill">L Lululemon</span>
+        </div>
+      </div>
+
+      <!-- Research enrichment - friendlier framing -->
+      <div class="panel panel--collapse" style="margin-top:10px;">
+        <div class="panel__head" onclick="this.parentElement.classList.toggle('open')">
+          <span>➕ Add extra research <span style="color:var(--muted); font-weight:400; font-size:12px;">— optional, helps Genie match your tone</span></span>
+        </div>
       </div>
     </div>
 
     <!-- Strategies -->
-    <div class="panel">
-      <div class="panel__header-row">
-        <div class="panel__label" style="margin:0;">📋 Strategies <span style="color:var(--muted); font-weight:400; margin-left:6px;">Select at least 1</span></div>
-        <div class="tabs-mini">
+    <div class="friendly-section">
+      <div class="friendly-section__head">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Pick a strategy <span class="badge-optional">Select at least 1</span></div>
+          <div class="step-desc">Proven ad angles — we'll apply them to your brand.</div>
+        </div>
+        <div class="tabs-mini" style="margin-left:auto;">
+          <button class="active">✨ Recommended</button>
           <button>Saved</button>
-          <button>New</button>
-          <button>Tune</button>
+          <button>Browse all</button>
         </div>
       </div>
-      <div class="strategy-grid">
+
+      <div class="strategy-grid" style="margin-top:14px;">
         <div class="strategy-card">
           <div class="strategy-card__thumb">👥</div>
-          <div class="strategy-card__title">Before/After...</div>
-          <div class="strategy-card__desc">See the difference in just 7 days</div>
+          <div class="strategy-card__title">Before / After</div>
+          <div class="strategy-card__desc">Show transformation in 7 days — great for beauty, fitness.</div>
           <div class="tag-row">
             <span class="tag">Comparison</span>
-            <span class="tag">conversion</span>
-            <span class="tag">proof</span>
+            <span class="tag">Conversion</span>
           </div>
         </div>
         <div class="strategy-card">
           <div class="strategy-card__thumb">⭐</div>
-          <div class="strategy-card__title">Social Proof Authority</div>
-          <div class="strategy-card__desc">Join 50K+ satisfied customers</div>
+          <div class="strategy-card__title">Social Proof</div>
+          <div class="strategy-card__desc">"Join 50K+ customers" — builds trust fast.</div>
           <div class="tag-row">
             <span class="tag">Trust</span>
-            <span class="tag">trust</span>
             <span class="tag">UGC</span>
           </div>
         </div>
         <div class="strategy-card">
           <div class="strategy-card__thumb">⏰</div>
-          <div class="strategy-card__title">Urgency Flash Sale</div>
-          <div class="strategy-card__desc">Only 24 hours left — don't miss out</div>
+          <div class="strategy-card__title">Urgency / Flash Sale</div>
+          <div class="strategy-card__desc">"24 hours left" — for promos and launches.</div>
           <div class="tag-row">
             <span class="tag">FOMO</span>
-            <span class="tag">Custom</span>
-            <span class="tag">sale</span>
+            <span class="tag">Sale</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Approach -->
-    <div class="panel">
-      <div class="panel__header-row">
-        <div class="panel__label" style="margin:0;">APPROACH</div>
+      <!-- Approach as inline radio -->
+      <div class="approach-row">
+        <span style="font-size:13px; color:var(--muted);">Style of generation:</span>
         <div class="approach-toggle">
-          <button>📄 Templates</button>
+          <button>📄 Use Templates</button>
           <button class="active">✨ Fresh AI</button>
         </div>
+        <span style="font-size:12px; color:var(--muted);">💡 Fresh AI creates concepts from scratch.</span>
       </div>
-      <div style="color:var(--muted); font-size:14px;">⚡ AI will generate fresh concepts from scratch</div>
     </div>
 
-    <!-- Style suggestion chips -->
-    <div style="padding: 12px 0; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-      <span style="font-size:13px; color:var(--muted);">📎 Try:</span>
-      <span class="chip">Product Focus</span>
-      <span class="chip">Lifestyle</span>
-      <span class="chip">UGC Style</span>
-      <span class="chip">Offer Highlight</span>
-      <span class="chip">Bold & Eye-catching</span>
+    <!-- Prompt + suggestions -->
+    <div class="friendly-section">
+      <div class="friendly-section__head">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Describe your vision <span class="badge-optional">optional</span></div>
+          <div class="step-desc">Add any specific ideas — or let Genie decide.</div>
+        </div>
+      </div>
+
+      <div style="padding: 12px 0 8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span style="font-size:12px; color:var(--muted);">Quick vibes:</span>
+        <span class="chip">Product Focus</span>
+        <span class="chip">Lifestyle</span>
+        <span class="chip">UGC Style</span>
+        <span class="chip">Offer Highlight</span>
+        <span class="chip">Bold & Eye-catching</span>
+      </div>
+
+      <div class="prompt-area">
+        <textarea placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."></textarea>
+      </div>
     </div>
 
-    <!-- Prompt -->
-    <div class="prompt-area">
-      <textarea placeholder="Describe the ad you want... (optional)"></textarea>
-    </div>
-
-    <!-- Generate bar -->
+    <!-- Generate bar (friendlier) -->
     <div class="genbar">
       <div class="genbar__left">
-        <span class="genbar__chip">Auto ▾</span>
-        <span class="genbar__chip">− 4 +</span>
+        <span class="genbar__chip" title="Aspect ratio">Auto ▾</span>
+        <span class="genbar__chip" title="Number of outputs">🖼 4</span>
         <span class="genbar__chip">E-com</span>
-        <span class="genbar__chip">Product focused</span>
-        <span class="genbar__chip">Ad Copy</span>
-        <span class="genbar__chip">4 outputs</span>
+        <span class="genbar__chip">Product Ads</span>
       </div>
       <div class="genbar__right">
-        <span style="color:var(--muted); font-size:13px;">⚡ −4</span>
-        <button class="btn btn--primary">✨ Generate</button>
+        <span style="color:var(--muted); font-size:13px;">⚡ Uses 4 credits</span>
+        <button class="btn btn--primary">✨ Generate →</button>
       </div>
+    </div>
+
+    <!-- Help footer -->
+    <div class="help-row">
+      <span>Not sure where to start? <a href="#">Watch a 60-sec demo</a></span>
+      <span>·</span>
+      <span><a href="#">Chat with us</a></span>
     </div>
   </div>
 
@@ -158,7 +193,6 @@
   <script>
     document.querySelectorAll('.mode-tabs .tab').forEach(t => {
       t.addEventListener('click', () => {
-        // tabs with data-mode are the Ecom/Affiliate group
         if (t.dataset.mode) {
           document.querySelectorAll('.mode-tabs .tab[data-mode]').forEach(x => x.classList.remove('tab--active'));
         } else {
@@ -169,7 +203,7 @@
     });
     document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
     document.querySelectorAll('.strategy-card').forEach(c => c.addEventListener('click', () => c.classList.toggle('selected')));
-    document.querySelectorAll('.approach-toggle button, .view-toggle button').forEach(b => {
+    document.querySelectorAll('.approach-toggle button, .view-toggle button, .tabs-mini button').forEach(b => {
       b.addEventListener('click', () => {
         b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
