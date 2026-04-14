@@ -631,10 +631,6 @@
         }
         document.getElementById('brandSummary').classList.remove('hidden');
 
-        // Unlock the work area
-        const lock = document.getElementById('workLock');
-        if (lock) lock.classList.add('hidden');
-
         showToast(brandName + ' is set up — you can now generate personalized creatives');
       }, 2500);
     }
@@ -898,16 +894,12 @@
       document.getElementById('tplBrowseModal').classList.add('hidden');
     }
     function pickTemplateFromBrowse(name, emoji) {
-      // If a matching card already exists in the picker row, activate it; else prepend a new one
-      let match = null;
-      document.querySelectorAll('.tpl-picker-card').forEach(c => {
-        const el = c.querySelector('.tpl-picker-card__name');
-        if (el && el.textContent.trim() === name.split(' — ')[0].split(' / ')[0].split(/\s+/).slice(0, 2).join(' ')) match = c;
-      });
+      // Match existing card by data-tpl attribute (set when first picked from browse)
+      let match = document.querySelector('.tpl-picker-card[data-tpl="' + name + '"]');
       if (!match) {
-        // Create a new picker card and prepend (after "None")
         const card = document.createElement('div');
         card.className = 'tpl-picker-card';
+        card.dataset.tpl = name;
         card.onclick = function () { pickTemplate(this, name); };
         card.innerHTML = '<div class="tpl-picker-card__thumb">' + emoji + '</div><div class="tpl-picker-card__name">' + name + '</div>';
         const row = document.querySelector('.tpl-picker-row');
