@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Overview</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
+    </div>
+    <div class="topbar__right">
+      <div class="credits-pill">
+        <span class="credits-pill__bolt">⚡</span>
+        <span class="credits-pill__count">42</span>
+        <span class="credits-pill__label">credits</span>
+        <button class="credits-pill__buy" onclick="alert('Buy credits — coming soon')">+ Buy more</button>
+      </div>
+      <span style="color:var(--muted);">Client 1 ▾</span>
+    </div>
+  </div>
+
+  <div class="genie-layout">
+    <aside class="genie-sidebar">
+      <div class="genie-sidebar__head">
+        <div class="genie-sidebar__title">✨ Genie 5.0</div>
+        <button class="genie-sidebar__collapse" title="Collapse">‹</button>
+      </div>
+      <nav class="genie-sidebar__nav">
+        <a href="overview.html" class="active"><span class="nav-icon">🏠</span> Overview</a>
+        <a href="dashboard.html"><span class="nav-icon">✨</span> New Generation</a>
+        <a href="gallery.html"><span class="nav-icon">🖼</span> Gallery</a>
+        <a href="templates.html"><span class="nav-icon">📋</span> Templates</a>
+        <a href="brands.html"><span class="nav-icon">🏷️</span> Brands</a>
+        <a href="categories.html"><span class="nav-icon">📁</span> Categories</a>
+        <a href="index.html"><span class="nav-icon">⚡</span> Quick Start</a>
+        <a href="ai-setup.html"><span class="nav-icon">🛠</span> AI Setup</a>
+      </nav>
+    </aside>
+
+    <main class="genie-main">
+      <div class="genie-wrap">
+
+        <!-- Greeting -->
+        <div class="ov-greeting">
+          <div>
+            <h1 style="font-size:24px;">👋 Welcome back</h1>
+            <p style="color:var(--muted); font-size:13px; margin:0;">Here's what's happening across your Genie workspace.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="dashboard.html" class="btn btn--primary">✨ New Generation</a>
+            <a href="brands.html" class="btn">+ Add Brand</a>
+          </div>
+        </div>
+
+        <!-- KPI row -->
+        <div class="ov-kpis">
+          <div class="ov-kpi">
+            <div class="ov-kpi__label">TOTAL CREATIVES</div>
+            <div class="ov-kpi__value">248</div>
+            <div class="ov-kpi__trend ov-kpi__trend--up">↑ 12% this week</div>
+            <div class="ov-kpi__split">
+              <span>🖼 189 images</span>
+              <span>🎬 59 videos</span>
+            </div>
+          </div>
+          <div class="ov-kpi">
+            <div class="ov-kpi__label">ACTIVE BRANDS</div>
+            <div class="ov-kpi__value">12</div>
+            <div class="ov-kpi__trend">+2 added this month</div>
+            <div class="ov-kpi__split"><span>Top: Airbnb · 68 creatives</span></div>
+          </div>
+          <div class="ov-kpi">
+            <div class="ov-kpi__label">CREDITS USED</div>
+            <div class="ov-kpi__value">958 <span style="font-size:13px; color:var(--muted); font-weight:400;">/ 1000</span></div>
+            <div class="ov-kpi__bar"><span style="width:95.8%;"></span></div>
+            <div class="ov-kpi__trend">42 remaining · resets May 1</div>
+          </div>
+          <div class="ov-kpi">
+            <div class="ov-kpi__label">FAVORITES</div>
+            <div class="ov-kpi__value">⭐ 18</div>
+            <div class="ov-kpi__trend ov-kpi__trend--up">↑ 6 this week</div>
+            <div class="ov-kpi__split"><a href="gallery.html?filter=fav" style="color:var(--muted); text-decoration:underline;">View all →</a></div>
+          </div>
+        </div>
+
+        <!-- Main grid: left (chart + recent creatives) / right (top brands + recent activity) -->
+        <div class="ov-main-grid">
+          <!-- Left column -->
+          <div>
+            <!-- Chart -->
+            <div class="ov-card">
+              <div class="ov-card__header">
+                <div class="ov-card__title">📊 Generation trend</div>
+                <select class="inline-select">
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                  <option>Last 90 days</option>
+                </select>
+              </div>
+              <div class="ov-chart">
+                <div class="ov-bar" style="height:40%;" title="Mon: 14"><span class="ov-bar__val">14</span><span class="ov-bar__day">Mon</span></div>
+                <div class="ov-bar" style="height:55%;" title="Tue: 19"><span class="ov-bar__val">19</span><span class="ov-bar__day">Tue</span></div>
+                <div class="ov-bar" style="height:70%;" title="Wed: 24"><span class="ov-bar__val">24</span><span class="ov-bar__day">Wed</span></div>
+                <div class="ov-bar" style="height:50%;" title="Thu: 17"><span class="ov-bar__val">17</span><span class="ov-bar__day">Thu</span></div>
+                <div class="ov-bar" style="height:85%;" title="Fri: 29"><span class="ov-bar__val">29</span><span class="ov-bar__day">Fri</span></div>
+                <div class="ov-bar" style="height:65%;" title="Sat: 22"><span class="ov-bar__val">22</span><span class="ov-bar__day">Sat</span></div>
+                <div class="ov-bar ov-bar--today" style="height:90%;" title="Today: 31"><span class="ov-bar__val">31</span><span class="ov-bar__day">Today</span></div>
+              </div>
+            </div>
+
+            <!-- Recent creatives -->
+            <div class="ov-card">
+              <div class="ov-card__header">
+                <div class="ov-card__title">🖼 Recent creatives</div>
+                <a href="gallery.html" style="font-size:12px; color:var(--muted);">View all →</a>
+              </div>
+              <div class="ov-recent-grid">
+                <div class="ov-thumb">
+                  <div class="ov-thumb__img"><span class="creative__tag">🖼 Image</span>👕</div>
+                  <div class="ov-thumb__name">Summer Tee Launch</div>
+                  <div class="ov-thumb__meta">Airbnb · 2h ago</div>
+                </div>
+                <div class="ov-thumb">
+                  <div class="ov-thumb__img"><span class="creative__tag creative__tag--video">🎬 Video</span>🧥<span class="creative__duration">15s</span></div>
+                  <div class="ov-thumb__name">Linen Jacket Reel</div>
+                  <div class="ov-thumb__meta">Nike · 5h ago</div>
+                </div>
+                <div class="ov-thumb">
+                  <div class="ov-thumb__img"><span class="creative__tag">🖼 Image</span>💄</div>
+                  <div class="ov-thumb__name">Lipstick Promo</div>
+                  <div class="ov-thumb__meta">Glossier · yesterday</div>
+                </div>
+                <div class="ov-thumb">
+                  <div class="ov-thumb__img"><span class="creative__tag">🖼 Image</span>👟</div>
+                  <div class="ov-thumb__name">Sneaker Hero</div>
+                  <div class="ov-thumb__meta">Nike · 2d ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column -->
+          <div>
+            <!-- Top brands -->
+            <div class="ov-card">
+              <div class="ov-card__header">
+                <div class="ov-card__title">🏷 Top brands</div>
+                <a href="brands.html" style="font-size:12px; color:var(--muted);">View all →</a>
+              </div>
+              <div class="ov-brand-list">
+                <a href="brand-detail.html?brand=airbnb" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">🅰</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Airbnb</div>
+                    <div class="ov-brand-row__meta">68 creatives</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:95%;"></span></div>
+                </a>
+                <a href="brand-detail.html?brand=nike" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">✓</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Nike</div>
+                    <div class="ov-brand-row__meta">54 creatives</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:78%;"></span></div>
+                </a>
+                <a href="brand-detail.html?brand=glossier" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">G</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Glossier</div>
+                    <div class="ov-brand-row__meta">42 creatives</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:62%;"></span></div>
+                </a>
+                <a href="brand-detail.html?brand=lululemon" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">L</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Lululemon</div>
+                    <div class="ov-brand-row__meta">31 creatives</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:45%;"></span></div>
+                </a>
+                <a href="brand-detail.html?brand=spotify" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">♫</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Spotify</div>
+                    <div class="ov-brand-row__meta">24 creatives</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:36%;"></span></div>
+                </a>
+              </div>
+            </div>
+
+            <!-- Recent activity -->
+            <div class="ov-card">
+              <div class="ov-card__header">
+                <div class="ov-card__title">🕘 Recent activity</div>
+              </div>
+              <div class="ov-activity">
+                <div class="ov-activity__item">
+                  <div class="ov-activity__icon">✨</div>
+                  <div class="ov-activity__body">
+                    <div><strong>4 new creatives</strong> generated for <strong>Airbnb</strong></div>
+                    <div class="ov-activity__time">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="ov-activity__item">
+                  <div class="ov-activity__icon">🎬</div>
+                  <div class="ov-activity__body">
+                    <div>Generated a <strong>15s video reel</strong> for <strong>Nike</strong></div>
+                    <div class="ov-activity__time">5 hours ago</div>
+                  </div>
+                </div>
+                <div class="ov-activity__item">
+                  <div class="ov-activity__icon">⭐</div>
+                  <div class="ov-activity__body">
+                    <div>Added <strong>Summer Tee Launch</strong> to Favorites</div>
+                    <div class="ov-activity__time">yesterday</div>
+                  </div>
+                </div>
+                <div class="ov-activity__item">
+                  <div class="ov-activity__icon">🚀</div>
+                  <div class="ov-activity__body">
+                    <div>Launched <strong>Lipstick Promo</strong> to Meta Ads</div>
+                    <div class="ov-activity__time">yesterday</div>
+                  </div>
+                </div>
+                <div class="ov-activity__item">
+                  <div class="ov-activity__icon">➕</div>
+                  <div class="ov-activity__body">
+                    <div>Added new brand <strong>Tesla</strong></div>
+                    <div class="ov-activity__time">3 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom: Insights -->
+        <div class="ov-card" style="margin-top:4px;">
+          <div class="ov-card__header">
+            <div class="ov-card__title">💡 Quick insights</div>
+          </div>
+          <div class="ov-insights">
+            <div class="ov-insight">
+              <div class="ov-insight__icon">📈</div>
+              <div>
+                <div class="ov-insight__title">Your Friday output is up 2×</div>
+                <div class="ov-insight__desc">29 creatives vs 14 on Monday — consider scheduling more Friday campaigns.</div>
+              </div>
+            </div>
+            <div class="ov-insight">
+              <div class="ov-insight__icon">⚡</div>
+              <div>
+                <div class="ov-insight__title">You're running low on credits</div>
+                <div class="ov-insight__desc">42 left · at current pace you'll run out in ~2 days. <a href="#" onclick="alert('Buy credits — coming soon'); return false;">Top up now →</a></div>
+              </div>
+            </div>
+            <div class="ov-insight">
+              <div class="ov-insight__icon">🎯</div>
+              <div>
+                <div class="ov-insight__title">Product Ads perform best for you</div>
+                <div class="ov-insight__desc">42% of favorited creatives are Product Ads — try more of this type.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+</body>
+</html>
