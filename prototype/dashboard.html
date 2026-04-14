@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Genie Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+    <div style="font-size:13px; color:var(--muted);">Workspace: My Brand ▾</div>
+  </div>
+
+  <div class="dash">
+    <aside class="sidebar">
+      <div class="sidebar__section">Create</div>
+      <a href="#" class="active">✨ Generate Image</a>
+      <a href="#">📚 Templates</a>
+      <a href="#">🖼️ My Library</a>
+
+      <div class="sidebar__section">Workspace</div>
+      <a href="#">🎨 Brand Kit</a>
+      <a href="#">⚙️ Preferences</a>
+      <a href="#">👥 Team</a>
+
+      <div class="sidebar__section">Account</div>
+      <a href="#">💳 Billing</a>
+      <a href="#">❓ Help</a>
+    </aside>
+
+    <main class="main">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h1 style="font-size:24px;">Generate Image</h1>
+        <div class="mode-toggle" id="modeToggle">
+          <button class="active" data-mode="ecom">🛍️ Ecom</button>
+          <button data-mode="affiliate">📣 Affiliate</button>
+        </div>
+      </div>
+      <p class="sub" id="modeSub">Pick a use case below. All tools are available in both modes — toggle anytime.</p>
+
+      <!-- ECOM MODE -->
+      <section id="ecomView">
+        <div class="section-title">Popular for Ecom</div>
+        <div class="tile-grid">
+          <div class="tile"><div class="tile__icon">📦</div><div class="tile__title">Product Photo</div><div class="tile__desc">Clean, studio-style shots from a reference image.</div></div>
+          <div class="tile"><div class="tile__icon">🏖️</div><div class="tile__title">Lifestyle Scene</div><div class="tile__desc">Place your product in real-world settings.</div></div>
+          <div class="tile"><div class="tile__icon">📢</div><div class="tile__title">Ad Creative</div><div class="tile__desc">Meta/TikTok-ready ads with hook text.</div></div>
+          <div class="tile"><div class="tile__icon">📦</div><div class="tile__title">Packaging Mockup</div><div class="tile__desc">Visualize packaging & labels.</div></div>
+          <div class="tile"><div class="tile__icon">📧</div><div class="tile__title">Email Hero</div><div class="tile__desc">Banners sized for campaign emails.</div></div>
+          <div class="tile"><div class="tile__icon">🛒</div><div class="tile__title">Amazon A+ Image</div><div class="tile__desc">Listing-optimized visuals with callouts.</div></div>
+        </div>
+
+        <div class="section-title">Customize output</div>
+        <div class="card">
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Auto-apply brand colors</div><div class="toggle-row__desc">Use palette from your Brand Kit.</div></div>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Include promotional text</div><div class="toggle-row__desc">Add headline & CTA overlay.</div></div>
+            <div class="switch" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Transparent background</div><div class="toggle-row__desc">For product cutouts.</div></div>
+            <div class="switch" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Generate variations</div><div class="toggle-row__desc">Create 4 style-matched versions.</div></div>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AFFILIATE MODE -->
+      <section id="affiliateView" class="hidden">
+        <div class="section-title">Popular for Affiliate</div>
+        <div class="tile-grid">
+          <div class="tile"><div class="tile__icon">⚖️</div><div class="tile__title">Comparison Graphic</div><div class="tile__desc">Side-by-side product comparisons.</div></div>
+          <div class="tile"><div class="tile__icon">⭐</div><div class="tile__title">Review Card</div><div class="tile__desc">Rating + verdict visuals.</div></div>
+          <div class="tile"><div class="tile__icon">📱</div><div class="tile__title">Social Post</div><div class="tile__desc">Formatted for IG, TikTok, Pinterest.</div></div>
+          <div class="tile"><div class="tile__icon">🎯</div><div class="tile__title">CTA Banner</div><div class="tile__desc">Click-through banners for blogs.</div></div>
+          <div class="tile"><div class="tile__icon">🎬</div><div class="tile__title">YouTube Thumbnail</div><div class="tile__desc">High-CTR thumbnails.</div></div>
+          <div class="tile"><div class="tile__icon">📊</div><div class="tile__title">Stat / Fact Card</div><div class="tile__desc">Shareable data graphics.</div></div>
+        </div>
+
+        <div class="section-title">Customize output</div>
+        <div class="card">
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Add my handle / watermark</div><div class="toggle-row__desc">Credit yourself on every image.</div></div>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Platform-sized exports</div><div class="toggle-row__desc">IG / TikTok / YT aspect ratios.</div></div>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Include affiliate disclosure</div><div class="toggle-row__desc">Auto-add "#ad" / disclosure text.</div></div>
+            <div class="switch" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-row__label">Generate variations</div><div class="toggle-row__desc">Create 4 versions for A/B testing.</div></div>
+            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="actions" style="justify-content:flex-end;">
+        <button class="btn btn--primary">Start Generating →</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    // Default mode from URL (?mode=ecom|affiliate)
+    const params = new URLSearchParams(location.search);
+    const initial = params.get('mode') === 'affiliate' ? 'affiliate' : 'ecom';
+    setMode(initial);
+
+    document.querySelectorAll('#modeToggle button').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    function setMode(mode) {
+      document.querySelectorAll('#modeToggle button').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === mode);
+      });
+      document.getElementById('ecomView').classList.toggle('hidden', mode !== 'ecom');
+      document.getElementById('affiliateView').classList.toggle('hidden', mode !== 'affiliate');
+    }
+  </script>
+</body>
+</html>

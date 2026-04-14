@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Affiliate Setup</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+    <a href="profile.html" class="btn btn--ghost" style="font-size:12px;">Back</a>
+  </div>
+
+  <div class="page">
+    <div class="stepper">
+      <span>1. Welcome</span>
+      <span>2. Profile</span>
+      <span class="current">3. Setup · Affiliate</span>
+      <span>4. Dashboard</span>
+    </div>
+
+    <h1>Tell us about your affiliate work</h1>
+    <p class="sub">This helps Genie generate visuals matched to your audience and platforms.</p>
+
+    <div class="card">
+      <div class="field">
+        <label>Display name / Handle</label>
+        <input type="text" placeholder="e.g., @techreviews" />
+      </div>
+      <div class="field">
+        <label>Primary niche</label>
+        <select>
+          <option>Tech & Gadgets</option>
+          <option>Beauty & Skincare</option>
+          <option>Fitness & Wellness</option>
+          <option>Finance & Crypto</option>
+          <option>Fashion</option>
+          <option>Gaming</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Platforms you post on</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="this.classList.toggle('active')">Instagram</span>
+          <span class="chip active" onclick="this.classList.toggle('active')">TikTok</span>
+          <span class="chip" onclick="this.classList.toggle('active')">YouTube</span>
+          <span class="chip" onclick="this.classList.toggle('active')">X / Twitter</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Blog / Website</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Pinterest</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Content tone</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="this.classList.toggle('active')">Honest / Review-style</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Playful</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Professional</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Bold / Punchy</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>What do you create most often?</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="this.classList.toggle('active')">Product comparison</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Review graphics</span>
+          <span class="chip active" onclick="this.classList.toggle('active')">Social posts</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Banners / CTAs</span>
+          <span class="chip" onclick="this.classList.toggle('active')">Thumbnails</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="profile.html" class="btn">← Back</a>
+      <a href="dashboard.html?mode=affiliate" class="btn btn--primary">Continue to Dashboard →</a>
+    </div>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+</body>
+</html>
