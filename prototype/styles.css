@@ -373,6 +373,91 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 .genie-sidebar__nav a .nav-icon { width: 18px; display: inline-block; text-align: center; }
 .genie-main { min-width: 0; }
 
+/* Gallery */
+.gallery-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 16px;
+  padding: 16px 0 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.gallery-search {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  font-size: 13px;
+  font-family: inherit;
+  min-width: 220px;
+}
+.gallery-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.gallery-filters .count {
+  background: var(--accent-bg);
+  color: var(--muted);
+  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-left: 4px;
+  font-weight: 500;
+}
+.pill-toggle button.active .count {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+.creatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+.creative {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s;
+}
+.creative:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.creative__thumb {
+  position: relative;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, var(--accent-bg) 25%, var(--bg) 25%, var(--bg) 50%, var(--accent-bg) 50%, var(--accent-bg) 75%, var(--bg) 75%);
+  background-size: 20px 20px;
+  display: flex; align-items: center; justify-content: center;
+}
+.creative__emoji { font-size: 52px; }
+.creative__tag {
+  position: absolute;
+  top: 8px; left: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.95);
+  padding: 3px 8px;
+  border-radius: 10px;
+  color: var(--text);
+}
+.creative__tag--video { background: var(--active); color: #fff; }
+.creative__duration {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+.creative__info { padding: 10px 12px; }
+.creative__title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.creative__meta { font-size: 11px; color: var(--muted); }
+
 /* Blank module placeholder */
 .module-placeholder {
   max-width: 640px;
