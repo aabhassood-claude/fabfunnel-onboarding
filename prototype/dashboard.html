@@ -436,8 +436,12 @@
         const sel = document.getElementById('dashboardBrandSelect');
         const opt = document.createElement('option');
         const letter = name.charAt(0).toUpperCase();
+        // Simulated analysis result — in production these come from the brand analyzer
+        const cats = ['Apparel', 'Beauty', 'Home & Lifestyle', 'Electronics', 'Food & Beverage'];
+        const category = cats[Math.floor(Math.random() * cats.length)];
+        const products = 10 + Math.floor(Math.random() * 25);
         opt.value = name;
-        opt.textContent = `${letter} · ${name} — just added`;
+        opt.textContent = `${letter} · ${name} — ${products} products · ${category}`;
         sel.appendChild(opt);
         sel.value = name;
         showToast(`"${name}" added and selected`);
