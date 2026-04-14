@@ -282,6 +282,41 @@
       </div>
     </div>
 
+    <!-- Template picker (optional) -->
+    <div class="work-section">
+      <label class="work-label">Use a template <span class="badge-optional">optional</span> <span class="work-label__hint">start from a proven reference</span></label>
+      <div class="tpl-picker-row">
+        <div class="tpl-picker-card tpl-picker-card--none active" onclick="pickTemplate(this, null)">
+          <div>None<br/><span style="color:var(--subtle); font-weight:400;">generate from scratch</span></div>
+        </div>
+        <div class="tpl-picker-card" onclick="pickTemplate(this, 'Product Hero — Minimal')">
+          <div class="tpl-picker-card__thumb">👕</div>
+          <div class="tpl-picker-card__name">Product Hero</div>
+        </div>
+        <div class="tpl-picker-card" onclick="pickTemplate(this, 'Social Proof Card')">
+          <div class="tpl-picker-card__thumb">⭐</div>
+          <div class="tpl-picker-card__name">Social Proof</div>
+        </div>
+        <div class="tpl-picker-card" onclick="pickTemplate(this, 'Before / After')">
+          <div class="tpl-picker-card__thumb">⚖️</div>
+          <div class="tpl-picker-card__name">Before/After</div>
+        </div>
+        <div class="tpl-picker-card" onclick="pickTemplate(this, 'Brand Story Hero')">
+          <div class="tpl-picker-card__thumb">✨</div>
+          <div class="tpl-picker-card__name">Brand Story</div>
+        </div>
+        <div class="tpl-picker-card" onclick="pickTemplate(this, 'Lifestyle Product Shot')">
+          <div class="tpl-picker-card__thumb">📦</div>
+          <div class="tpl-picker-card__name">Lifestyle</div>
+        </div>
+        <div class="tpl-picker-card" onclick="pickTemplate(this, 'Offer Highlight')">
+          <div class="tpl-picker-card__thumb">🎁</div>
+          <div class="tpl-picker-card__name">Offer</div>
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--muted);"><a href="templates.html" style="color:var(--muted); text-decoration:underline;">Browse all templates →</a></div>
+    </div>
+
     <!-- Prompt (primary) -->
     <div class="work-section">
       <label class="work-label" id="promptLabel">Describe your vision <span class="badge-optional">optional</span> <span class="work-label__hint" id="promptDesc">add any specific ideas — or let Genie decide.</span></label>
@@ -747,6 +782,13 @@
       // Update bar mode chip
       const barMode = document.querySelector('.genbar__chip:nth-child(3)');
       if (barMode) barMode.textContent = mode === 'affiliate' ? 'Affiliate' : 'E-com';
+    }
+
+    let selectedTemplate = null;
+    function pickTemplate(el, name) {
+      document.querySelectorAll('.tpl-picker-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      selectedTemplate = name;
     }
 
     function selectCategory(el) {
