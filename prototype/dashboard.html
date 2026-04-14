@@ -27,8 +27,73 @@
         <div class="setup-banner__desc">Takes under a minute. We'll auto-pull your products, colors, and style.</div>
       </div>
       <div class="setup-banner__actions">
-        <a href="index.html" class="btn btn--primary">✨ Set up brand</a>
+        <button class="btn btn--primary" onclick="openSetupModal()">✨ Set up brand</button>
         <button class="btn btn--ghost" onclick="document.getElementById('setupBanner').classList.add('hidden');">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- Brand summary strip (shown after in-dashboard setup) -->
+    <div id="brandSummary" class="brand-summary hidden">
+      <div class="brand-summary__logo">T</div>
+      <div class="brand-summary__meta">
+        <div class="brand-summary__name">test <span style="color:var(--muted); font-weight:400; font-size:12px;">· 24 products</span></div>
+        <div class="brand-summary__sub">Modern · Clean · Shopify</div>
+      </div>
+      <div class="brand-summary__swatches">
+        <span class="swatch" style="background:#c5e04b;"></span>
+        <span class="swatch" style="background:#3370ff;"></span>
+        <span class="swatch" style="background:#f0f0f0; border:1px solid var(--border);"></span>
+        <span class="swatch" style="background:#111;"></span>
+      </div>
+      <a href="done.html?mode=ecom" class="btn btn--ghost" style="font-size:12px;">View details →</a>
+    </div>
+
+    <!-- Setup modal -->
+    <div id="setupModal" class="modal-backdrop hidden">
+      <div class="modal">
+        <button class="modal__close" onclick="closeSetupModal()">✕</button>
+        <h2 style="font-size:20px; margin-bottom:6px;">Set up your brand</h2>
+        <p class="sub" style="margin-bottom:20px; font-size:13px;">Fill this in to personalize Genie — you can edit anytime.</p>
+
+        <div class="field">
+          <label>Mode</label>
+          <div class="chip-group">
+            <span class="chip active" onclick="setChip(this, 'modeChips')">🛒 E-commerce</span>
+            <span class="chip" onclick="setChip(this, 'modeChips')">⚡ Affiliate</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Store URL or product link</label>
+          <input type="text" placeholder="https://yourstore.com" />
+          <div class="field__hint">Works with Shopify, WooCommerce, Amazon, affiliate links.</div>
+        </div>
+
+        <div class="field">
+          <label>Primary category <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
+          <select>
+            <option>Auto-detect</option>
+            <option>Apparel & Fashion</option>
+            <option>Beauty & Skincare</option>
+            <option>Home & Lifestyle</option>
+            <option>Electronics</option>
+            <option>Food & Beverage</option>
+          </select>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button class="btn btn--ghost" onclick="closeSetupModal()">Cancel</button>
+          <button class="btn btn--primary" onclick="completeSetup()">Save & Analyze →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing state inside modal -->
+    <div id="processingModal" class="modal-backdrop hidden">
+      <div class="modal" style="text-align:center; padding:40px 28px;">
+        <div class="spinner"></div>
+        <h2 style="font-size:18px; margin-top:14px;">Analyzing your brand…</h2>
+        <p class="sub" style="font-size:13px;">This usually takes 10–20 seconds.</p>
       </div>
     </div>
 
@@ -205,11 +270,46 @@
     const dashMode = dashParams.get('mode') || 'ecom';
     document.getElementById('dashBack').href = 'done.html?mode=' + dashMode;
 
-    // Show setup banner if user skipped onboarding
-    if (dashParams.get('setup') === 'pending') {
+    // Show setup banner if user skipped onboarding (new user)
+    const isExisting = dashParams.get('user') === 'existing';
+    const setupPending = dashParams.get('setup') === 'pending';
+
+    if (setupPending) {
       document.getElementById('setupBanner').classList.remove('hidden');
-      // Also hide the back arrow since there's nothing to go back to
-      document.getElementById('dashBack').href = 'index.html';
+      document.getElementById('dashBack').href = 'login.html';
+    } else if (isExisting) {
+      // Existing user lands with brand summary pre-populated
+      document.getElementById('brandSummary').classList.remove('hidden');
+      document.getElementById('dashBack').href = 'login.html';
+    }
+
+    function openSetupModal() {
+      document.getElementById('setupModal').classList.remove('hidden');
+    }
+    function closeSetupModal() {
+      document.getElementById('setupModal').classList.add('hidden');
+    }
+    function setChip(el, groupId) {
+      el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+    function completeSetup() {
+      // Close setup modal, show processing modal, then "refresh" dashboard state
+      document.getElementById('setupModal').classList.add('hidden');
+      document.getElementById('processingModal').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('processingModal').classList.add('hidden');
+        document.getElementById('setupBanner').classList.add('hidden');
+        document.getElementById('brandSummary').classList.remove('hidden');
+        showToast('Brand profile saved — Genie is now personalized for you');
+      }, 2500);
+    }
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = '✓ ' + msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
     }
 
     document.querySelectorAll('.mode-tabs .tab').forEach(t => {

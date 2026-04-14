@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Sign in</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+  </div>
+
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="signin">Sign in</button>
+        <button class="auth-tab" data-tab="signup">Create account</button>
+      </div>
+
+      <!-- Sign in (existing user) -->
+      <div id="signin" class="auth-form">
+        <h1 style="font-size:22px; margin-bottom:4px;">Welcome back 👋</h1>
+        <p class="sub" style="margin-bottom:24px;">Pick up where you left off.</p>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="you@company.com" value="existing@user.com" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" placeholder="••••••••" value="••••••••" />
+        </div>
+
+        <a href="dashboard.html?user=existing" class="btn btn--primary" style="display:block; text-align:center; width:100%; padding:13px; margin-top:10px;">Sign in →</a>
+
+        <div style="text-align:center; margin-top:14px;">
+          <a href="#" style="font-size:13px; color:var(--muted);">Forgot password?</a>
+        </div>
+      </div>
+
+      <!-- Sign up (new user) -->
+      <div id="signup" class="auth-form hidden">
+        <h1 style="font-size:22px; margin-bottom:4px;">Create your account</h1>
+        <p class="sub" style="margin-bottom:24px;">Takes under a minute. No credit card needed.</p>
+
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" placeholder="you@company.com" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" placeholder="At least 8 characters" />
+        </div>
+
+        <a href="index.html" class="btn btn--primary" style="display:block; text-align:center; width:100%; padding:13px; margin-top:10px;">Create account →</a>
+
+        <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--muted);">
+          By signing up you agree to our Terms &amp; Privacy.
+        </div>
+      </div>
+
+      <div class="auth-divider"><span>or</span></div>
+      <button class="btn" style="width:100%;">🔑 Continue with Google</button>
+    </div>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    document.querySelectorAll('.auth-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.auth-tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById('signin').classList.toggle('hidden', t.dataset.tab !== 'signin');
+        document.getElementById('signup').classList.toggle('hidden', t.dataset.tab !== 'signup');
+      });
+    });
+  </script>
+</body>
+</html>
