@@ -271,6 +271,28 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   cursor: pointer;
 }
 
+/* Creative type cards */
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+.type-card {
+  text-align: left;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .15s, background .15s;
+}
+.type-card:hover { border-color: var(--border-strong); }
+.type-card.active { border-color: var(--active); background: var(--accent-bg); }
+.type-card__icon { font-size: 20px; margin-bottom: 6px; }
+.type-card__title { font-weight: 700; font-size: 13px; margin-bottom: 3px; color: var(--text); }
+.type-card__desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
 /* Work sections (primary actions) */
 .work-section {
   background: var(--surface);

@@ -131,19 +131,49 @@
         <button class="active" data-mode="ecom">🛒 E-com</button>
         <button data-mode="affiliate">⚡ Affiliate</button>
       </div>
+    </div>
 
-      <select class="inline-select" id="subModeSelect">
-        <optgroup label="Image" class="fmt-image">
-          <option>Product Ads</option>
-          <option>Brand Ads</option>
-          <option>Product Asset Creative</option>
-        </optgroup>
-        <optgroup label="Video" class="fmt-video hidden">
-          <option>Product Demo</option>
-          <option>UGC-style Reel</option>
-          <option>Brand Story</option>
-        </optgroup>
-      </select>
+    <!-- Creative type (swaps based on format) -->
+    <div class="work-section">
+      <label class="work-label">Creative type <span class="work-label__hint" id="typeHint">pick the style of ad you're generating</span></label>
+
+      <!-- Image types -->
+      <div class="type-grid fmt-image">
+        <button class="type-card active" onclick="selectType(this)">
+          <div class="type-card__icon">📦</div>
+          <div class="type-card__title">Product Ads</div>
+          <div class="type-card__desc">Conversion-focused · price, offer, CTA</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">🏷</div>
+          <div class="type-card__title">Brand Ads</div>
+          <div class="type-card__desc">Awareness & style · brand storytelling</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">✨</div>
+          <div class="type-card__title">Product Asset Creative</div>
+          <div class="type-card__desc">Detail shots · listings, email, PDP</div>
+        </button>
+      </div>
+
+      <!-- Video types (hidden by default) -->
+      <div class="type-grid fmt-video hidden">
+        <button class="type-card active" onclick="selectType(this)">
+          <div class="type-card__icon">🎥</div>
+          <div class="type-card__title">Product Demo</div>
+          <div class="type-card__desc">How it works · features in action</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">📱</div>
+          <div class="type-card__title">UGC-style Reel</div>
+          <div class="type-card__desc">Authentic, native feel · reviews, unboxing</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">🎬</div>
+          <div class="type-card__title">Brand Story</div>
+          <div class="type-card__desc">Emotive · narrative-driven brand film</div>
+        </button>
+      </div>
     </div>
 
     <!-- Brand selection (primary) -->
@@ -342,15 +372,6 @@
       document.querySelectorAll('.fmt-video').forEach(el => el.classList.toggle('hidden', fmt !== 'video'));
       document.querySelectorAll('.fmt-video-only').forEach(el => el.classList.toggle('hidden', fmt !== 'video'));
 
-      // Switch selected optgroup in sub-mode select (optgroups don't hide via CSS in most browsers)
-      const sel = document.getElementById('subModeSelect');
-      if (sel) {
-        Array.from(sel.querySelectorAll('optgroup')).forEach(g => {
-          g.disabled = !g.classList.contains('fmt-' + (fmt === 'image' ? 'image' : 'video'));
-        });
-        const firstEnabled = sel.querySelector('optgroup:not([disabled]) option');
-        if (firstEnabled) sel.value = firstEnabled.textContent;
-      }
 
       // Update generate bar + prompt hint based on format
       if (fmt === 'video') {
@@ -370,6 +391,15 @@
         document.getElementById('promptText').placeholder = 'e.g., Summer vibes, people laughing on a beach, warm colors...';
         document.getElementById('promptDesc').textContent = 'Add any specific ideas — or let Genie decide.';
       }
+    }
+    function selectType(btn) {
+      // Only toggle within the currently visible grid
+      const grid = btn.closest('.type-grid');
+      grid.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      // Sync bottom bar sub-mode label
+      const title = btn.querySelector('.type-card__title').textContent;
+      document.getElementById('barSubMode').textContent = title;
     }
     function selectOne(el) {
       el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
