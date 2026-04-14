@@ -19,6 +19,19 @@
   </div>
 
   <div class="genie-wrap">
+    <!-- Setup CTA banner (shown when brand isn't configured) -->
+    <div id="setupBanner" class="setup-banner hidden">
+      <div class="setup-banner__icon">🎨</div>
+      <div class="setup-banner__body">
+        <div class="setup-banner__title">Add your brand to unlock personalized results</div>
+        <div class="setup-banner__desc">Takes under a minute. We'll auto-pull your products, colors, and style.</div>
+      </div>
+      <div class="setup-banner__actions">
+        <a href="index.html" class="btn btn--primary">✨ Set up brand</a>
+        <button class="btn btn--ghost" onclick="document.getElementById('setupBanner').classList.add('hidden');">Dismiss</button>
+      </div>
+    </div>
+
     <!-- Friendly welcome header -->
     <div class="genie-welcome">
       <div>
@@ -188,8 +201,16 @@
 
   <script>
     // Preserve mode when navigating back to done
-    const dashMode = new URLSearchParams(location.search).get('mode') || 'ecom';
+    const dashParams = new URLSearchParams(location.search);
+    const dashMode = dashParams.get('mode') || 'ecom';
     document.getElementById('dashBack').href = 'done.html?mode=' + dashMode;
+
+    // Show setup banner if user skipped onboarding
+    if (dashParams.get('setup') === 'pending') {
+      document.getElementById('setupBanner').classList.remove('hidden');
+      // Also hide the back arrow since there's nothing to go back to
+      document.getElementById('dashBack').href = 'index.html';
+    }
 
     document.querySelectorAll('.mode-tabs .tab').forEach(t => {
       t.addEventListener('click', () => {

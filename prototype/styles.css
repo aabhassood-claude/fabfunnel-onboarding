@@ -340,6 +340,31 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 .chip--static { cursor: default; }
 .chip--static:hover { background: var(--surface); }
 
+/* Setup banner (empty-state CTA) */
+.setup-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  border: 2px dashed var(--border-strong);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.setup-banner__icon {
+  width: 48px; height: 48px;
+  background: var(--accent-bg);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.setup-banner__body { flex: 1; min-width: 240px; }
+.setup-banner__title { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+.setup-banner__desc { color: var(--muted); font-size: 13px; }
+.setup-banner__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
 /* Product thumbs */
 .product-grid {
   display: grid;
