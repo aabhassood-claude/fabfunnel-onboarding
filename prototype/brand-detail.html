@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Airbnb</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <a href="brands.html" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Brands</a>
+      <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
+    </div>
+    <div class="topbar__right">
+      <div class="credits-pill">
+        <span class="credits-pill__bolt">⚡</span>
+        <span class="credits-pill__count">42</span>
+        <span class="credits-pill__label">credits</span>
+        <button class="credits-pill__buy" onclick="alert('Buy credits — coming soon')">+ Buy more</button>
+      </div>
+      <span style="color:var(--muted);">Client 1 ▾</span>
+    </div>
+  </div>
+
+  <div class="genie-layout">
+    <aside class="genie-sidebar">
+      <div class="genie-sidebar__head">
+        <div class="genie-sidebar__title">✨ Genie 5.0</div>
+        <button class="genie-sidebar__collapse" title="Collapse">‹</button>
+      </div>
+      <nav class="genie-sidebar__nav">
+        <a href="dashboard.html"><span class="nav-icon">✨</span> New Generation</a>
+        <a href="gallery.html"><span class="nav-icon">🖼</span> Gallery</a>
+        <a href="templates.html"><span class="nav-icon">📋</span> Templates</a>
+        <a href="brands.html" class="active"><span class="nav-icon">🏷️</span> Brands</a>
+        <a href="categories.html"><span class="nav-icon">📁</span> Categories</a>
+        <a href="index.html"><span class="nav-icon">⚡</span> Quick Start</a>
+        <a href="ai-setup.html"><span class="nav-icon">🛠</span> AI Setup</a>
+      </nav>
+    </aside>
+
+    <main class="genie-main">
+      <div class="genie-wrap">
+
+        <!-- Brand header -->
+        <div class="bd-header">
+          <a href="brands.html" class="bd-back">←</a>
+          <div class="bd-logo">🅰</div>
+          <div class="bd-title">
+            <h1>Airbnb</h1>
+            <div class="bd-industry">Travel</div>
+          </div>
+          <div class="bd-colors">
+            <span class="swatch" style="background:#FF5A5F;"></span>
+            <span class="swatch" style="background:#00A699;"></span>
+            <span class="swatch" style="background:#484848;"></span>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bd-tabs">
+          <button class="active" onclick="bdTab(this, 'overview')">Overview</button>
+          <button onclick="bdTab(this, 'strategies')">Strategies</button>
+          <button onclick="bdTab(this, 'library')">Library</button>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="tab-overview">
+          <!-- Quick stats -->
+          <div class="bd-stats">
+            <div class="bd-stat">
+              <div class="bd-stat__label">🌐 Website</div>
+              <div class="bd-stat__value">https://airbnb.com</div>
+              <div class="bd-stat__hint">✓ Connected</div>
+            </div>
+            <div class="bd-stat">
+              <div class="bd-stat__label">📦 Products</div>
+              <div class="bd-stat__value">2</div>
+              <div class="bd-stat__hint">Synced items</div>
+            </div>
+            <div class="bd-stat">
+              <div class="bd-stat__label">⏱ Last synced</div>
+              <div class="bd-stat__value">Never</div>
+              <div class="bd-stat__hint">Auto-sync enabled</div>
+            </div>
+            <div class="bd-stat">
+              <div class="bd-stat__label">🖼 Assets created</div>
+              <div class="bd-stat__value">0</div>
+              <div class="bd-stat__hint">+6 this week</div>
+            </div>
+          </div>
+
+          <!-- Style row -->
+          <div class="bd-style-row">
+            <div class="bd-style">
+              <div class="bd-style__label">🎨 Brand colors</div>
+              <div class="bd-style__value">
+                <span class="color-chip" style="background:#FF5A5F;"></span><code>#FF5A5F</code>
+                <span class="color-chip" style="background:#00A699;"></span><code>#00A699</code>
+                <span class="color-chip" style="background:#484848;"></span><code>#484848</code>
+              </div>
+            </div>
+            <div class="bd-style">
+              <div class="bd-style__label">🔤 Typography</div>
+              <div class="bd-style__value"><strong>Cereal</strong>, Circular</div>
+            </div>
+            <div class="bd-style">
+              <div class="bd-style__label">💬 Brand tone</div>
+              <div class="bd-style__value">Warm, Adventurous, Belonging</div>
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div class="bd-ctas">
+            <a href="dashboard.html" class="btn btn--primary">✨ Generate Ad Creative</a>
+            <a href="dashboard.html" class="btn">🖼 Generate Product Assets</a>
+          </div>
+
+          <!-- Edit brand details -->
+          <div class="bd-section">
+            <div class="bd-section__title">Edit Brand Details</div>
+            <div class="bd-form-grid">
+              <div class="field">
+                <label>Name</label>
+                <input type="text" value="Airbnb" />
+              </div>
+              <div class="field">
+                <label>Domain / Website</label>
+                <input type="text" value="https://airbnb.com" />
+              </div>
+              <div class="field">
+                <label>Industry</label>
+                <select>
+                  <option>Travel</option>
+                  <option>Technology</option>
+                  <option>Fashion &amp; Apparel</option>
+                  <option>Health &amp; Beauty</option>
+                  <option>Financial Services</option>
+                  <option>Automotive</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Tone</label>
+                <input type="text" value="Warm, Adventurous, Belonging" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Guidelines</label>
+              <textarea rows="2">Belong anywhere. Focus on experiences, not just places.</textarea>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <button class="btn btn--primary">Save Changes</button>
+              <button class="btn cm-danger">🗑 Delete Brand</button>
+            </div>
+          </div>
+
+          <!-- Product catalog -->
+          <div class="bd-section">
+            <div class="bd-section__title-row">
+              <div class="bd-section__title" style="margin:0;">📦 Product Catalog <span class="count-bubble">2</span></div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn">🔄 Sync Now</button>
+                <button class="btn">+ Add Product</button>
+              </div>
+            </div>
+            <div class="bd-products">
+              <div class="bd-product">
+                <div class="bd-product__thumb">🏖</div>
+                <div class="bd-product__info">
+                  <div class="bd-product__name">Experiences</div>
+                  <div class="bd-product__meta">airbnb.com/experiences</div>
+                </div>
+                <a href="#" class="bd-product__link">↗</a>
+              </div>
+              <div class="bd-product">
+                <div class="bd-product__thumb">🏡</div>
+                <div class="bd-product__info">
+                  <div class="bd-product__name">Luxe Collection</div>
+                  <div class="bd-product__meta">airbnb.com/luxe</div>
+                </div>
+                <a href="#" class="bd-product__link">↗</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Competitors -->
+          <div class="bd-section">
+            <div class="bd-section__title-row">
+              <div class="bd-section__title" style="margin:0;">⚖ Competitors <span class="count-bubble">3</span></div>
+              <button class="btn">+ Add Competitor</button>
+            </div>
+            <p style="color:var(--muted); font-size:12px; margin-bottom:12px;">Brands we track for inspiration — we'll apply their winning moves to your creatives.</p>
+            <div class="bd-competitors">
+              <div class="bd-competitor">
+                <div class="bd-competitor__logo">B</div>
+                <div class="bd-competitor__info">
+                  <div class="bd-competitor__name">Booking.com</div>
+                  <div class="bd-competitor__meta">booking.com · Travel</div>
+                </div>
+                <div class="bd-competitor__tracking">
+                  <span class="tag-chip">Ad creatives</span>
+                  <span class="tag-chip">Messaging</span>
+                </div>
+                <button class="bd-competitor__remove">✕</button>
+              </div>
+              <div class="bd-competitor">
+                <div class="bd-competitor__logo">V</div>
+                <div class="bd-competitor__info">
+                  <div class="bd-competitor__name">Vrbo</div>
+                  <div class="bd-competitor__meta">vrbo.com · Travel</div>
+                </div>
+                <div class="bd-competitor__tracking">
+                  <span class="tag-chip">Visual style</span>
+                  <span class="tag-chip">Promotions</span>
+                </div>
+                <button class="bd-competitor__remove">✕</button>
+              </div>
+              <div class="bd-competitor">
+                <div class="bd-competitor__logo">E</div>
+                <div class="bd-competitor__info">
+                  <div class="bd-competitor__name">Expedia</div>
+                  <div class="bd-competitor__meta">expedia.com · Travel</div>
+                </div>
+                <div class="bd-competitor__tracking">
+                  <span class="tag-chip">Social posts</span>
+                </div>
+                <button class="bd-competitor__remove">✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STRATEGIES TAB -->
+        <div id="tab-strategies" class="hidden">
+          <div class="module-placeholder" style="margin-top:24px;">
+            <div class="module-placeholder__icon">📋</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Brand-specific strategies</h1>
+            <p>Save reusable ad angles and frameworks tailored to Airbnb's tone and audience.</p>
+          </div>
+        </div>
+
+        <!-- LIBRARY TAB -->
+        <div id="tab-library" class="hidden">
+          <div class="module-placeholder" style="margin-top:24px;">
+            <div class="module-placeholder__icon">🖼</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Brand library</h1>
+            <p>All creatives generated for Airbnb, plus uploaded brand assets (logos, hero imagery, product shots).</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    function bdTab(btn, name) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['overview', 'strategies', 'library'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('hidden', t !== name);
+      });
+    }
+  </script>
+</body>
+</html>
