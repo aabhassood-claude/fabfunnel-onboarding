@@ -37,7 +37,9 @@
 
   <script>
     const steps = document.querySelectorAll('.processing__step');
-    const format = new URLSearchParams(location.search).get('format') || 'image';
+    const qs = new URLSearchParams(location.search);
+    const format = qs.get('format') || 'image';
+    const count = qs.get('count') || '1';
     let i = 0;
     const iv = setInterval(() => {
       steps[i].classList.remove('active');
@@ -47,7 +49,7 @@
         steps[i].classList.add('active');
       } else {
         clearInterval(iv);
-        location.href = 'gallery.html?new=1&format=' + format;
+        location.href = 'gallery.html?new=1&format=' + format + '&count=' + count;
       }
     }, 1000);
   </script>

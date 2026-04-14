@@ -234,8 +234,9 @@
     const qs = new URLSearchParams(location.search);
     if (qs.get('new') === '1') {
       const format = qs.get('format') || 'image';
+      const requested = parseInt(qs.get('count') || '1', 10);
       const grid = document.getElementById('creativesGrid');
-      const matches = Array.from(document.querySelectorAll('.creative[data-type="' + format + '"]')).slice(0, 4);
+      const matches = Array.from(document.querySelectorAll('.creative[data-type="' + format + '"]')).slice(0, requested);
       const count = matches.length;
 
       // Update banner copy to reflect actual count

@@ -347,6 +347,26 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   cursor: pointer;
 }
 
+/* Variations selector row */
+.variations-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.variations-row__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Advanced collapsible */
 .advanced {
   background: var(--surface);
