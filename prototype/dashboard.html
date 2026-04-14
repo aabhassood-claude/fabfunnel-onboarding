@@ -136,8 +136,8 @@
     <div class="work-section">
       <label class="work-label">Creative type <span class="work-label__hint" id="typeHint">pick the style of ad you're generating</span></label>
 
-      <!-- Image types -->
-      <div class="type-grid fmt-image">
+      <!-- Image types — Ecom -->
+      <div class="type-grid fmt-image mode-ecom">
         <button class="type-card active" onclick="selectType(this)">
           <div class="type-card__icon">📦</div>
           <div class="type-card__title">Product Ads</div>
@@ -155,8 +155,8 @@
         </button>
       </div>
 
-      <!-- Video types (hidden by default) -->
-      <div class="type-grid fmt-video hidden">
+      <!-- Video types — Ecom -->
+      <div class="type-grid fmt-video mode-ecom hidden">
         <button class="type-card active" onclick="selectType(this)">
           <div class="type-card__icon">🎥</div>
           <div class="type-card__title">Product Demo</div>
@@ -173,10 +173,48 @@
           <div class="type-card__desc">Emotive · narrative-driven brand film</div>
         </button>
       </div>
+
+      <!-- Image types — Affiliate -->
+      <div class="type-grid fmt-image mode-affiliate hidden">
+        <button class="type-card active" onclick="selectType(this)">
+          <div class="type-card__icon">📝</div>
+          <div class="type-card__title">Ad Copy</div>
+          <div class="type-card__desc">Static image with hook + CTA — conversion-focused</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">⚖️</div>
+          <div class="type-card__title">Comparison Graphic</div>
+          <div class="type-card__desc">Side-by-side picks · "Top 5 picks for X"</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">🎯</div>
+          <div class="type-card__title">Landing Banner</div>
+          <div class="type-card__desc">Hero image for your blog/landing page</div>
+        </button>
+      </div>
+
+      <!-- Video types — Affiliate -->
+      <div class="type-grid fmt-video mode-affiliate hidden">
+        <button class="type-card active" onclick="selectType(this)">
+          <div class="type-card__icon">📹</div>
+          <div class="type-card__title">Review Reel</div>
+          <div class="type-card__desc">Honest review format · tryout + verdict</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">⚡</div>
+          <div class="type-card__title">Testimonial</div>
+          <div class="type-card__desc">Before/after or result-focused short</div>
+        </button>
+        <button class="type-card" onclick="selectType(this)">
+          <div class="type-card__icon">🎬</div>
+          <div class="type-card__title">Explainer</div>
+          <div class="type-card__desc">Quick "how it works" narration</div>
+        </button>
+      </div>
     </div>
 
-    <!-- Brand selection (primary) -->
-    <div class="work-section">
+    <!-- Brand selection (E-com) -->
+    <div class="work-section mode-ecom">
       <label class="work-label">Select your brand <span class="work-label__hint">which brand is this creative for?</span></label>
 
       <div class="brand-select-row">
@@ -185,6 +223,28 @@
           <option value="Glossier">G · Glossier — 12 products · Beauty</option>
         </select>
         <button class="btn" onclick="openAddBrandModal()">+ Add new brand</button>
+      </div>
+    </div>
+
+    <!-- Category selection (Affiliate) -->
+    <div class="work-section mode-affiliate hidden">
+      <label class="work-label">Select a category <span class="work-label__hint">what vertical are you promoting?</span></label>
+
+      <div class="category-box">
+        <span style="color:var(--muted);">🔍</span>
+        <input type="text" id="categorySearch" placeholder="Search or create category..." />
+      </div>
+      <div class="brand-pills" id="categoryPills" style="margin-top:10px;">
+        <span class="pill-chip active" onclick="selectCategory(this)">🏷 test category</span>
+        <span class="pill-chip" onclick="selectCategory(this)">🛡 Life Insurance</span>
+        <span class="pill-chip" onclick="selectCategory(this)">🏠 Home Insurance</span>
+        <span class="pill-chip" onclick="selectCategory(this)">🐶 Pet Insurance</span>
+        <span class="pill-chip" onclick="selectCategory(this)">✈️ Travel Insurance</span>
+        <span class="pill-chip" onclick="selectCategory(this)">🦷 Dental Plans</span>
+        <span class="pill-chip" onclick="selectCategory(this)">👓 Vision Plans</span>
+        <span class="pill-chip" onclick="selectCategory(this)">💳 Credit Cards</span>
+        <span class="pill-chip" onclick="selectCategory(this)">💰 Loans</span>
+        <span class="pill-chip" onclick="selectCategory(this)">₿ Crypto</span>
       </div>
     </div>
 
@@ -224,7 +284,7 @@
 
     <!-- Prompt (primary) -->
     <div class="work-section">
-      <label class="work-label">Describe your vision <span class="badge-optional">optional</span> <span class="work-label__hint" id="promptDesc">add any specific ideas — or let Genie decide.</span></label>
+      <label class="work-label" id="promptLabel">Describe your vision <span class="badge-optional">optional</span> <span class="work-label__hint" id="promptDesc">add any specific ideas — or let Genie decide.</span></label>
       <div class="prompt-area">
         <textarea id="promptText" placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."></textarea>
       </div>
@@ -637,8 +697,62 @@
       t.addEventListener('click', () => {
         t.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
         t.classList.add('active');
+        setMode(t.dataset.mode);
       });
     });
+
+    function setMode(mode) {
+      document.querySelectorAll('.mode-ecom').forEach(el => el.classList.toggle('hidden', mode !== 'ecom'));
+      document.querySelectorAll('.mode-affiliate').forEach(el => el.classList.toggle('hidden', mode !== 'affiliate'));
+      // Keep only the currently-visible format grid shown (in case both ecom & affiliate have fmt-image/fmt-video)
+      const isVideo = document.getElementById('fmtVideo').classList.contains('active');
+      document.querySelectorAll('.fmt-image').forEach(el => {
+        // mode-* class already toggled above; if this element has no mode-*, respect format only
+        if (el.classList.contains('mode-ecom') || el.classList.contains('mode-affiliate')) {
+          // already handled
+        } else {
+          el.classList.toggle('hidden', isVideo);
+        }
+      });
+      document.querySelectorAll('.fmt-video').forEach(el => {
+        if (el.classList.contains('mode-ecom') || el.classList.contains('mode-affiliate')) {
+          // already handled
+        } else {
+          el.classList.toggle('hidden', !isVideo);
+        }
+      });
+      // But re-hide the wrong format among the mode-specific type grids
+      document.querySelectorAll('.type-grid.mode-ecom, .type-grid.mode-affiliate').forEach(el => {
+        const isFmtImage = el.classList.contains('fmt-image');
+        const isFmtVideo = el.classList.contains('fmt-video');
+        const elMode = el.classList.contains('mode-ecom') ? 'ecom' : 'affiliate';
+        const modeMatch = elMode === mode;
+        const fmtMatch = (isFmtImage && !isVideo) || (isFmtVideo && isVideo);
+        el.classList.toggle('hidden', !(modeMatch && fmtMatch));
+      });
+
+      // Update prompt label & bar mode chip
+      const promptDesc = document.getElementById('promptDesc');
+      const promptLabel = document.getElementById('promptLabel');
+      const promptText = document.getElementById('promptText');
+      if (mode === 'affiliate') {
+        promptLabel.firstChild.textContent = 'Angle / Prompt ';
+        promptDesc.textContent = 'Describe the angle, hook, or specific idea you want to promote.';
+        promptText.placeholder = 'e.g., "How I cut my car insurance by 40% in 10 minutes"';
+      } else {
+        promptLabel.firstChild.textContent = 'Describe your vision ';
+        promptDesc.textContent = 'Add any specific ideas — or let Genie decide.';
+        promptText.placeholder = 'e.g., Summer vibes, people laughing on a beach, warm colors...';
+      }
+      // Update bar mode chip
+      const barMode = document.querySelector('.genbar__chip:nth-child(3)');
+      if (barMode) barMode.textContent = mode === 'affiliate' ? 'Affiliate' : 'E-com';
+    }
+
+    function selectCategory(el) {
+      el.parentElement.querySelectorAll('.pill-chip').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+    }
     // Only attach the toggle handler to chips that don't already have an inline onclick handler
     document.querySelectorAll('.chip:not([onclick])').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
     document.querySelectorAll('.strategy-card').forEach(c => c.addEventListener('click', () => c.classList.toggle('selected')));
