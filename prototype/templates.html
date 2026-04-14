@@ -40,16 +40,235 @@
     </aside>
 
     <main class="genie-main">
-      <div class="module-placeholder">
-        <div class="module-placeholder__icon">📋</div>
-        <div class="module-placeholder__badge">COMING SOON</div>
-        <h1>Templates</h1>
-        <p>Saved layouts and proven ad frameworks you can reuse across campaigns.</p>
+      <div class="genie-wrap">
+        <div class="brands-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <h1 style="font-size:22px;">📋 Templates</h1>
+            <span class="count-bubble" id="tplCount">10</span>
+          </div>
+          <button class="btn btn--primary" onclick="openUploadTpl()">+ Upload Template</button>
+        </div>
+
+        <p style="color:var(--muted); font-size:13px; margin-bottom:20px;">Saved references Genie uses as inspiration. Use them from Creative Generation to draft ads in a matching style.</p>
+
+        <div class="gallery-toolbar">
+          <div class="pill-toggle" id="tplFilter">
+            <button class="active" data-filter="all">All <span class="count">10</span></button>
+            <button data-filter="image">🖼 Image <span class="count">7</span></button>
+            <button data-filter="video">🎬 Video <span class="count">3</span></button>
+            <button data-filter="uploaded">📤 Uploaded <span class="count">0</span></button>
+          </div>
+          <div class="toolbar-right">
+            <div class="toolbar-field">
+              <label class="toolbar-field__label">Category</label>
+              <select class="inline-select" id="tplCategory">
+                <option value="all">All categories</option>
+                <option>Product Ads</option>
+                <option>Brand Story</option>
+                <option>Social Proof</option>
+                <option>Urgency</option>
+                <option>Comparison</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="tpl-grid" id="tplGrid">
+          <div class="tpl-card" data-type="image" data-cat="Product Ads" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">👕</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Product Hero — Minimal</div>
+              <div class="tpl-card__meta">Product Ads · used 24×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="image" data-cat="Social Proof" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">⭐</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Social Proof Card</div>
+              <div class="tpl-card__meta">Social Proof · used 18×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="video" data-cat="Urgency" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="tpl-card__emoji">⏰</span><span class="creative__duration">15s</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Flash Sale Countdown</div>
+              <div class="tpl-card__meta">Urgency · used 12×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="image" data-cat="Comparison" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">⚖️</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Before / After</div>
+              <div class="tpl-card__meta">Comparison · used 21×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="image" data-cat="Brand Story" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">✨</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Brand Story Hero</div>
+              <div class="tpl-card__meta">Brand Story · used 9×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="video" data-cat="Brand Story" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="tpl-card__emoji">🎬</span><span class="creative__duration">30s</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Brand Story Reel</div>
+              <div class="tpl-card__meta">Brand Story · used 6×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="image" data-cat="Product Ads" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">📦</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Lifestyle Product Shot</div>
+              <div class="tpl-card__meta">Product Ads · used 15×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="image" data-cat="Product Ads" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">🎁</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Offer Highlight</div>
+              <div class="tpl-card__meta">Product Ads · used 11×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="video" data-cat="Social Proof" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="tpl-card__emoji">👥</span><span class="creative__duration">20s</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Testimonial Reel</div>
+              <div class="tpl-card__meta">Social Proof · used 7×</div>
+            </div>
+          </div>
+          <div class="tpl-card" data-type="image" data-cat="Urgency" onclick="previewTpl(this)">
+            <div class="tpl-card__thumb"><span class="creative__tag">🖼 Image</span><span class="tpl-card__emoji">🔥</span></div>
+            <div class="tpl-card__info">
+              <div class="tpl-card__name">Limited Time Banner</div>
+              <div class="tpl-card__meta">Urgency · used 8×</div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
 
+  <div id="uploadTplModal" class="modal-backdrop hidden" onclick="if (event.target === this) closeUploadTpl()">
+    <div class="modal">
+      <button class="modal__close" onclick="closeUploadTpl()">✕</button>
+      <h2 style="font-size:20px; margin-bottom:6px;">Upload a template</h2>
+      <p class="sub" style="margin-bottom:20px; font-size:13px;">Add your own reference — Genie will use it as inspiration for future generations.</p>
+
+      <div class="upload-zone" onclick="document.getElementById('tplFile').click()">
+        <div class="upload-zone__icon">📁</div>
+        <div class="upload-zone__title">Click to upload or drag &amp; drop</div>
+        <div class="upload-zone__hint">PNG, JPG, MP4 · up to 20 MB</div>
+        <input type="file" id="tplFile" accept="image/*,video/*" style="display:none;" onchange="onFilePicked(this)" />
+      </div>
+      <div id="tplFileName" style="font-size:12px; color:var(--muted); margin-top:8px;"></div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Template name <span style="color:#c33;">*</span></label>
+        <input type="text" id="newTplName" placeholder="e.g., My Brand Hero Shot" />
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <select id="newTplCategory">
+          <option>Product Ads</option>
+          <option>Brand Story</option>
+          <option>Social Proof</option>
+          <option>Urgency</option>
+          <option>Comparison</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn btn--ghost" onclick="closeUploadTpl()">Cancel</button>
+        <button class="btn btn--primary" onclick="saveTemplate()">Upload &amp; Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tplPreviewModal" class="modal-backdrop hidden" onclick="if (event.target === this) closeTplPreview()">
+    <div class="modal" style="max-width:520px;">
+      <button class="modal__close" onclick="closeTplPreview()">✕</button>
+      <h2 id="tplPreviewName" style="font-size:20px; margin-bottom:6px;">Template</h2>
+      <div id="tplPreviewMeta" style="color:var(--muted); font-size:13px; margin-bottom:20px;"></div>
+      <div id="tplPreviewThumb" class="tpl-preview-thumb"></div>
+      <div style="display:flex; justify-content:space-between; gap:10px; margin-top:20px; flex-wrap:wrap;">
+        <button class="btn btn--ghost cm-danger" onclick="closeTplPreview()">🗑 Delete</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn--ghost" onclick="closeTplPreview()">Cancel</button>
+          <a href="dashboard.html" class="btn btn--primary">✨ Use in Creative Generation →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
-<script src="pricing.js"></script>
+
+  <script>
+    function previewTpl(card) {
+      document.getElementById('tplPreviewName').textContent = card.querySelector('.tpl-card__name').textContent;
+      document.getElementById('tplPreviewMeta').textContent = card.querySelector('.tpl-card__meta').textContent;
+      document.getElementById('tplPreviewThumb').innerHTML = card.querySelector('.tpl-card__thumb').outerHTML;
+      document.getElementById('tplPreviewModal').classList.remove('hidden');
+    }
+    function closeTplPreview() { document.getElementById('tplPreviewModal').classList.add('hidden'); }
+
+    function openUploadTpl() {
+      document.getElementById('newTplName').value = '';
+      document.getElementById('tplFileName').textContent = '';
+      document.getElementById('tplFile').value = '';
+      document.getElementById('uploadTplModal').classList.remove('hidden');
+    }
+    function closeUploadTpl() { document.getElementById('uploadTplModal').classList.add('hidden'); }
+    function onFilePicked(input) {
+      const f = input.files && input.files[0];
+      document.getElementById('tplFileName').textContent = f ? ('📎 ' + f.name + ' (' + Math.round(f.size / 1024) + ' KB)') : '';
+    }
+    function saveTemplate() {
+      const name = document.getElementById('newTplName').value.trim();
+      const category = document.getElementById('newTplCategory').value;
+      const file = document.getElementById('tplFile').files[0];
+      if (!name) { document.getElementById('newTplName').focus(); return; }
+      const isVideo = file && file.type.startsWith('video/');
+      const card = document.createElement('div');
+      card.className = 'tpl-card';
+      card.dataset.type = isVideo ? 'video' : 'image';
+      card.dataset.cat = category;
+      card.dataset.uploaded = '1';
+      card.onclick = function(){ previewTpl(this); };
+      const tag = isVideo ? '<span class="creative__tag creative__tag--video">🎬 Video</span>' : '<span class="creative__tag">🖼 Image</span>';
+      card.innerHTML = `
+        <div class="tpl-card__thumb">${tag}<span class="tpl-card__emoji">📤</span><span class="tpl-card__uploaded-tag">Uploaded</span></div>
+        <div class="tpl-card__info">
+          <div class="tpl-card__name">${name}</div>
+          <div class="tpl-card__meta">${category} · just added</div>
+        </div>
+      `;
+      const grid = document.getElementById('tplGrid');
+      grid.insertBefore(card, grid.firstChild);
+      const bubble = document.getElementById('tplCount');
+      bubble.textContent = parseInt(bubble.textContent, 10) + 1;
+      closeUploadTpl();
+    }
+
+    function applyTplFilter() {
+      const active = document.querySelector('#tplFilter button.active');
+      const filter = active ? active.dataset.filter : 'all';
+      const cat = document.getElementById('tplCategory').value;
+      document.querySelectorAll('.tpl-card').forEach(c => {
+        const typeOk = filter === 'all' || (filter === 'uploaded' ? c.dataset.uploaded : c.dataset.type === filter);
+        const catOk = cat === 'all' || c.dataset.cat === cat;
+        c.classList.toggle('hidden', !(typeOk && catOk));
+      });
+    }
+    document.querySelectorAll('#tplFilter button').forEach(b => b.addEventListener('click', () => {
+      b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      applyTplFilter();
+    }));
+    document.getElementById('tplCategory').addEventListener('change', applyTplFilter);
+  </script>
+  <script src="pricing.js"></script>
 </body>
 </html>

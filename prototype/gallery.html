@@ -253,6 +253,7 @@
                 <div class="cm-secondary-actions">
                   <button class="btn btn--ghost">⬇ Download</button>
                   <button class="btn btn--ghost">🔁 Regenerate</button>
+                  <button class="btn btn--ghost" onclick="saveAsTemplate()">📋 Save as Template</button>
                   <button class="btn btn--ghost cm-danger">🗑 Delete</button>
                 </div>
               </div>
@@ -353,6 +354,14 @@
     }
     function launchCreative() {
       alert('🚀 Launching to Meta, TikTok, Google Ads — (coming soon in production)');
+    }
+    function saveAsTemplate() {
+      const title = document.getElementById('cmTitle').textContent;
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = '✓ "' + title + '" saved to Templates';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
     }
 
     document.querySelectorAll('.creative').forEach((c, idx) => {
