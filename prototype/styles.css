@@ -452,7 +452,7 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 }
 .creative__new-tag {
   position: absolute;
-  top: 8px; right: 8px;
+  top: 40px; right: 8px;
   font-size: 10px;
   font-weight: 700;
   background: var(--active);
@@ -460,6 +460,7 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   padding: 3px 8px;
   border-radius: 10px;
   letter-spacing: 0.5px;
+  z-index: 1;
 }
 
 /* Gallery */

@@ -47,7 +47,7 @@
           <div class="new-banner__icon">✨</div>
           <div class="new-banner__body">
             <div class="new-banner__title">Your creatives are ready!</div>
-            <div class="new-banner__desc">4 new items added to your Gallery — scroll down to see them marked <strong>NEW</strong>.</div>
+            <div class="new-banner__desc" id="newBannerDesc">New items added to your Gallery.</div>
           </div>
           <button class="btn btn--ghost" onclick="document.getElementById('newBanner').classList.add('hidden');">Dismiss</button>
         </div>
@@ -230,20 +230,29 @@
     });
     document.getElementById('brandFilter').addEventListener('change', applyFilters);
 
-    // Handle new generation: show banner + add NEW tags to the first N matching creatives
+    // Handle new generation: show banner + add NEW tags + move to top
     const qs = new URLSearchParams(location.search);
     if (qs.get('new') === '1') {
-      document.getElementById('newBanner').classList.remove('hidden');
       const format = qs.get('format') || 'image';
-      // Mark the first 4 creatives of the generated format as "NEW"
+      const grid = document.getElementById('creativesGrid');
       const matches = Array.from(document.querySelectorAll('.creative[data-type="' + format + '"]')).slice(0, 4);
-      matches.forEach(c => {
+      const count = matches.length;
+
+      // Update banner copy to reflect actual count
+      document.getElementById('newBannerDesc').innerHTML =
+        count + ' new ' + (format === 'video' ? 'video' : 'image') + (count > 1 ? 's' : '') +
+        ' added to your Gallery — marked <strong>NEW</strong> at the top.';
+      document.getElementById('newBanner').classList.remove('hidden');
+
+      // Add NEW tag and move to top of grid (in reverse so the first match stays leftmost)
+      matches.slice().reverse().forEach(c => {
         c.classList.add('creative--new');
         const thumb = c.querySelector('.creative__thumb');
         const newTag = document.createElement('span');
         newTag.className = 'creative__new-tag';
         newTag.textContent = '🆕 NEW';
         thumb.appendChild(newTag);
+        grid.insertBefore(c, grid.firstChild);
       });
     }
   </script>
