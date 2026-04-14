@@ -208,6 +208,73 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 
 .hidden { display: none !important; }
 
+/* ===== Genie app layout (sidebar + main) ===== */
+.genie-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - 57px);
+}
+.genie-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 12px;
+  display: flex; flex-direction: column;
+}
+.genie-sidebar__head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.genie-sidebar__title { font-weight: 700; font-size: 14px; }
+.genie-sidebar__collapse {
+  background: transparent; border: none;
+  color: var(--muted); cursor: pointer;
+  width: 24px; height: 24px; border-radius: 6px;
+}
+.genie-sidebar__collapse:hover { background: var(--accent-bg); }
+.genie-sidebar__nav { display: flex; flex-direction: column; gap: 2px; }
+.genie-sidebar__nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+}
+.genie-sidebar__nav a:hover { background: var(--accent-bg); }
+.genie-sidebar__nav a.active { background: var(--active); color: #fff; font-weight: 600; }
+.genie-sidebar__nav a .nav-icon { width: 18px; display: inline-block; text-align: center; }
+.genie-main { min-width: 0; }
+
+/* Blank module placeholder */
+.module-placeholder {
+  max-width: 640px;
+  margin: 60px auto;
+  text-align: center;
+  padding: 40px 24px;
+}
+.module-placeholder__icon {
+  width: 72px; height: 72px;
+  background: var(--accent-bg);
+  border-radius: 18px;
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+}
+.module-placeholder h1 { font-size: 24px; margin-bottom: 8px; }
+.module-placeholder p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+.module-placeholder__badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: var(--accent-bg);
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
 /* ===== Brand Ready metrics ===== */
 .metrics-grid {
   display: grid;
