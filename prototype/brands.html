@@ -46,7 +46,7 @@
             <h1 style="font-size:22px;">🎨 Brands</h1>
             <span class="count-bubble">12</span>
           </div>
-          <button class="btn btn--primary" onclick="location.href='#'">+ Add Brand</button>
+          <button class="btn btn--primary" onclick="openAddBrand()">+ Add Brand</button>
         </div>
 
         <div class="brand-grid">
@@ -182,6 +182,114 @@
     </main>
   </div>
 
+  <!-- Add Brand Modal -->
+  <div id="addBrandModal" class="modal-backdrop hidden" onclick="if (event.target === this) closeAddBrand()">
+    <div class="modal">
+      <button class="modal__close" onclick="closeAddBrand()">✕</button>
+      <h2 style="font-size:20px; margin-bottom:6px;">Add a new brand</h2>
+      <p class="sub" style="margin-bottom:20px; font-size:13px;">We'll auto-pull products, colors, and branding.</p>
+
+      <div class="field">
+        <label>Store URL <span style="color:#c33;">*</span></label>
+        <input type="text" id="newBrandUrl" placeholder="https://yourstore.com" />
+        <div class="field__hint">Works with Shopify, WooCommerce, Amazon, and most platforms.</div>
+      </div>
+
+      <div class="field">
+        <label>Brand name <span style="color:var(--muted); font-weight:400;">(optional — we'll detect from your store)</span></label>
+        <input type="text" id="newBrandName" placeholder="e.g., Aurora Apparel" />
+      </div>
+
+      <div class="field">
+        <label>Industry</label>
+        <select id="newBrandIndustry">
+          <option>Auto-detect</option>
+          <option>Travel</option>
+          <option>Technology</option>
+          <option>Fashion &amp; Apparel</option>
+          <option>Health &amp; Beauty</option>
+          <option>Financial Services</option>
+          <option>Automotive</option>
+          <option>Education</option>
+          <option>DTC</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn btn--ghost" onclick="closeAddBrand()">Cancel</button>
+        <button class="btn btn--primary" onclick="saveNewBrand()">Analyze & Add →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="newBrandProcessing" class="modal-backdrop hidden">
+    <div class="modal" style="text-align:center; padding:40px 28px;">
+      <div class="spinner"></div>
+      <h2 style="font-size:18px; margin-top:14px;">Analyzing your brand…</h2>
+      <p class="sub" style="font-size:13px;">This usually takes 10–20 seconds.</p>
+    </div>
+  </div>
+
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    function openAddBrand() {
+      document.getElementById('newBrandUrl').value = '';
+      document.getElementById('newBrandName').value = '';
+      document.getElementById('addBrandModal').classList.remove('hidden');
+    }
+    function closeAddBrand() {
+      document.getElementById('addBrandModal').classList.add('hidden');
+    }
+    function saveNewBrand() {
+      const url = document.getElementById('newBrandUrl').value.trim();
+      let name = document.getElementById('newBrandName').value.trim();
+      let industry = document.getElementById('newBrandIndustry').value;
+
+      if (!url) { document.getElementById('newBrandUrl').focus(); return; }
+      if (!name) name = url.replace(/^https?:\/\//, '').split(/[./]/)[0].replace(/^\w/, c => c.toUpperCase());
+      if (industry === 'Auto-detect') {
+        const pool = ['Technology','Fashion & Apparel','Health & Beauty','DTC','Travel'];
+        industry = pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      const palettes = [
+        ['#6366F1','#EC4899','#F0F0F0'],
+        ['#22C55E','#111','#F5F5F5'],
+        ['#F97316','#111','#FFF'],
+        ['#3B82F6','#0A2540','#FFF'],
+        ['#EF4444','#111','#F0F0F0']
+      ];
+      const colors = palettes[Math.floor(Math.random() * palettes.length)];
+
+      document.getElementById('addBrandModal').classList.add('hidden');
+      document.getElementById('newBrandProcessing').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('newBrandProcessing').classList.add('hidden');
+
+        const letter = name.charAt(0).toUpperCase();
+        const domain = url.replace(/^https?:\/\//, '').split('/')[0];
+        const card = document.createElement('a');
+        card.href = '#';
+        card.className = 'brand-card';
+        card.innerHTML = `
+          <div class="brand-card__logo brand-card__logo--text">${letter}</div>
+          <div class="brand-card__name">${name}</div>
+          <div class="brand-card__industry">${industry}</div>
+          <div class="brand-card__colors">
+            ${colors.map(c => `<span class="swatch" style="background:${c}; ${c.toUpperCase()==='#FFF'||c.toUpperCase()==='#FFFFFF'?'border:1px solid var(--border);':''}"></span>`).join('')}
+          </div>
+          <div class="brand-card__domain">🌐 ${domain} · <span style="color:var(--active); font-weight:600;">Just added</span></div>
+        `;
+        const grid = document.querySelector('.brand-grid');
+        grid.insertBefore(card, grid.firstChild);
+
+        const bubble = document.querySelector('.brands-header .count-bubble');
+        bubble.textContent = parseInt(bubble.textContent, 10) + 1;
+      }, 2200);
+    }
+  </script>
 </body>
 </html>
