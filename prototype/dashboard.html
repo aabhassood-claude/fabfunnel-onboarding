@@ -46,8 +46,8 @@
     <div id="setupBanner" class="setup-banner hidden">
       <div class="setup-banner__icon">🎨</div>
       <div class="setup-banner__body">
-        <div class="setup-banner__title">Add your brand to unlock personalized results</div>
-        <div class="setup-banner__desc">Takes under a minute. We'll auto-pull your products, colors, and style.</div>
+        <div class="setup-banner__title">Set up your brand to unlock personalized results</div>
+        <div class="setup-banner__desc">Takes under a minute. We'll auto-pull products, colors, and style — or you can still generate generic creatives right now using just a prompt.</div>
       </div>
       <div class="setup-banner__actions">
         <button class="btn btn--primary" onclick="openSetupModal()">✨ Set up brand</button>
@@ -350,6 +350,11 @@
       document.getElementById('setupBanner').classList.remove('hidden');
       document.getElementById('dashBack').href = 'login.html';
       document.getElementById('dashBack').textContent = '← Sign in';
+      // Clear prefilled brands for a truly "new" user so it's obvious no brand is set up
+      const sel = document.getElementById('dashboardBrandSelect');
+      if (sel) {
+        sel.innerHTML = '<option value="" disabled selected>— No brand yet · add one to personalize —</option>';
+      }
     } else if (isExisting) {
       document.getElementById('brandSummary').classList.remove('hidden');
       document.getElementById('dashBack').href = 'login.html';
@@ -367,14 +372,44 @@
       el.classList.add('active');
     }
     function completeSetup() {
-      // Close setup modal, show processing modal, then "refresh" dashboard state
+      // Read what the user entered in the setup modal
+      const modal = document.getElementById('setupModal');
+      const urlInput = modal.querySelector('input[type="text"]');
+      const url = urlInput ? urlInput.value.trim() : '';
+      const derived = url ? url.replace(/^https?:\/\//, '').split(/[./]/)[0] : 'My Brand';
+      const brandName = derived.charAt(0).toUpperCase() + derived.slice(1);
+
       document.getElementById('setupModal').classList.add('hidden');
       document.getElementById('processingModal').classList.remove('hidden');
       setTimeout(() => {
         document.getElementById('processingModal').classList.add('hidden');
         document.getElementById('setupBanner').classList.add('hidden');
+
+        // Add the new brand to the selector and select it
+        const sel = document.getElementById('dashboardBrandSelect');
+        if (sel) {
+          const cats = ['Apparel', 'Beauty', 'Home & Lifestyle', 'Electronics'];
+          const category = cats[Math.floor(Math.random() * cats.length)];
+          const products = 10 + Math.floor(Math.random() * 25);
+          const opt = document.createElement('option');
+          opt.value = brandName;
+          opt.textContent = brandName.charAt(0).toUpperCase() + ' · ' + brandName + ' — ' + products + ' products · ' + category;
+          sel.insertBefore(opt, sel.firstChild);
+          sel.value = brandName;
+
+          // Update the brand summary strip to reflect the new brand
+          const summary = document.getElementById('brandSummary');
+          summary.querySelector('.brand-summary__logo').textContent = brandName.charAt(0).toUpperCase();
+          summary.querySelector('.brand-summary__name').innerHTML = brandName + ' <span style="color:var(--muted); font-weight:400; font-size:12px;">· ' + products + ' products</span>';
+          summary.querySelector('.brand-summary__sub').textContent = category + ' · Shopify';
+        }
         document.getElementById('brandSummary').classList.remove('hidden');
-        showToast('Brand profile saved — Genie is now personalized for you');
+
+        // Unlock the work area
+        const lock = document.getElementById('workLock');
+        if (lock) lock.classList.add('hidden');
+
+        showToast(brandName + ' is set up — you can now generate personalized creatives');
       }, 2500);
     }
     function showToast(msg) {
