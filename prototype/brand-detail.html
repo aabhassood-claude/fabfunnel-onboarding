@@ -258,6 +258,104 @@
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
 
   <script>
+    // Brand data (12 brands) — keyed by slug, used to populate the detail page
+    const BRANDS = {
+      airbnb: { name: 'Airbnb', industry: 'Travel', logo: '🅰', logoClass: '', domain: 'https://airbnb.com', colors: ['#FF5A5F','#00A699','#484848'], typography: 'Cereal, Circular', tone: 'Warm, Adventurous, Belonging', guidelines: 'Belong anywhere. Focus on experiences, not just places.', products: [['🏖','Experiences','airbnb.com/experiences'],['🏡','Luxe Collection','airbnb.com/luxe']], competitors: [['B','Booking.com','booking.com · Travel',['Ad creatives','Messaging']],['V','Vrbo','vrbo.com · Travel',['Visual style','Promotions']],['E','Expedia','expedia.com · Travel',['Social posts']]] },
+      amalfa: { name: 'amalfa.com', industry: 'DTC', logo: 'a', logoClass: 'brand-card__logo--text', domain: 'https://amalfa.com', colors: ['#6366F1','#EC4899'], typography: 'Inter, Sans-serif', tone: 'Modern, Approachable, Confident', guidelines: 'Effortless style for every day.', products: [['👗','Summer Edit','amalfa.com/summer'],['👜','Everyday Bag','amalfa.com/bags']], competitors: [['E','Everlane','everlane.com · DTC',['Messaging','Visual style']],['R','Reformation','thereformation.com · Fashion',['Ad creatives']]] },
+      apple: { name: 'Apple', industry: 'Technology', logo: '🍎', logoClass: '', domain: 'https://apple.com', colors: ['#111','#888','#F0F0F0'], typography: 'SF Pro Display, SF Pro Text', tone: 'Minimal, Aspirational, Confident', guidelines: 'Think different. Focus on the experience.', products: [['📱','iPhone','apple.com/iphone'],['💻','MacBook','apple.com/mac'],['⌚','Apple Watch','apple.com/watch']], competitors: [['S','Samsung','samsung.com · Technology',['Ad creatives','Product launches']],['G','Google','store.google.com · Tech',['Visual style']]] },
+      duolingo: { name: 'Duolingo', industry: 'Education', logo: '🦉', logoClass: '', domain: 'https://duolingo.com', colors: ['#58CC02','#1CB0F6'], typography: 'Feather Bold, DIN Round', tone: 'Playful, Encouraging, Cheeky', guidelines: 'Make learning addictive. Streaks matter.', products: [['📚','Language Courses','duolingo.com/courses'],['🎵','Duolingo Music','duolingo.com/music']], competitors: [['B','Babbel','babbel.com · EdTech',['Messaging','Social posts']],['R','Rosetta Stone','rosettastone.com · EdTech',['Ad creatives']]] },
+      glossier: { name: 'Glossier', industry: 'Health & Beauty', logo: 'G', logoClass: 'brand-card__logo--text', domain: 'https://glossier.com', colors: ['#FFE5EC','#111'], typography: 'Surveyor, Graphik', tone: 'Friendly, Real, Community-led', guidelines: 'Skin first. Makeup second. Smile always.', products: [['💄','Balm Dotcom','glossier.com/balm'],['✨','Boy Brow','glossier.com/boybrow']], competitors: [['R','Rare Beauty','rarebeauty.com · Beauty',['Social posts','UGC']],['F','Fenty Beauty','fentybeauty.com · Beauty',['Ad creatives','Visual style']]] },
+      google: { name: 'google', industry: 'DTC', logo: 'g', logoClass: 'brand-card__logo--text', domain: 'https://google.com', colors: ['#4285F4','#EA4335','#FBBC04','#34A853'], typography: 'Google Sans, Roboto', tone: 'Helpful, Smart, Approachable', guidelines: 'Focus on the user and all else will follow.', products: [['🔍','Search','google.com'],['📺','YouTube','youtube.com']], competitors: [['M','Microsoft','microsoft.com · Tech',['Ad creatives']],['A','Apple','apple.com · Tech',['Visual style']]] },
+      lululemon: { name: 'Lululemon', industry: 'Fashion & Apparel', logo: 'L', logoClass: 'brand-card__logo--text', domain: 'https://lululemon.com', colors: ['#E31C3D','#111','#F5F5F5'], typography: 'Pangea, Helvetica', tone: 'Aspirational, Wellness-focused, Bold', guidelines: 'Elevate the world from mediocrity to greatness.', products: [['🧘','Align Leggings','lululemon.com/align'],['👕','Scuba Hoodie','lululemon.com/scuba']], competitors: [['A','Alo Yoga','aloyoga.com · Activewear',['Social posts','UGC']],['N','Nike','nike.com · Apparel',['Ad creatives']]] },
+      nike: { name: 'Nike', industry: 'Fashion & Apparel', logo: '✓', logoClass: 'brand-card__logo--text', domain: 'https://nike.com', colors: ['#111','#FA5400','#FFF'], typography: 'Futura, Trade Gothic', tone: 'Bold, Inspirational, Competitive', guidelines: 'Just do it. Celebrate athletes, push limits.', products: [['👟','Air Max','nike.com/airmax'],['👕','Dri-FIT','nike.com/dri-fit']], competitors: [['A','Adidas','adidas.com · Apparel',['Ad creatives','Product launches']],['P','Puma','puma.com · Apparel',['Social posts']]] },
+      notion: { name: 'Notion', industry: 'Technology', logo: 'N', logoClass: 'brand-card__logo--text', domain: 'https://notion.so', colors: ['#111','#F0F0F0'], typography: 'Inter, SF Pro', tone: 'Calm, Intelligent, Minimal', guidelines: 'One workspace. Every team.', products: [['📝','Notes & Docs','notion.so/docs'],['📊','Databases','notion.so/databases']], competitors: [['C','Coda','coda.io · Productivity',['Messaging']],['A','Airtable','airtable.com · Productivity',['Visual style']]] },
+      spotify: { name: 'Spotify', industry: 'Technology', logo: '♫', logoClass: 'brand-card__logo--text', domain: 'https://spotify.com', colors: ['#1DB954','#111','#FFF'], typography: 'Spotify Circular, Helvetica', tone: 'Personal, Playful, Culture-savvy', guidelines: 'Music for every moment. Personalization wins.', products: [['🎵','Spotify Premium','spotify.com/premium'],['🎙','Podcasts','spotify.com/podcasts']], competitors: [['A','Apple Music','music.apple.com · Streaming',['Ad creatives']],['Y','YouTube Music','music.youtube.com · Streaming',['Social posts']]] },
+      stripe: { name: 'Stripe', industry: 'Financial Services', logo: 'S', logoClass: 'brand-card__logo--text', domain: 'https://stripe.com', colors: ['#635BFF','#0A2540','#FFF'], typography: 'Stripe Sans, Inter', tone: 'Technical, Confident, Elegant', guidelines: 'Increase the GDP of the internet.', products: [['💳','Payments','stripe.com/payments'],['🧾','Invoicing','stripe.com/invoicing']], competitors: [['S','Square','squareup.com · Payments',['Product launches']],['A','Adyen','adyen.com · Payments',['Messaging']]] },
+      tesla: { name: 'Tesla', industry: 'Automotive', logo: 'T', logoClass: 'brand-card__logo--text', domain: 'https://tesla.com', colors: ['#E31937','#111','#FFF'], typography: 'Gotham, Helvetica', tone: 'Bold, Futuristic, Disruptive', guidelines: 'Accelerate the world\'s transition to sustainable energy.', products: [['🚗','Model 3','tesla.com/model3'],['🔋','Powerwall','tesla.com/powerwall']], competitors: [['R','Rivian','rivian.com · EV',['Product launches','Ad creatives']],['L','Lucid','lucidmotors.com · EV',['Visual style']]] }
+    };
+
+    function populateBrand() {
+      const slug = new URLSearchParams(location.search).get('brand') || 'airbnb';
+      const b = BRANDS[slug] || BRANDS.airbnb;
+
+      document.title = 'FabFunnel · ' + b.name;
+
+      // Header
+      const bdLogo = document.querySelector('.bd-logo');
+      bdLogo.textContent = b.logo;
+      if (b.logoClass) bdLogo.classList.add(b.logoClass);
+      document.querySelector('.bd-title h1').textContent = b.name;
+      document.querySelector('.bd-industry').textContent = b.industry;
+
+      // Color swatches (header + website stat + style row)
+      const headerColors = document.querySelector('.bd-colors');
+      headerColors.innerHTML = b.colors.map(c =>
+        `<span class="swatch" style="background:${c}; ${c.toUpperCase()==='#FFF' || c.toUpperCase()==='#FFFFFF' ? 'border:1px solid var(--border);':''}"></span>`
+      ).join('');
+
+      // Stat: website
+      document.querySelectorAll('.bd-stat__value')[0].textContent = b.domain;
+
+      // Brand colors row
+      const colorValueEl = document.querySelectorAll('.bd-style__value')[0];
+      colorValueEl.innerHTML = b.colors.map(c =>
+        `<span class="color-chip" style="background:${c}; ${c.toUpperCase()==='#FFF' || c.toUpperCase()==='#FFFFFF' ? 'border:1px solid var(--border);':''}"></span><code>${c}</code>`
+      ).join(' ');
+
+      // Typography + tone
+      document.querySelectorAll('.bd-style__value')[1].innerHTML = '<strong>' + b.typography.split(',')[0] + '</strong>' + (b.typography.includes(',') ? ',' + b.typography.split(',').slice(1).join(',') : '');
+      document.querySelectorAll('.bd-style__value')[2].textContent = b.tone;
+
+      // Edit form
+      const inputs = document.querySelectorAll('.bd-form-grid input, .bd-form-grid select');
+      inputs[0].value = b.name;
+      inputs[1].value = b.domain;
+      // industry select — select the option matching b.industry (or keep first)
+      const indSel = document.querySelector('.bd-form-grid select');
+      for (const opt of indSel.options) {
+        if (opt.textContent === b.industry) { opt.selected = true; break; }
+      }
+      document.querySelectorAll('.bd-form-grid input')[2].value = b.tone;
+      document.querySelector('.bd-section textarea').value = b.guidelines;
+
+      // Products
+      const productsEl = document.querySelector('.bd-products');
+      productsEl.innerHTML = b.products.map(([emoji, name, url]) => `
+        <div class="bd-product">
+          <div class="bd-product__thumb">${emoji}</div>
+          <div class="bd-product__info">
+            <div class="bd-product__name">${name}</div>
+            <div class="bd-product__meta">${url}</div>
+          </div>
+          <a href="#" class="bd-product__link">↗</a>
+        </div>`).join('');
+      // Update product count bubble
+      const countBubbles = document.querySelectorAll('.bd-section__title-row .count-bubble');
+      countBubbles[0].textContent = b.products.length;
+
+      // Competitors
+      const compEl = document.querySelector('.bd-competitors');
+      compEl.innerHTML = b.competitors.map(([letter, name, meta, tracks]) => `
+        <div class="bd-competitor">
+          <div class="bd-competitor__logo">${letter}</div>
+          <div class="bd-competitor__info">
+            <div class="bd-competitor__name">${name}</div>
+            <div class="bd-competitor__meta">${meta}</div>
+          </div>
+          <div class="bd-competitor__tracking">
+            ${tracks.map(t => `<span class="tag-chip">${t}</span>`).join('')}
+          </div>
+          <button class="bd-competitor__remove">✕</button>
+        </div>`).join('');
+      countBubbles[1].textContent = b.competitors.length;
+
+      // Strategies/Library placeholder copy uses brand name
+      const strat = document.querySelector('#tab-strategies .module-placeholder p');
+      if (strat) strat.textContent = `Save reusable ad angles and frameworks tailored to ${b.name}'s tone and audience.`;
+      const lib = document.querySelector('#tab-library .module-placeholder p');
+      if (lib) lib.textContent = `All creatives generated for ${b.name}, plus uploaded brand assets (logos, hero imagery, product shots).`;
+    }
+
     function bdTab(btn, name) {
       btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -265,6 +363,8 @@
         document.getElementById('tab-' + t).classList.toggle('hidden', t !== name);
       });
     }
+
+    populateBrand();
   </script>
 </body>
 </html>
