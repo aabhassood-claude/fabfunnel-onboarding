@@ -557,8 +557,8 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 }
 .competitor__name { font-size: 13px; font-weight: 600; }
 .competitor__meta { font-size: 11px; color: var(--muted); }
+.competitor__info { flex: 1; min-width: 0; }
 .competitor__tag {
-  margin-left: auto;
   font-size: 10px;
   padding: 3px 8px;
   border-radius: 10px;
@@ -566,6 +566,17 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   color: var(--muted);
   white-space: nowrap;
 }
+.competitor__remove {
+  background: transparent;
+  border: none;
+  color: var(--subtle);
+  font-size: 14px;
+  cursor: pointer;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.competitor__remove:hover { background: var(--accent-bg); color: var(--text); }
 
 /* ===== Genie dashboard ===== */
 .genie-wrap {

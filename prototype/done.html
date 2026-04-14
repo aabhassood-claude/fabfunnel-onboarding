@@ -155,41 +155,91 @@
     <div class="card" style="margin-top:20px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <div class="metric__label" style="margin:0;">Competitors</div>
-        <a href="#" style="font-size:12px; color:var(--muted);">+ Add competitor</a>
+        <button class="btn" style="font-size:12px; padding:6px 12px;" onclick="openCompetitorModal()">+ Add competitor</button>
       </div>
       <div style="color:var(--muted); font-size:12px; margin-bottom:14px;">Similar brands we found — use them for reference or comparison ads.</div>
-      <div class="competitor-grid">
+      <div id="competitorGrid" class="competitor-grid">
         <div class="competitor">
           <div class="competitor__logo">A</div>
-          <div>
+          <div class="competitor__info">
             <div class="competitor__name">Aritzia</div>
             <div class="competitor__meta">Apparel · $$ · Mid-premium</div>
           </div>
           <span class="competitor__tag">Style match</span>
+          <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
         <div class="competitor">
           <div class="competitor__logo">E</div>
-          <div>
+          <div class="competitor__info">
             <div class="competitor__name">Everlane</div>
             <div class="competitor__meta">Apparel · $$ · Minimal</div>
           </div>
           <span class="competitor__tag">Audience match</span>
+          <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
         <div class="competitor">
           <div class="competitor__logo">U</div>
-          <div>
+          <div class="competitor__info">
             <div class="competitor__name">Uniqlo</div>
             <div class="competitor__meta">Apparel · $ · Everyday</div>
           </div>
           <span class="competitor__tag">Category match</span>
+          <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
         <div class="competitor">
           <div class="competitor__logo">C</div>
-          <div>
+          <div class="competitor__info">
             <div class="competitor__name">COS</div>
             <div class="competitor__meta">Apparel · $$$ · Modern</div>
           </div>
           <span class="competitor__tag">Style match</span>
+          <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
+        </div>
+      </div>
+      <div id="emptyCompetitors" class="hidden" style="text-align:center; padding:24px; color:var(--muted); font-size:13px; border:1px dashed var(--border); border-radius:10px;">
+        No competitors added yet. Click <strong>+ Add competitor</strong> to add one.
+      </div>
+    </div>
+
+    <!-- Add Competitor Modal -->
+    <div id="competitorModal" class="modal-backdrop hidden">
+      <div class="modal">
+        <button class="modal__close" onclick="closeCompetitorModal()">✕</button>
+        <h2 style="font-size:20px; margin-bottom:6px;">Add a competitor</h2>
+        <p class="sub" style="margin-bottom:20px; font-size:13px;">We'll use this brand as reference for your ad strategies.</p>
+
+        <div class="field">
+          <label>Brand name</label>
+          <input type="text" id="compName" placeholder="e.g., Nike" />
+        </div>
+        <div class="field">
+          <label>Website or store URL <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
+          <input type="text" id="compUrl" placeholder="https://competitor.com" />
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="compCategory">
+            <option>Apparel</option>
+            <option>Beauty</option>
+            <option>Home & Lifestyle</option>
+            <option>Electronics</option>
+            <option>Food & Beverage</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Why track them?</label>
+          <div class="chip-group">
+            <span class="chip active" onclick="selectMatchType(this)">Style match</span>
+            <span class="chip" onclick="selectMatchType(this)">Audience match</span>
+            <span class="chip" onclick="selectMatchType(this)">Category match</span>
+            <span class="chip" onclick="selectMatchType(this)">Price match</span>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button class="btn btn--ghost" onclick="closeCompetitorModal()">Cancel</button>
+          <button class="btn btn--primary" onclick="addCompetitor()">Add competitor</button>
         </div>
       </div>
     </div>
@@ -212,8 +262,50 @@
     const mode = new URLSearchParams(location.search).get('mode') || 'ecom';
     document.getElementById('goDashboard').href = 'dashboard.html?mode=' + mode;
     document.getElementById('backLink').href = 'input-' + mode + '.html';
-    // Also route "Edit inputs" link to correct mode
     document.querySelectorAll('a[href^="input-"]').forEach(a => a.href = 'input-' + mode + '.html');
+
+    // Competitor management
+    function openCompetitorModal() {
+      document.getElementById('compName').value = '';
+      document.getElementById('compUrl').value = '';
+      document.getElementById('competitorModal').classList.remove('hidden');
+    }
+    function closeCompetitorModal() {
+      document.getElementById('competitorModal').classList.add('hidden');
+    }
+    function selectMatchType(el) {
+      el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+    function addCompetitor() {
+      const name = document.getElementById('compName').value.trim() || 'New Brand';
+      const category = document.getElementById('compCategory').value;
+      const matchEl = document.querySelector('#competitorModal .chip.active');
+      const match = matchEl ? matchEl.textContent : 'Style match';
+      const letter = name.charAt(0).toUpperCase();
+
+      const el = document.createElement('div');
+      el.className = 'competitor';
+      el.innerHTML = `
+        <div class="competitor__logo">${letter}</div>
+        <div class="competitor__info">
+          <div class="competitor__name">${name}</div>
+          <div class="competitor__meta">${category}</div>
+        </div>
+        <span class="competitor__tag">${match}</span>
+        <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
+      `;
+      document.getElementById('competitorGrid').appendChild(el);
+      document.getElementById('emptyCompetitors').classList.add('hidden');
+      closeCompetitorModal();
+    }
+    function removeCompetitor(btn) {
+      btn.closest('.competitor').remove();
+      const remaining = document.querySelectorAll('#competitorGrid .competitor').length;
+      if (remaining === 0) {
+        document.getElementById('emptyCompetitors').classList.remove('hidden');
+      }
+    }
   </script>
 </body>
 </html>
