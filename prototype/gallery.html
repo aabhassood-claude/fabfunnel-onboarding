@@ -47,27 +47,34 @@
             <h1 style="font-size:22px; margin-bottom:2px;">🖼 Gallery</h1>
             <p style="color:var(--muted); font-size:13px; margin:0;">All your generated creatives in one place.</p>
           </div>
-          <div style="display:flex; gap:8px;">
-            <input type="text" class="gallery-search" placeholder="🔍 Search creatives..." />
-            <select class="inline-select">
-              <option>Newest first</option>
-              <option>Oldest first</option>
-              <option>Most used</option>
-            </select>
-          </div>
+          <input type="text" class="gallery-search" placeholder="🔍 Search creatives..." />
         </div>
 
-        <div class="gallery-filters">
+        <div class="gallery-toolbar">
           <div class="pill-toggle">
             <button class="active" data-filter="all">All <span class="count">12</span></button>
             <button data-filter="image">🖼 Images <span class="count">9</span></button>
             <button data-filter="video">🎬 Videos <span class="count">3</span></button>
           </div>
-          <select class="inline-select" id="brandFilter">
-            <option value="all">All brands</option>
-            <option value="test">test</option>
-            <option value="Glossier">Glossier</option>
-          </select>
+
+          <div class="toolbar-right">
+            <div class="toolbar-field">
+              <label class="toolbar-field__label">Brand</label>
+              <select class="inline-select" id="brandFilter">
+                <option value="all">All brands</option>
+                <option value="test">test</option>
+                <option value="Glossier">Glossier</option>
+              </select>
+            </div>
+            <div class="toolbar-field">
+              <label class="toolbar-field__label">Sort</label>
+              <select class="inline-select">
+                <option>Newest first</option>
+                <option>Oldest first</option>
+                <option>Most used</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div class="creatives-grid" id="creativesGrid">
