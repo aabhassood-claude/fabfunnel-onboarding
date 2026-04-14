@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FabFunnel · Studio</title>
+  <title>FabFunnel · Gallery</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,9 +12,14 @@
       <a href="dashboard.html" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Dashboard</a>
       <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
     </div>
-    <div style="display:flex; align-items:center; gap:14px; font-size:13px; color:var(--muted);">
-      <span>⚡ 42 credits</span>
-      <span>Client 1 ▾</span>
+    <div style="display:flex; align-items:center; gap:12px; font-size:13px;">
+      <div class="credits-pill">
+        <span class="credits-pill__bolt">⚡</span>
+        <span class="credits-pill__count">42</span>
+        <span class="credits-pill__label">credits</span>
+        <button class="credits-pill__buy">+ Buy more</button>
+      </div>
+      <span style="color:var(--muted);">Client 1 ▾</span>
     </div>
   </div>
 
@@ -26,7 +31,7 @@
       </div>
       <nav class="genie-sidebar__nav">
         <a href="dashboard.html"><span class="nav-icon">✨</span> New Generation</a>
-        <a href="studio.html" class="active"><span class="nav-icon">🎨</span> Studio</a>
+        <a href="gallery.html" class="active"><span class="nav-icon">🖼</span> Gallery</a>
         <a href="templates.html"><span class="nav-icon">📋</span> Templates</a>
         <a href="brands.html"><span class="nav-icon">🏷️</span> Brands</a>
         <a href="categories.html"><span class="nav-icon">📁</span> Categories</a>
@@ -36,15 +41,150 @@
     </aside>
 
     <main class="genie-main">
-      <div class="module-placeholder">
-        <div class="module-placeholder__icon">🎨</div>
-        <div class="module-placeholder__badge">COMING SOON</div>
-        <h1>Studio</h1>
-        <p>Edit, refine, and remix your generated creatives in a visual editor — layers, text, mockups, export presets.</p>
+      <div class="genie-wrap">
+        <div class="gallery-header">
+          <div>
+            <h1 style="font-size:22px; margin-bottom:2px;">🖼 Gallery</h1>
+            <p style="color:var(--muted); font-size:13px; margin:0;">All your generated creatives in one place.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" class="gallery-search" placeholder="🔍 Search creatives..." />
+            <select class="inline-select">
+              <option>Newest first</option>
+              <option>Oldest first</option>
+              <option>Most used</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="gallery-filters">
+          <div class="pill-toggle">
+            <button class="active" data-filter="all">All <span class="count">12</span></button>
+            <button data-filter="image">🖼 Images <span class="count">9</span></button>
+            <button data-filter="video">🎬 Videos <span class="count">3</span></button>
+          </div>
+          <div class="pill-toggle">
+            <button class="active">All brands</button>
+            <button>test</button>
+            <button>Glossier</button>
+          </div>
+        </div>
+
+        <div class="creatives-grid" id="creativesGrid">
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👕</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Summer Tee Launch</div>
+              <div class="creative__meta">test · Product Ads · 2 days ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👟</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Sneaker Hero Shot</div>
+              <div class="creative__meta">test · Brand Ads · 3 days ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="video">
+            <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🧥</span><span class="creative__duration">15s</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Linen Jacket Reel</div>
+              <div class="creative__meta">test · Product Demo · 4 days ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👖</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Slim Trousers Lifestyle</div>
+              <div class="creative__meta">test · Product Ads · 5 days ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🧢</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Canvas Cap Social Post</div>
+              <div class="creative__meta">Glossier · Product Asset · 1 week ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="video">
+            <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">👜</span><span class="creative__duration">30s</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Tote Bag Unboxing</div>
+              <div class="creative__meta">test · UGC-style Reel · 1 week ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">💄</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Lipstick Promo</div>
+              <div class="creative__meta">Glossier · Brand Ads · 1 week ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🌸</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Spring Collection</div>
+              <div class="creative__meta">test · Offer Highlight · 2 weeks ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">✨</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Brand Story Hero</div>
+              <div class="creative__meta">test · Brand Ads · 2 weeks ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="video">
+            <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🏃</span><span class="creative__duration">6s</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Flash Sale Teaser</div>
+              <div class="creative__meta">test · Brand Story · 3 weeks ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🎁</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Holiday Gift Set</div>
+              <div class="creative__meta">test · Product Ads · 1 month ago</div>
+            </div>
+          </div>
+          <div class="creative" data-type="image">
+            <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">📸</span></div>
+            <div class="creative__info">
+              <div class="creative__title">Campaign Launch</div>
+              <div class="creative__meta">Glossier · Product Asset · 1 month ago</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="emptyGallery" class="hidden" style="text-align:center; padding:40px; color:var(--muted);">No creatives match this filter.</div>
       </div>
     </main>
   </div>
 
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    document.querySelectorAll('.gallery-filters .pill-toggle button[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        let visibleCount = 0;
+        document.querySelectorAll('.creative').forEach(c => {
+          const show = filter === 'all' || c.dataset.type === filter;
+          c.classList.toggle('hidden', !show);
+          if (show) visibleCount++;
+        });
+        document.getElementById('emptyGallery').classList.toggle('hidden', visibleCount > 0);
+      });
+    });
+    document.querySelectorAll('.gallery-filters .pill-toggle:last-child button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
