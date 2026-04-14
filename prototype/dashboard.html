@@ -12,9 +12,14 @@
       <a href="done.html" id="dashBack" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Brand Details</a>
       <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
     </div>
-    <div style="display:flex; align-items:center; gap:14px; font-size:13px; color:var(--muted);">
-      <span>⚡ 42 credits</span>
-      <span>Client 1 ▾</span>
+    <div style="display:flex; align-items:center; gap:12px; font-size:13px;">
+      <div class="credits-pill" title="Credits remaining · enough for ~10 images / 2 videos">
+        <span class="credits-pill__bolt">⚡</span>
+        <span class="credits-pill__count">42</span>
+        <span class="credits-pill__label">credits</span>
+        <button class="credits-pill__buy" onclick="alert('Buy credits — coming soon')">+ Buy more</button>
+      </div>
+      <span style="color:var(--muted);">Client 1 ▾</span>
     </div>
   </div>
 
@@ -115,233 +120,132 @@
       </div>
     </div>
 
-    <!-- Friendly welcome header -->
-    <div class="genie-welcome">
-      <div>
-        <h1 style="font-size:22px; margin-bottom:2px;">👋 Welcome, let's create your first ad</h1>
-        <p style="color:var(--muted); font-size:13px; margin:0;">Follow the 3 steps below — it takes about a minute.</p>
+    <!-- Compact control strip -->
+    <div class="control-strip">
+      <div class="pill-toggle" role="tablist" aria-label="Output format">
+        <button class="active" id="fmtImage" onclick="setFormat('image')">🖼 Image</button>
+        <button id="fmtVideo" onclick="setFormat('video')">🎬 Video</button>
+      </div>
+
+      <div class="pill-toggle" role="tablist" aria-label="Mode">
+        <button class="active" data-mode="ecom">🛒 E-com</button>
+        <button data-mode="affiliate">⚡ Affiliate</button>
+      </div>
+
+      <select class="inline-select" id="subModeSelect">
+        <optgroup label="Image" class="fmt-image">
+          <option>Product Ads</option>
+          <option>Brand Ads</option>
+          <option>Product Asset Creative</option>
+        </optgroup>
+        <optgroup label="Video" class="fmt-video hidden">
+          <option>Product Demo</option>
+          <option>UGC-style Reel</option>
+          <option>Brand Story</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Brand input (primary) -->
+    <div class="work-section">
+      <label class="work-label">Brand <span class="work-label__hint">or paste a product URL</span></label>
+      <div class="search-box search-box--highlight">
+        <span style="color:var(--muted);">🔍</span>
+        <input type="text" placeholder="Paste URL or search..." />
+        <span class="kbd-hint">↵</span>
+      </div>
+      <div class="brand-pills" style="margin-top:10px;">
+        <span class="pill">🅰 Airbnb</span>
+        <span class="pill">✺ amalfa.com</span>
+        <span class="pill">🍎 Apple</span>
+        <span class="pill">🦉 Duolingo</span>
+        <span class="pill">◐ Glossier</span>
+        <span class="pill">L Lululemon</span>
       </div>
     </div>
 
-    <!-- Output format (Static/Video) -->
-    <div class="friendly-section">
-      <div class="friendly-section__head">
-        <div class="step-num">1</div>
-        <div>
-          <div class="step-title">What do you want to generate?</div>
-          <div class="step-desc">Pick a format — fields below will adapt.</div>
-        </div>
-      </div>
-      <div class="format-cards" style="margin-top:14px;">
-        <button class="format-card active" id="fmtImage" onclick="setFormat('image')">
-          <div class="format-card__icon">🖼️</div>
-          <div class="format-card__title">Static Image</div>
-          <div class="format-card__desc">Product shots, ads, social posts. 4 variations in ~15s.</div>
-        </button>
-        <button class="format-card" id="fmtVideo" onclick="setFormat('video')">
-          <div class="format-card__icon">🎬</div>
-          <div class="format-card__title">Video</div>
-          <div class="format-card__desc">Short-form reels, UGC-style, product demos. 6–30 sec.</div>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mode tabs (friendlier labels + helper text) -->
-    <div class="friendly-section">
-      <div class="friendly-section__head">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-title">Choose what you're creating for</div>
-          <div class="step-desc">Switch modes anytime — your inputs are saved.</div>
-        </div>
-      </div>
-      <div class="mode-tabs" id="subTabs" style="margin-top:14px;">
-        <button class="tab tab--active" data-mode="ecom">🛒 E-com</button>
-        <button class="tab" data-mode="affiliate">⚡ Affiliate</button>
-        <span class="tab-divider"></span>
-        <!-- Image sub-tabs -->
-        <button class="tab tab--active fmt-image">Product Ads</button>
-        <button class="tab fmt-image">Brand Ads</button>
-        <button class="tab fmt-image">Product Asset Creative</button>
-        <!-- Video sub-tabs (hidden by default) -->
-        <button class="tab tab--active fmt-video hidden">Product Demo</button>
-        <button class="tab fmt-video hidden">UGC-style Reel</button>
-        <button class="tab fmt-video hidden">Brand Story</button>
-      </div>
-    </div>
-
-    <!-- Video-specific settings (only shown for Video) -->
-    <div class="friendly-section fmt-video-only hidden">
-      <div class="friendly-section__head">
-        <div class="step-num">2b</div>
-        <div>
-          <div class="step-title">Video settings</div>
-          <div class="step-desc">Set duration, aspect ratio, and audio style.</div>
-        </div>
-      </div>
-
-      <div class="field" style="margin-top:14px;">
-        <label>Duration</label>
-        <div class="chip-group">
-          <span class="chip" onclick="selectOne(this)">6 sec</span>
-          <span class="chip active" onclick="selectOne(this)">15 sec</span>
-          <span class="chip" onclick="selectOne(this)">30 sec</span>
-          <span class="chip" onclick="selectOne(this)">60 sec</span>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Aspect ratio</label>
-        <div class="chip-group">
-          <span class="chip active" onclick="selectOne(this)">📱 9:16 (Reels/TikTok)</span>
-          <span class="chip" onclick="selectOne(this)">⬛ 1:1 (Square)</span>
-          <span class="chip" onclick="selectOne(this)">🖥 16:9 (YouTube)</span>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Voiceover / Music</label>
-        <div class="chip-group">
-          <span class="chip active" onclick="selectOne(this)">🎵 Trending music</span>
-          <span class="chip" onclick="selectOne(this)">🎙 AI voiceover</span>
-          <span class="chip" onclick="selectOne(this)">🤐 No audio</span>
-        </div>
-      </div>
-
-      <div class="field" style="margin-bottom:0;">
-        <label>Scene count <span style="color:var(--muted); font-weight:400;">(we'll auto-storyboard)</span></label>
-        <div class="chip-group">
-          <span class="chip" onclick="selectOne(this)">2 scenes</span>
-          <span class="chip active" onclick="selectOne(this)">3 scenes</span>
-          <span class="chip" onclick="selectOne(this)">4–6 scenes</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brand search panel -->
-    <div class="friendly-section">
-      <div class="friendly-section__head">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-title">Pick a brand or paste a product URL</div>
-          <div class="step-desc">We'll auto-pull images, colors, and product info.</div>
-        </div>
-      </div>
-
-      <div class="panel" style="margin-top:14px;">
-        <div class="search-box search-box--highlight">
-          <span style="color:var(--muted);">🔍</span>
-          <input type="text" placeholder="Paste a URL or search..." />
-          <span class="kbd-hint">↵ Enter</span>
-        </div>
-        <div style="font-size:12px; color:var(--muted); margin:10px 0 8px;">Or try one of these:</div>
-        <div class="brand-pills">
-          <span class="pill">🅰 Airbnb</span>
-          <span class="pill">✺ amalfa.com</span>
-          <span class="pill">🍎 Apple</span>
-          <span class="pill">🦉 Duolingo</span>
-          <span class="pill">◐ Glossier</span>
-          <span class="pill">G google</span>
-          <span class="pill">L Lululemon</span>
-        </div>
-      </div>
-
-      <!-- Research enrichment - friendlier framing -->
-      <div class="panel panel--collapse" style="margin-top:10px;">
-        <div class="panel__head" onclick="this.parentElement.classList.toggle('open')">
-          <span>➕ Add extra research <span style="color:var(--muted); font-weight:400; font-size:12px;">— optional, helps Genie match your tone</span></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strategies -->
-    <div class="friendly-section">
-      <div class="friendly-section__head">
-        <div class="step-num">4</div>
-        <div>
-          <div class="step-title">Pick a strategy <span class="badge-optional">Select at least 1</span></div>
-          <div class="step-desc">Proven ad angles — we'll apply them to your brand.</div>
-        </div>
-        <div class="tabs-mini" style="margin-left:auto;">
-          <button class="active">✨ Recommended</button>
-          <button>Saved</button>
-          <button>Browse all</button>
-        </div>
-      </div>
-
-      <div class="strategy-grid" style="margin-top:14px;">
-        <div class="strategy-card">
-          <div class="strategy-card__thumb">👥</div>
-          <div class="strategy-card__title">Before / After</div>
-          <div class="strategy-card__desc">Show transformation in 7 days — great for beauty, fitness.</div>
-          <div class="tag-row">
-            <span class="tag">Comparison</span>
-            <span class="tag">Conversion</span>
-          </div>
-        </div>
-        <div class="strategy-card">
-          <div class="strategy-card__thumb">⭐</div>
-          <div class="strategy-card__title">Social Proof</div>
-          <div class="strategy-card__desc">"Join 50K+ customers" — builds trust fast.</div>
-          <div class="tag-row">
-            <span class="tag">Trust</span>
-            <span class="tag">UGC</span>
-          </div>
-        </div>
-        <div class="strategy-card">
-          <div class="strategy-card__thumb">⏰</div>
-          <div class="strategy-card__title">Urgency / Flash Sale</div>
-          <div class="strategy-card__desc">"24 hours left" — for promos and launches.</div>
-          <div class="tag-row">
-            <span class="tag">FOMO</span>
-            <span class="tag">Sale</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Approach as inline radio -->
-      <div class="approach-row">
-        <span style="font-size:13px; color:var(--muted);">Style of generation:</span>
-        <div class="approach-toggle">
-          <button>📄 Use Templates</button>
-          <button class="active">✨ Fresh AI</button>
-        </div>
-        <span style="font-size:12px; color:var(--muted);">💡 Fresh AI creates concepts from scratch.</span>
-      </div>
-    </div>
-
-    <!-- Prompt + suggestions -->
-    <div class="friendly-section">
-      <div class="friendly-section__head">
-        <div class="step-num">5</div>
-        <div>
-          <div class="step-title">Describe your vision <span class="badge-optional">optional</span></div>
-          <div class="step-desc" id="promptDesc">Add any specific ideas — or let Genie decide.</div>
-        </div>
-      </div>
-
-      <div style="padding: 12px 0 8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-        <span style="font-size:12px; color:var(--muted);">Quick vibes:</span>
-        <div id="vibeChips" style="display:contents;">
-          <!-- Image vibes -->
-          <span class="chip fmt-image">Product Focus</span>
-          <span class="chip fmt-image">Lifestyle</span>
-          <span class="chip fmt-image">UGC Style</span>
-          <span class="chip fmt-image">Offer Highlight</span>
-          <span class="chip fmt-image">Bold & Eye-catching</span>
-          <!-- Video vibes -->
-          <span class="chip fmt-video hidden">Unboxing</span>
-          <span class="chip fmt-video hidden">Before/After</span>
-          <span class="chip fmt-video hidden">Day in the life</span>
-          <span class="chip fmt-video hidden">Problem → Solution</span>
-          <span class="chip fmt-video hidden">Testimonial</span>
-        </div>
-      </div>
-
+    <!-- Prompt (primary) -->
+    <div class="work-section">
+      <label class="work-label">Describe your vision <span class="badge-optional">optional</span></label>
       <div class="prompt-area">
         <textarea id="promptText" placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."></textarea>
       </div>
+      <div class="vibes-row">
+        <span class="vibes-row__label">Quick vibes:</span>
+        <span class="chip fmt-image">Product Focus</span>
+        <span class="chip fmt-image">Lifestyle</span>
+        <span class="chip fmt-image">UGC Style</span>
+        <span class="chip fmt-image">Offer Highlight</span>
+        <span class="chip fmt-image">Bold</span>
+        <span class="chip fmt-video hidden">Unboxing</span>
+        <span class="chip fmt-video hidden">Before/After</span>
+        <span class="chip fmt-video hidden">Day in the life</span>
+        <span class="chip fmt-video hidden">Testimonial</span>
+      </div>
     </div>
+
+    <!-- Advanced (collapsed by default) -->
+    <details class="advanced">
+      <summary>⚙️ More options <span class="advanced__hint">— strategy, video settings, research</span></summary>
+
+      <!-- Video settings -->
+      <div class="adv-block fmt-video-only hidden">
+        <div class="adv-block__title">🎬 Video settings</div>
+        <div class="adv-row">
+          <span class="adv-row__label">Duration</span>
+          <div class="chip-group">
+            <span class="chip" onclick="selectOne(this)">6s</span>
+            <span class="chip active" onclick="selectOne(this)">15s</span>
+            <span class="chip" onclick="selectOne(this)">30s</span>
+            <span class="chip" onclick="selectOne(this)">60s</span>
+          </div>
+        </div>
+        <div class="adv-row">
+          <span class="adv-row__label">Aspect</span>
+          <div class="chip-group">
+            <span class="chip active" onclick="selectOne(this)">9:16</span>
+            <span class="chip" onclick="selectOne(this)">1:1</span>
+            <span class="chip" onclick="selectOne(this)">16:9</span>
+          </div>
+        </div>
+        <div class="adv-row">
+          <span class="adv-row__label">Audio</span>
+          <div class="chip-group">
+            <span class="chip active" onclick="selectOne(this)">🎵 Music</span>
+            <span class="chip" onclick="selectOne(this)">🎙 AI voice</span>
+            <span class="chip" onclick="selectOne(this)">🤐 None</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy -->
+      <div class="adv-block">
+        <div class="adv-block__title">📋 Strategy <span class="badge-optional">optional</span></div>
+        <div class="strategy-grid" style="margin-top:10px;">
+          <div class="strategy-card">
+            <div class="strategy-card__thumb">👥</div>
+            <div class="strategy-card__title">Before / After</div>
+            <div class="strategy-card__desc">Show transformation.</div>
+          </div>
+          <div class="strategy-card">
+            <div class="strategy-card__thumb">⭐</div>
+            <div class="strategy-card__title">Social Proof</div>
+            <div class="strategy-card__desc">Builds trust fast.</div>
+          </div>
+          <div class="strategy-card">
+            <div class="strategy-card__thumb">⏰</div>
+            <div class="strategy-card__title">Urgency</div>
+            <div class="strategy-card__desc">Promos & launches.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Research -->
+      <div class="adv-block">
+        <div class="adv-block__title">🔎 Research enrichment <span class="badge-optional">optional</span></div>
+        <p style="color:var(--muted); font-size:12px; margin:4px 0 0;">Add extra context to help Genie match your tone.</p>
+      </div>
+    </details>
 
     <!-- Generate bar (friendlier) -->
     <div class="genbar">
@@ -357,12 +261,6 @@
       </div>
     </div>
 
-    <!-- Help footer -->
-    <div class="help-row">
-      <span>Not sure where to start? <a href="#">Watch a 60-sec demo</a></span>
-      <span>·</span>
-      <span><a href="#">Chat with us</a></span>
-    </div>
   </div>
     </main>
   </div>
@@ -424,6 +322,16 @@
       document.querySelectorAll('.fmt-image').forEach(el => el.classList.toggle('hidden', fmt !== 'image'));
       document.querySelectorAll('.fmt-video').forEach(el => el.classList.toggle('hidden', fmt !== 'video'));
       document.querySelectorAll('.fmt-video-only').forEach(el => el.classList.toggle('hidden', fmt !== 'video'));
+
+      // Switch selected optgroup in sub-mode select (optgroups don't hide via CSS in most browsers)
+      const sel = document.getElementById('subModeSelect');
+      if (sel) {
+        Array.from(sel.querySelectorAll('optgroup')).forEach(g => {
+          g.disabled = !g.classList.contains('fmt-' + (fmt === 'image' ? 'image' : 'video'));
+        });
+        const firstEnabled = sel.querySelector('optgroup:not([disabled]) option');
+        if (firstEnabled) sel.value = firstEnabled.textContent;
+      }
 
       // Update generate bar + prompt hint based on format
       if (fmt === 'video') {
