@@ -271,8 +271,9 @@
 
         const letter = name.charAt(0).toUpperCase();
         const domain = url.replace(/^https?:\/\//, '').split('/')[0];
+        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'new-brand';
         const card = document.createElement('a');
-        card.href = '#';
+        card.href = 'brand-detail.html?brand=' + encodeURIComponent(slug);
         card.className = 'brand-card';
         card.innerHTML = `
           <div class="brand-card__logo brand-card__logo--text">${letter}</div>
