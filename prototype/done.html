@@ -13,7 +13,7 @@
   </div>
 
   <div class="page">
-    <a href="javascript:history.back()" class="back-link">← Back</a>
+    <a href="#" id="backLink" class="back-link">← Back</a>
 
     <div class="stepper">
       <div class="stepper__item done">Choose Mode</div>
@@ -205,8 +205,11 @@
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
 
   <script>
-    const mode = new URLSearchParams(location.search).get('mode');
-    if (mode) document.getElementById('goDashboard').href = 'dashboard.html?mode=' + mode;
+    const mode = new URLSearchParams(location.search).get('mode') || 'ecom';
+    document.getElementById('goDashboard').href = 'dashboard.html?mode=' + mode;
+    document.getElementById('backLink').href = 'input-' + mode + '.html';
+    // Also route "Edit inputs" link to correct mode
+    document.querySelectorAll('a[href^="input-"]').forEach(a => a.href = 'input-' + mode + '.html');
   </script>
 </body>
 </html>

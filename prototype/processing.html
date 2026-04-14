@@ -13,7 +13,7 @@
   </div>
 
   <div class="page">
-    <a href="javascript:history.back()" class="back-link">← Back</a>
+    <a href="#" id="backLink" class="back-link">← Back</a>
 
     <div class="stepper">
       <div class="stepper__item done">Choose Mode</div>
@@ -42,6 +42,7 @@
     // Simulate progress so the flow can be clicked through
     const params = new URLSearchParams(location.search);
     const mode = params.get('mode') || 'ecom';
+    document.getElementById('backLink').href = 'input-' + mode + '.html';
     const steps = document.querySelectorAll('.processing__step');
     let i = 0;
     const iv = setInterval(() => {
