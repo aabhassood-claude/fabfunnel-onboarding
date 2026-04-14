@@ -319,6 +319,34 @@
       </div>
     </div>
 
+    <!-- Inline processing (shown while generating) -->
+    <div id="inlineProcessing" class="inline-processing hidden">
+      <div class="spinner"></div>
+      <div class="inline-processing__title">Generating your creatives…</div>
+      <div class="inline-processing__sub">Usually takes 15–30 seconds.</div>
+      <div class="inline-processing__steps" id="inlineSteps">
+        <div class="processing__step active"><span class="processing__check"></span><span>Reading your brand &amp; prompt</span></div>
+        <div class="processing__step"><span class="processing__check"></span><span>Applying strategy &amp; style</span></div>
+        <div class="processing__step"><span class="processing__check"></span><span>Rendering variations</span></div>
+        <div class="processing__step"><span class="processing__check"></span><span>Saving to Gallery</span></div>
+      </div>
+    </div>
+
+    <!-- Inline results (shown after generation completes) -->
+    <div id="inlineResults" class="inline-results hidden">
+      <div class="inline-results__header">
+        <div>
+          <h3 style="font-size:18px; margin-bottom:2px;">✨ Your creatives are ready</h3>
+          <p id="inlineResultsSub" style="color:var(--muted); font-size:13px; margin:0;">Saved to your Gallery.</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <a href="gallery.html?new=1" class="btn btn--primary">🖼 See in Gallery →</a>
+          <button class="btn" onclick="resetGeneration()">✨ Generate more</button>
+        </div>
+      </div>
+      <div id="inlineResultsGrid" class="inline-results__grid"></div>
+    </div>
+
     <!-- Generate bar (friendlier) -->
     <div class="genbar">
       <div class="genbar__left">
@@ -423,10 +451,78 @@
       setTimeout(() => t.remove(), 3500);
     }
 
+    const SAMPLE_EMOJIS_IMG = ['👕','👟','🧥','👖','🧢','👜','💄','🌸','✨','🎁','📸','🕶'];
+    const SAMPLE_EMOJIS_VID = ['🎬','📱','🎥','🎙','📺','🎞'];
+    const SAMPLE_TITLES_IMG = ['Product Hero','Lifestyle Shot','Ad Creative','Social Post','Email Banner','Offer Highlight'];
+    const SAMPLE_TITLES_VID = ['Product Demo','Unboxing Reel','Before / After','Brand Story','Flash Sale Teaser'];
+
     function startGeneration() {
       const isVideo = document.getElementById('fmtVideo').classList.contains('active');
       const count = getVariationCount();
-      location.href = 'generating.html?format=' + (isVideo ? 'video' : 'image') + '&count=' + count;
+
+      document.getElementById('inlineResults').classList.add('hidden');
+      const proc = document.getElementById('inlineProcessing');
+      proc.classList.remove('hidden');
+      const steps = document.querySelectorAll('#inlineSteps .processing__step');
+      steps.forEach(s => s.classList.remove('active', 'done'));
+      steps[0].classList.add('active');
+      proc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      let i = 0;
+      const iv = setInterval(() => {
+        steps[i].classList.remove('active');
+        steps[i].classList.add('done');
+        i++;
+        if (i < steps.length) {
+          steps[i].classList.add('active');
+        } else {
+          clearInterval(iv);
+          showResults(isVideo ? 'video' : 'image', count);
+        }
+      }, 800);
+    }
+
+    function showResults(format, count) {
+      document.getElementById('inlineProcessing').classList.add('hidden');
+
+      const grid = document.getElementById('inlineResultsGrid');
+      grid.innerHTML = '';
+      const emojis = format === 'video' ? SAMPLE_EMOJIS_VID : SAMPLE_EMOJIS_IMG;
+      const titles = format === 'video' ? SAMPLE_TITLES_VID : SAMPLE_TITLES_IMG;
+      const sel = document.getElementById('dashboardBrandSelect');
+      const brand = (sel && sel.selectedOptions[0]) ? (sel.value || 'Your brand') : 'Your brand';
+      const visual = count > 12 ? 12 : count;
+
+      for (let i = 0; i < visual; i++) {
+        const card = document.createElement('div');
+        card.className = 'inline-result';
+        const dur = format === 'video' ? '<span class="creative__duration">' + (6 + (i * 3) % 25) + 's</span>' : '';
+        const tag = format === 'video' ? '<span class="creative__tag creative__tag--video">🎬 Video</span>' : '<span class="creative__tag">🖼 Image</span>';
+        card.innerHTML = `
+          <div class="inline-result__thumb">${tag}<span class="inline-result__emoji">${emojis[i % emojis.length]}</span>${dur}</div>
+          <div class="inline-result__info">
+            <div class="inline-result__title">${titles[i % titles.length]} #${i + 1}</div>
+            <div class="inline-result__meta">${brand} · just now</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+
+      const extra = count > 12 ? ' (showing first 12 of ' + count + ')' : '';
+      document.getElementById('inlineResultsSub').textContent =
+        count + ' ' + (format === 'video' ? 'video' : 'image') + (count > 1 ? 's' : '') + ' saved to your Gallery' + extra + '.';
+
+      const seeBtn = document.querySelector('#inlineResults a.btn--primary');
+      seeBtn.href = 'gallery.html?new=1&format=' + format + '&count=' + count;
+
+      const results = document.getElementById('inlineResults');
+      results.classList.remove('hidden');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetGeneration() {
+      document.getElementById('inlineResults').classList.add('hidden');
+      document.querySelector('.genbar').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // Format switcher (Static Image vs Video)
