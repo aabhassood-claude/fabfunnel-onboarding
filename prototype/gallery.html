@@ -42,6 +42,16 @@
 
     <main class="genie-main">
       <div class="genie-wrap">
+        <!-- "Just generated" success banner (shown after generation) -->
+        <div id="newBanner" class="new-banner hidden">
+          <div class="new-banner__icon">✨</div>
+          <div class="new-banner__body">
+            <div class="new-banner__title">Your creatives are ready!</div>
+            <div class="new-banner__desc">4 new items added to your Gallery — scroll down to see them marked <strong>NEW</strong>.</div>
+          </div>
+          <button class="btn btn--ghost" onclick="document.getElementById('newBanner').classList.add('hidden');">Dismiss</button>
+        </div>
+
         <div class="gallery-header">
           <div>
             <h1 style="font-size:22px; margin-bottom:2px;">🖼 Gallery</h1>
@@ -195,6 +205,23 @@
       });
     });
     document.getElementById('brandFilter').addEventListener('change', applyFilters);
+
+    // Handle new generation: show banner + add NEW tags to the first N matching creatives
+    const qs = new URLSearchParams(location.search);
+    if (qs.get('new') === '1') {
+      document.getElementById('newBanner').classList.remove('hidden');
+      const format = qs.get('format') || 'image';
+      // Mark the first 4 creatives of the generated format as "NEW"
+      const matches = Array.from(document.querySelectorAll('.creative[data-type="' + format + '"]')).slice(0, 4);
+      matches.forEach(c => {
+        c.classList.add('creative--new');
+        const thumb = c.querySelector('.creative__thumb');
+        const newTag = document.createElement('span');
+        newTag.className = 'creative__new-tag';
+        newTag.textContent = '🆕 NEW';
+        thumb.appendChild(newTag);
+      });
+    }
   </script>
 </body>
 </html>

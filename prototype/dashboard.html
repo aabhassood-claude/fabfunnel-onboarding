@@ -316,7 +316,7 @@
       </div>
       <div class="genbar__right">
         <span style="color:var(--muted); font-size:13px;" id="barCredits">⚡ Uses 4 credits</span>
-        <button class="btn btn--primary" id="barBtn">✨ Generate →</button>
+        <button class="btn btn--primary" id="barBtn" onclick="startGeneration()">✨ Generate →</button>
       </div>
     </div>
 
@@ -372,6 +372,11 @@
       t.textContent = '✓ ' + msg;
       document.body.appendChild(t);
       setTimeout(() => t.remove(), 3500);
+    }
+
+    function startGeneration() {
+      const isVideo = document.getElementById('fmtVideo').classList.contains('active');
+      location.href = 'generating.html?format=' + (isVideo ? 'video' : 'image');
     }
 
     // Format switcher (Static Image vs Video)
