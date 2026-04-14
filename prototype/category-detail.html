@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Category</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <a href="categories.html" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Categories</a>
+      <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
+    </div>
+    <div class="topbar__right">
+      <div class="credits-pill">
+        <span class="credits-pill__bolt">⚡</span>
+        <span class="credits-pill__count">42</span>
+        <span class="credits-pill__label">credits</span>
+        <button class="credits-pill__buy" onclick="openPricing()">+ Buy more</button>
+      </div>
+      <span style="color:var(--muted);">Client 1 ▾</span>
+    </div>
+  </div>
+
+  <div class="genie-layout">
+    <aside class="genie-sidebar">
+      <div class="genie-sidebar__head">
+        <div class="genie-sidebar__title">✨ Genie</div>
+        <button class="genie-sidebar__collapse" title="Collapse">‹</button>
+      </div>
+      <nav class="genie-sidebar__nav">
+        <a href="overview.html"><span class="nav-icon">🏠</span> Overview</a>
+        <a href="dashboard.html"><span class="nav-icon">✨</span> Creative Generation</a>
+        <a href="gallery.html"><span class="nav-icon">🖼</span> Gallery</a>
+        <a href="templates.html"><span class="nav-icon">📋</span> Templates</a>
+        <a href="brands.html"><span class="nav-icon">🏷️</span> Brands</a>
+        <a href="categories.html" class="active"><span class="nav-icon">📁</span> Categories</a>
+      </nav>
+    </aside>
+
+    <main class="genie-main">
+      <div class="genie-wrap">
+
+        <!-- Category header -->
+        <div class="cd-header">
+          <a href="categories.html" class="bd-back">←</a>
+          <div class="bd-logo" id="cdIcon">🚗</div>
+          <div class="bd-title">
+            <h1 id="cdName">test category 1</h1>
+          </div>
+          <span class="cd-industry-pill" id="cdIndustry">IINsurance</span>
+          <div class="cd-actions">
+            <button class="btn btn--ghost">✏️ Edit</button>
+            <a href="dashboard.html" class="btn btn--primary">✨ Generate</a>
+            <button class="btn btn--ghost cm-danger" title="Delete">🗑</button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bd-tabs">
+          <button class="active" onclick="cdTab(this, 'knowledge')">Knowledge Base</button>
+          <button onclick="cdTab(this, 'concepts')">Concepts</button>
+          <button onclick="cdTab(this, 'winners')">Winners</button>
+          <button onclick="cdTab(this, 'library')">Library</button>
+          <button onclick="cdTab(this, 'logs')">Logs</button>
+        </div>
+
+        <!-- KNOWLEDGE BASE TAB -->
+        <div id="cd-knowledge">
+          <!-- System Prompt -->
+          <div class="bd-section">
+            <div class="bd-section__title" style="margin-bottom:4px;">📝 System Prompt</div>
+            <p style="color:var(--muted); font-size:12px; margin-bottom:12px;">Define the AI's context and rules for this category.</p>
+            <div class="field" style="margin-bottom:12px;">
+              <textarea rows="5" id="systemPrompt" placeholder="You are an expert at creating high-converting ad creatives for..."></textarea>
+            </div>
+            <button class="btn btn--primary" onclick="alert('System prompt saved')">Save Prompt</button>
+          </div>
+
+          <!-- Reference URLs -->
+          <div class="bd-section">
+            <div class="bd-section__title" style="margin-bottom:4px;">🔗 Reference URLs</div>
+            <p style="color:var(--muted); font-size:12px; margin-bottom:12px;">Add URLs for research, competitor pages, landing pages, etc.</p>
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+              <input type="text" id="refUrlInput" placeholder="https://..." style="flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:13px;" />
+              <button class="btn" onclick="addRefUrl()">+ Add</button>
+            </div>
+            <div id="refUrlList" class="ref-list">
+              <div class="ref-item">
+                <span class="ref-item__icon">🔗</span>
+                <span class="ref-item__url">https://example.com/insurance-rates-2026</span>
+                <button class="ref-item__remove" onclick="this.parentElement.remove()">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Learning Log -->
+          <div class="bd-section">
+            <div class="bd-section__title" style="margin-bottom:12px;">🧠 Learning Log</div>
+            <div class="learning-log-empty">
+              <p style="color:var(--muted); font-size:13px; text-align:center; margin:0;">AI learning log will appear here as you generate more ads for this category.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONCEPTS TAB -->
+        <div id="cd-concepts" class="hidden">
+          <div class="module-placeholder" style="margin-top:24px;">
+            <div class="module-placeholder__icon">💡</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Concepts</h1>
+            <p>Saved angles and hooks that work for this category — will be auto-applied to new creatives.</p>
+          </div>
+        </div>
+
+        <!-- WINNERS TAB -->
+        <div id="cd-winners" class="hidden">
+          <div class="module-placeholder" style="margin-top:24px;">
+            <div class="module-placeholder__icon">🏆</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Winners</h1>
+            <p>Top-performing creatives from this category with CTR and conversion data.</p>
+          </div>
+        </div>
+
+        <!-- LIBRARY TAB -->
+        <div id="cd-library" class="hidden">
+          <div class="module-placeholder" style="margin-top:24px;">
+            <div class="module-placeholder__icon">🖼</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Library</h1>
+            <p>All creatives generated for this category — filter, favorite, and launch.</p>
+          </div>
+        </div>
+
+        <!-- LOGS TAB -->
+        <div id="cd-logs" class="hidden">
+          <div class="module-placeholder" style="margin-top:24px;">
+            <div class="module-placeholder__icon">📜</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Logs</h1>
+            <p>Generation history and audit trail for every creative made under this category.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    // Category data keyed by slug
+    const CATEGORIES = {
+      'test': { name: 'test category 1', industry: 'IINsurance', icon: '🚗' },
+      'life-insurance': { name: 'Life Insurance', industry: 'Insurance', icon: '🛡' },
+      'home-insurance': { name: 'Home Insurance', industry: 'Insurance', icon: '🏠' },
+      'pet-insurance': { name: 'Pet Insurance', industry: 'Insurance', icon: '🐾' },
+      'travel-insurance': { name: 'Travel Insurance', industry: 'Insurance', icon: '✈️' },
+      'dental': { name: 'Dental Plans', industry: 'Insurance', icon: '🦷' },
+      'vision': { name: 'Vision Plans', industry: 'Insurance', icon: '👓' },
+      'credit-cards': { name: 'Credit Cards', industry: 'Finance', icon: '💳' },
+      'mortgage': { name: 'Mortgage', industry: 'Finance', icon: '🏡' },
+      'student-loans': { name: 'Student Loans', industry: 'Finance', icon: '🎓' },
+      'business-loans': { name: 'Business Loans', industry: 'Finance', icon: '🏢' },
+      'debt-relief': { name: 'Debt Relief', industry: 'Finance', icon: '📉' },
+      'tax': { name: 'Tax Services', industry: 'Finance', icon: '📋' },
+      'crypto': { name: 'Crypto Trading', industry: 'Finance', icon: '₿' },
+      'stocks': { name: 'Stock Trading', industry: 'Finance', icon: '📈' }
+    };
+
+    const slug = new URLSearchParams(location.search).get('cat') || 'test';
+    const cat = CATEGORIES[slug] || CATEGORIES.test;
+    document.title = 'FabFunnel · ' + cat.name;
+    document.getElementById('cdName').textContent = cat.name;
+    document.getElementById('cdIndustry').textContent = cat.industry;
+    document.getElementById('cdIcon').textContent = cat.icon;
+
+    function cdTab(btn, name) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      ['knowledge','concepts','winners','library','logs'].forEach(t => {
+        document.getElementById('cd-' + t).classList.toggle('hidden', t !== name);
+      });
+    }
+
+    function addRefUrl() {
+      const input = document.getElementById('refUrlInput');
+      const url = input.value.trim();
+      if (!url) return;
+      const item = document.createElement('div');
+      item.className = 'ref-item';
+      item.innerHTML = `
+        <span class="ref-item__icon">🔗</span>
+        <span class="ref-item__url">${url}</span>
+        <button class="ref-item__remove" onclick="this.parentElement.remove()">✕</button>
+      `;
+      document.getElementById('refUrlList').appendChild(item);
+      input.value = '';
+    }
+  </script>
+  <script src="pricing.js"></script>
+</body>
+</html>
