@@ -433,12 +433,6 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   font-family: inherit;
   min-width: 220px;
 }
-.gallery-filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
 .gallery-toolbar {
   display: flex;
   justify-content: space-between;
@@ -462,7 +456,7 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   letter-spacing: 0.5px;
   font-weight: 600;
 }
-.gallery-filters .count {
+.gallery-toolbar .count {
   background: var(--accent-bg);
   color: var(--muted);
   font-size: 10px;

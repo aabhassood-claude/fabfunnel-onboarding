@@ -17,7 +17,7 @@
         <span class="credits-pill__bolt">⚡</span>
         <span class="credits-pill__count">42</span>
         <span class="credits-pill__label">credits</span>
-        <button class="credits-pill__buy">+ Buy more</button>
+        <button class="credits-pill__buy" onclick="alert('Buy credits — coming soon')">+ Buy more</button>
       </div>
       <span style="color:var(--muted);">Client 1 ▾</span>
     </div>
@@ -173,7 +173,7 @@
 
   <script>
     function applyFilters() {
-      const typeBtn = document.querySelector('.gallery-filters .pill-toggle button.active');
+      const typeBtn = document.querySelector('.gallery-toolbar .pill-toggle button.active');
       const typeFilter = typeBtn ? typeBtn.dataset.filter : 'all';
       const brandFilter = document.getElementById('brandFilter').value;
       let visibleCount = 0;
@@ -187,7 +187,7 @@
       document.getElementById('emptyGallery').classList.toggle('hidden', visibleCount > 0);
     }
 
-    document.querySelectorAll('.gallery-filters .pill-toggle button[data-filter]').forEach(btn => {
+    document.querySelectorAll('.gallery-toolbar .pill-toggle button[data-filter]').forEach(btn => {
       btn.addEventListener('click', () => {
         btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');

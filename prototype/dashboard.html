@@ -225,7 +225,7 @@
 
     <!-- Prompt (primary) -->
     <div class="work-section">
-      <label class="work-label">Describe your vision <span class="badge-optional">optional</span></label>
+      <label class="work-label">Describe your vision <span class="badge-optional">optional</span> <span class="work-label__hint" id="promptDesc">add any specific ideas — or let Genie decide.</span></label>
       <div class="prompt-area">
         <textarea id="promptText" placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."></textarea>
       </div>
@@ -444,25 +444,16 @@
       }, 2200);
     }
 
-    document.querySelectorAll('.mode-tabs .tab').forEach(t => {
+    // E-com/Affiliate pill-toggle (in control strip)
+    document.querySelectorAll('.control-strip .pill-toggle button[data-mode]').forEach(t => {
       t.addEventListener('click', () => {
-        if (t.dataset.mode) {
-          document.querySelectorAll('.mode-tabs .tab[data-mode]').forEach(x => x.classList.remove('tab--active'));
-        } else {
-          document.querySelectorAll('.mode-tabs .tab:not([data-mode])').forEach(x => x.classList.remove('tab--active'));
-        }
-        t.classList.add('tab--active');
+        t.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
       });
     });
     // Only attach the toggle handler to chips that don't already have an inline onclick handler
     document.querySelectorAll('.chip:not([onclick])').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
     document.querySelectorAll('.strategy-card').forEach(c => c.addEventListener('click', () => c.classList.toggle('selected')));
-    document.querySelectorAll('.approach-toggle button, .view-toggle button, .tabs-mini button').forEach(b => {
-      b.addEventListener('click', () => {
-        b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-      });
-    });
   </script>
 </body>
 </html>
