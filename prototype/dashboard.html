@@ -309,10 +309,14 @@
     <!-- Variations selector -->
     <div class="variations-row">
       <span class="variations-row__label">Variations <span class="work-label__hint">how many to generate</span></span>
-      <div class="pill-toggle" id="variationsToggle">
-        <button class="active" data-count="1">1</button>
-        <button data-count="5">5</button>
-        <button data-count="10">10</button>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <div class="pill-toggle" id="variationsToggle">
+          <button class="active" data-count="1">1</button>
+          <button data-count="5">5</button>
+          <button data-count="10">10</button>
+          <button data-count="custom">Custom</button>
+        </div>
+        <input type="number" id="variationsCustom" class="variations-custom hidden" min="1" max="50" value="15" placeholder="N" />
       </div>
     </div>
 
@@ -422,8 +426,7 @@
 
     function startGeneration() {
       const isVideo = document.getElementById('fmtVideo').classList.contains('active');
-      const varBtn = document.querySelector('#variationsToggle button.active');
-      const count = varBtn ? varBtn.dataset.count : '1';
+      const count = getVariationCount();
       location.href = 'generating.html?format=' + (isVideo ? 'video' : 'image') + '&count=' + count;
     }
 
@@ -453,9 +456,21 @@
       updateVariationChips();
     }
 
-    function updateVariationChips() {
+    function getVariationCount() {
       const btn = document.querySelector('#variationsToggle button.active');
-      const count = btn ? parseInt(btn.dataset.count, 10) : 1;
+      if (!btn) return 1;
+      if (btn.dataset.count === 'custom') {
+        const input = document.getElementById('variationsCustom');
+        const n = parseInt(input.value, 10);
+        if (isNaN(n) || n < 1) return 1;
+        if (n > 50) { input.value = 50; return 50; }
+        return n;
+      }
+      return parseInt(btn.dataset.count, 10) || 1;
+    }
+
+    function updateVariationChips() {
+      const count = getVariationCount();
       const isVideo = document.getElementById('fmtVideo').classList.contains('active');
       const unit = isVideo ? 'video' : 'output';
       const perCost = isVideo ? 20 : 4;
@@ -468,9 +483,13 @@
       b.addEventListener('click', () => {
         b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
+        const customInput = document.getElementById('variationsCustom');
+        customInput.classList.toggle('hidden', b.dataset.count !== 'custom');
+        if (b.dataset.count === 'custom') customInput.focus();
         updateVariationChips();
       });
     });
+    document.getElementById('variationsCustom').addEventListener('input', updateVariationChips);
     updateVariationChips();
     function selectType(btn) {
       // Only toggle within the currently visible grid

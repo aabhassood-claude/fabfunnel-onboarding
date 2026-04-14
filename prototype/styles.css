@@ -355,6 +355,23 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
   cursor: pointer;
 }
 
+/* Custom variations input */
+.variations-custom {
+  width: 80px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: center;
+}
+.variations-custom:focus {
+  outline: none;
+  border-color: var(--active);
+}
+
 /* Variations selector row */
 .variations-row {
   display: flex;
