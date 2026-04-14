@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Processing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+    <a href="#" style="font-size:13px; color:var(--muted);">Help</a>
+  </div>
+
+  <div class="page">
+    <a href="javascript:history.back()" class="back-link">← Back</a>
+
+    <div class="stepper">
+      <div class="stepper__item done">Choose Mode</div>
+      <div class="stepper__item done">Input</div>
+      <div class="stepper__item current">Processing</div>
+      <div class="stepper__item">Done</div>
+    </div>
+
+    <div class="processing">
+      <div class="spinner"></div>
+      <h1 id="title">Setting up your workspace…</h1>
+      <p class="sub" id="subtitle">This usually takes 10–20 seconds.</p>
+
+      <div class="processing__steps" id="steps">
+        <div class="processing__step active" data-step="0"><span class="processing__check"></span><span>Fetching your inputs</span></div>
+        <div class="processing__step" data-step="1"><span class="processing__check"></span><span>Analyzing brand & style</span></div>
+        <div class="processing__step" data-step="2"><span class="processing__check"></span><span>Preparing templates</span></div>
+        <div class="processing__step" data-step="3"><span class="processing__check"></span><span>Launching dashboard</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    // Simulate progress so the flow can be clicked through
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode') || 'ecom';
+    const steps = document.querySelectorAll('.processing__step');
+    let i = 0;
+    const iv = setInterval(() => {
+      steps[i].classList.remove('active');
+      steps[i].classList.add('done');
+      i++;
+      if (i < steps.length) {
+        steps[i].classList.add('active');
+      } else {
+        clearInterval(iv);
+        location.href = 'done.html?mode=' + mode;
+      }
+    }, 1200);
+  </script>
+</body>
+</html>

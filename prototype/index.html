@@ -3,36 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FabFunnel · Genie Onboarding</title>
+  <title>FabFunnel · Genie — Quick Start</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="topbar">
     <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
-    <a href="#" class="btn btn--ghost" style="font-size:12px;">Sign in</a>
+    <a href="#" style="font-size:13px; color:var(--muted);">Help</a>
   </div>
 
   <div class="page">
     <div class="stepper">
-      <span class="current">1. Welcome</span>
-      <span>2. Profile</span>
-      <span>3. Setup</span>
-      <span>4. Dashboard</span>
+      <div class="stepper__item current">Choose Mode</div>
+      <div class="stepper__item">Input</div>
+      <div class="stepper__item">Processing</div>
+      <div class="stepper__item">Done</div>
     </div>
 
-    <div class="card" style="text-align:center; padding:60px 40px;">
-      <h1>Welcome to Genie</h1>
-      <p class="sub">AI-powered image creation for Ecom and Affiliate marketers.<br/>Let's set up your workspace in under 2 minutes.</p>
-      <a href="profile.html" class="btn btn--primary" style="padding:14px 32px; font-size:15px;">Get Started →</a>
-    </div>
+    <h1>Quick Start</h1>
+    <p class="sub">Get up and running in under a minute.</p>
 
-    <div class="card">
-      <h3>What you'll set up</h3>
-      <ul style="color:var(--muted); padding-left:20px; margin-top:8px;">
-        <li>Tell us about your business (Ecom or Affiliate)</li>
-        <li>Configure your image preferences & brand</li>
-        <li>Land on a dashboard tailored to your use case</li>
-      </ul>
+    <div class="mode-cards">
+      <a href="input-ecom.html" class="mode-card">
+        <div class="mode-card__icon">🛒</div>
+        <div class="mode-card__title">E-commerce</div>
+        <div class="mode-card__desc">Paste your store URL, we'll do the rest.</div>
+        <div class="mode-card__cta">Start →</div>
+      </a>
+      <a href="input-affiliate.html" class="mode-card">
+        <div class="mode-card__icon">⚡</div>
+        <div class="mode-card__title">Affiliate / Ad Lab</div>
+        <div class="mode-card__desc">Pick a niche and start generating.</div>
+        <div class="mode-card__cta">Start →</div>
+      </a>
     </div>
   </div>
 

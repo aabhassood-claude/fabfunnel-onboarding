@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Input — Affiliate</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+    <a href="#" style="font-size:13px; color:var(--muted);">Help</a>
+  </div>
+
+  <div class="page">
+    <a href="index.html" class="back-link">← Back</a>
+
+    <div class="stepper">
+      <div class="stepper__item done">Choose Mode</div>
+      <div class="stepper__item current">Input</div>
+      <div class="stepper__item">Processing</div>
+      <div class="stepper__item">Done</div>
+    </div>
+
+    <h1>Pick your niche</h1>
+    <p class="sub">We'll tailor templates and copy to your audience.</p>
+
+    <div class="card">
+      <div class="field">
+        <label>Your niche</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="toggleChip(this)">Tech & Gadgets</span>
+          <span class="chip" onclick="toggleChip(this)">Beauty & Skincare</span>
+          <span class="chip" onclick="toggleChip(this)">Fitness & Wellness</span>
+          <span class="chip" onclick="toggleChip(this)">Finance & Crypto</span>
+          <span class="chip" onclick="toggleChip(this)">Fashion</span>
+          <span class="chip" onclick="toggleChip(this)">Gaming</span>
+          <span class="chip" onclick="toggleChip(this)">Home & Garden</span>
+          <span class="chip" onclick="toggleChip(this)">Other</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Primary platform</label>
+        <div class="chip-group">
+          <span class="chip active" onclick="toggleChip(this, true)">Instagram</span>
+          <span class="chip" onclick="toggleChip(this, true)">TikTok</span>
+          <span class="chip" onclick="toggleChip(this, true)">YouTube</span>
+          <span class="chip" onclick="toggleChip(this, true)">Blog / Website</span>
+          <span class="chip" onclick="toggleChip(this, true)">Pinterest</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Product link <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
+        <input type="text" placeholder="Paste affiliate link for faster personalization" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="index.html" class="btn btn--ghost">Back</a>
+      <a href="processing.html?mode=affiliate" class="btn btn--primary">Continue →</a>
+    </div>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    function toggleChip(el, singleSelect) {
+      if (singleSelect) {
+        el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      }
+      el.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

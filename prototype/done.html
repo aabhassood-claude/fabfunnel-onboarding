@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Done</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+    <a href="#" style="font-size:13px; color:var(--muted);">Help</a>
+  </div>
+
+  <div class="page">
+    <a href="index.html" class="back-link">← Back to Quick Start</a>
+
+    <div class="stepper">
+      <div class="stepper__item done">Choose Mode</div>
+      <div class="stepper__item done">Input</div>
+      <div class="stepper__item done">Processing</div>
+      <div class="stepper__item current">Done</div>
+    </div>
+
+    <div class="card" style="text-align:center; padding:48px 32px;">
+      <div class="done-icon">✓</div>
+      <h1>You're all set!</h1>
+      <p class="sub">Your Genie workspace is ready. Start generating images tailored to your needs.</p>
+      <a href="dashboard.html" class="btn btn--primary" id="goDashboard" style="padding:13px 28px;">Open Dashboard →</a>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">Quick tips</div>
+      <ul style="color:var(--muted); padding-left:20px; font-size:14px;">
+        <li>Switch between Ecom and Affiliate modes anytime from the dashboard header.</li>
+        <li>Your brand settings can be edited under Workspace → Brand Kit.</li>
+        <li>Need help? Check the guide or chat with support.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    const mode = new URLSearchParams(location.search).get('mode');
+    if (mode) document.getElementById('goDashboard').href = 'dashboard.html?mode=' + mode;
+  </script>
+</body>
+</html>

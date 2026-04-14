@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Input — E-commerce</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div><span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span></div>
+    <a href="#" style="font-size:13px; color:var(--muted);">Help</a>
+  </div>
+
+  <div class="page">
+    <a href="index.html" class="back-link">← Back</a>
+
+    <div class="stepper">
+      <div class="stepper__item done">Choose Mode</div>
+      <div class="stepper__item current">Input</div>
+      <div class="stepper__item">Processing</div>
+      <div class="stepper__item">Done</div>
+    </div>
+
+    <h1>Paste your store URL</h1>
+    <p class="sub">We'll pull products, branding, and colors automatically.</p>
+
+    <div class="card">
+      <div class="field">
+        <label>Store URL</label>
+        <input type="text" placeholder="https://yourstore.com" />
+        <div class="field__hint">Works with Shopify, WooCommerce, Amazon, and most Ecom platforms.</div>
+      </div>
+
+      <div class="field">
+        <label>Primary category <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
+        <select>
+          <option>Auto-detect from store</option>
+          <option>Apparel & Fashion</option>
+          <option>Beauty & Skincare</option>
+          <option>Home & Lifestyle</option>
+          <option>Electronics</option>
+          <option>Food & Beverage</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="index.html" class="btn btn--ghost">Back</a>
+      <a href="processing.html?mode=ecom" class="btn btn--primary">Continue →</a>
+    </div>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+</body>
+</html>
