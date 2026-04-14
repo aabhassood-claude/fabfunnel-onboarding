@@ -176,6 +176,51 @@
         </div>
 
         <div id="emptyGallery" class="hidden" style="text-align:center; padding:40px; color:var(--muted);">No creatives match this filter.</div>
+
+        <!-- Creative detail modal -->
+        <div id="creativeModal" class="modal-backdrop hidden" onclick="if (event.target === this) closeCreative()">
+          <div class="modal creative-modal">
+            <button class="modal__close" onclick="closeCreative()">✕</button>
+            <div class="creative-modal__body">
+              <div class="creative-modal__preview">
+                <div id="cmPreview" class="creative-modal__thumb"></div>
+              </div>
+              <div class="creative-modal__details">
+                <h2 id="cmTitle" style="font-size:20px; margin-bottom:4px;"></h2>
+                <div id="cmSubtitle" style="color:var(--muted); font-size:13px; margin-bottom:18px;"></div>
+
+                <div class="detail-row"><span class="detail-row__label">Format</span><span id="cmFormat" class="detail-row__value"></span></div>
+                <div class="detail-row"><span class="detail-row__label">Brand</span><span id="cmBrand" class="detail-row__value"></span></div>
+                <div class="detail-row"><span class="detail-row__label">Creative type</span><span id="cmType" class="detail-row__value"></span></div>
+                <div class="detail-row"><span class="detail-row__label">Generated</span><span id="cmDate" class="detail-row__value"></span></div>
+                <div class="detail-row"><span class="detail-row__label">Credits used</span><span id="cmCredits" class="detail-row__value"></span></div>
+                <div class="detail-row" id="cmDurationRow"><span class="detail-row__label">Duration</span><span id="cmDuration" class="detail-row__value"></span></div>
+
+                <div class="detail-block">
+                  <div class="detail-block__label">Prompt used</div>
+                  <div id="cmPrompt" class="detail-block__value"></div>
+                </div>
+
+                <div class="detail-block">
+                  <div class="detail-block__label">Strategy</div>
+                  <div id="cmStrategy" class="detail-block__value"></div>
+                </div>
+
+                <div class="detail-block">
+                  <div class="detail-block__label">Vibes applied</div>
+                  <div id="cmVibes" class="chip-group"></div>
+                </div>
+
+                <div class="creative-modal__actions">
+                  <button class="btn btn--primary">⬇ Download</button>
+                  <button class="btn">🎨 Edit in Studio</button>
+                  <button class="btn">🔁 Regenerate</button>
+                  <button class="btn" style="color:#c33;">🗑 Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -198,6 +243,84 @@
       });
       document.getElementById('emptyGallery').classList.toggle('hidden', visibleCount > 0);
     }
+
+    // Mock prompt/strategy/vibes pool — cycle through for variety
+    const mockPrompts = [
+      'Summer vibes, bright natural lighting, product laid on linen background',
+      'Minimal studio shot, soft gradient backdrop, hero product centered',
+      'Lifestyle scene in urban setting, model wearing product, golden hour',
+      'Close-up macro shot, highlight material texture, shallow depth of field',
+      'Flat-lay with complementary props, pastel color story',
+      'Bold offer banner, high-contrast, sale headline overlay',
+      'Moody low-light shot, spotlight on product, dramatic shadows',
+      'Quick 15s demo, rapid cuts between angles, upbeat music',
+      'Unboxing reel, first-person POV, slow reveal',
+      'Before/after transformation, split screen, 7-day timeline',
+      'Brand story montage, emotive voiceover, warm tones',
+      'Flash sale teaser, countdown overlay, urgent feel'
+    ];
+    const mockStrategies = ['Social Proof', 'Before / After', 'Urgency / Flash Sale', 'Product Focus', 'Brand Story', 'Lifestyle'];
+    const mockVibesByType = {
+      image: ['Product Focus', 'Lifestyle', 'UGC Style', 'Offer Highlight', 'Bold'],
+      video: ['Unboxing', 'Before/After', 'Day in the life', 'Problem → Solution', 'Testimonial']
+    };
+
+    function openCreative(card, idx) {
+      const type = card.dataset.type;
+      const brand = card.dataset.brand;
+      const title = card.querySelector('.creative__title').textContent;
+      const meta = card.querySelector('.creative__meta').textContent;
+      const metaParts = meta.split(' · ').map(s => s.trim());
+      const subType = metaParts[1] || '';
+      const date = metaParts[2] || '';
+      const emoji = card.querySelector('.creative__emoji').textContent;
+      const durationEl = card.querySelector('.creative__duration');
+
+      document.getElementById('cmTitle').textContent = title;
+      document.getElementById('cmSubtitle').textContent = brand + ' · ' + subType;
+      document.getElementById('cmFormat').textContent = type === 'video' ? '🎬 Video' : '🖼 Static Image';
+      document.getElementById('cmBrand').textContent = brand;
+      document.getElementById('cmType').textContent = subType;
+      document.getElementById('cmDate').textContent = date;
+      document.getElementById('cmCredits').textContent = type === 'video' ? '20 credits' : '4 credits';
+      if (durationEl) {
+        document.getElementById('cmDurationRow').classList.remove('hidden');
+        document.getElementById('cmDuration').textContent = durationEl.textContent;
+      } else {
+        document.getElementById('cmDurationRow').classList.add('hidden');
+      }
+      document.getElementById('cmPrompt').textContent = '"' + mockPrompts[idx % mockPrompts.length] + '"';
+      document.getElementById('cmStrategy').textContent = mockStrategies[idx % mockStrategies.length];
+
+      const vibesEl = document.getElementById('cmVibes');
+      vibesEl.innerHTML = '';
+      const pool = mockVibesByType[type] || mockVibesByType.image;
+      const sampleVibes = [pool[idx % pool.length], pool[(idx + 1) % pool.length]];
+      sampleVibes.forEach(v => {
+        const chip = document.createElement('span');
+        chip.className = 'chip chip--static';
+        chip.textContent = v;
+        vibesEl.appendChild(chip);
+      });
+
+      // Preview thumb (clone of original)
+      const preview = document.getElementById('cmPreview');
+      preview.innerHTML = '';
+      preview.appendChild(card.querySelector('.creative__thumb').cloneNode(true));
+
+      document.getElementById('creativeModal').classList.remove('hidden');
+    }
+    function closeCreative() {
+      document.getElementById('creativeModal').classList.add('hidden');
+    }
+
+    document.querySelectorAll('.creative').forEach((c, idx) => {
+      c.addEventListener('click', (e) => {
+        // Don't open modal if the user clicked the star button
+        if (e.target.closest('.fav-btn')) return;
+        openCreative(c, idx);
+      });
+    });
 
     function toggleFav(e, btn) {
       e.stopPropagation();
