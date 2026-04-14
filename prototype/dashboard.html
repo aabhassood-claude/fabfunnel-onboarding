@@ -180,36 +180,46 @@
     <div class="work-section">
       <label class="work-label">Select your brand <span class="work-label__hint">which brand is this creative for?</span></label>
 
-      <div class="brand-picker">
-        <button class="brand-option active" onclick="selectBrand(this)">
-          <div class="brand-option__logo">T</div>
-          <div class="brand-option__info">
-            <div class="brand-option__name">test</div>
-            <div class="brand-option__meta">24 products · Apparel</div>
-          </div>
-          <span class="brand-option__check">✓</span>
-        </button>
-        <button class="brand-option" onclick="selectBrand(this)">
-          <div class="brand-option__logo">G</div>
-          <div class="brand-option__info">
-            <div class="brand-option__name">Glossier</div>
-            <div class="brand-option__meta">12 products · Beauty</div>
-          </div>
-          <span class="brand-option__check">✓</span>
-        </button>
-        <button class="brand-option brand-option--add" onclick="toggleAddBrand()">
-          <div class="brand-option__logo brand-option__logo--plus">+</div>
-          <div class="brand-option__info">
-            <div class="brand-option__name">Add new brand</div>
-            <div class="brand-option__meta">Paste a URL — we'll analyze it</div>
-          </div>
-        </button>
+      <div class="brand-select-row">
+        <select class="brand-select" id="dashboardBrandSelect">
+          <option value="test">T · test — 24 products · Apparel</option>
+          <option value="Glossier">G · Glossier — 12 products · Beauty</option>
+        </select>
+        <button class="btn" onclick="openAddBrandModal()">+ Add new brand</button>
       </div>
+    </div>
 
-      <div id="addBrandInput" class="search-box hidden" style="margin-top:12px;">
-        <span style="color:var(--muted);">🔗</span>
-        <input type="text" placeholder="https://newstore.com" />
-        <button class="btn btn--primary" style="padding:6px 14px; font-size:12px;">Analyze</button>
+    <!-- Add Brand Modal (mirrors onboarding input-ecom) -->
+    <div id="addBrandModal" class="modal-backdrop hidden">
+      <div class="modal">
+        <button class="modal__close" onclick="closeAddBrandModal()">✕</button>
+        <h2 style="font-size:20px; margin-bottom:6px;">Add a new brand</h2>
+        <p class="sub" style="margin-bottom:20px; font-size:13px;">We'll auto-pull products, colors, and branding — same as onboarding.</p>
+
+        <div class="field">
+          <label>Store URL <span style="color:#c33;">*</span></label>
+          <input type="text" id="newBrandUrl" placeholder="https://yourstore.com" />
+          <div class="field__hint">Works with Shopify, WooCommerce, Amazon, and most platforms.</div>
+        </div>
+
+        <div class="field">
+          <label>Brand name <span style="color:var(--muted); font-weight:400;">(optional — we'll detect from your store)</span></label>
+          <input type="text" id="newBrandName" placeholder="e.g., Aurora Apparel" />
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button class="btn btn--ghost" onclick="closeAddBrandModal()">Cancel</button>
+          <button class="btn btn--primary" onclick="saveNewBrand()">Analyze & Add →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- New brand processing modal (reuses same pattern) -->
+    <div id="newBrandProcessing" class="modal-backdrop hidden">
+      <div class="modal" style="text-align:center; padding:40px 28px;">
+        <div class="spinner"></div>
+        <h2 style="font-size:18px; margin-top:14px;">Analyzing new brand…</h2>
+        <p class="sub" style="font-size:13px;">This usually takes 10–20 seconds.</p>
       </div>
     </div>
 
@@ -405,16 +415,33 @@
       el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
     }
-    function selectBrand(btn) {
-      if (btn.classList.contains('brand-option--add')) return;
-      document.querySelectorAll('.brand-option').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('addBrandInput').classList.add('hidden');
+    function openAddBrandModal() {
+      document.getElementById('newBrandUrl').value = '';
+      document.getElementById('newBrandName').value = '';
+      document.getElementById('addBrandModal').classList.remove('hidden');
     }
-    function toggleAddBrand() {
-      const input = document.getElementById('addBrandInput');
-      input.classList.toggle('hidden');
-      if (!input.classList.contains('hidden')) input.querySelector('input').focus();
+    function closeAddBrandModal() {
+      document.getElementById('addBrandModal').classList.add('hidden');
+    }
+    function saveNewBrand() {
+      const url = document.getElementById('newBrandUrl').value.trim();
+      const name = document.getElementById('newBrandName').value.trim() || (url ? url.replace(/^https?:\/\//, '').split(/[./]/)[0] : 'New Brand');
+      if (!url) { document.getElementById('newBrandUrl').focus(); return; }
+
+      document.getElementById('addBrandModal').classList.add('hidden');
+      document.getElementById('newBrandProcessing').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('newBrandProcessing').classList.add('hidden');
+        const sel = document.getElementById('dashboardBrandSelect');
+        const opt = document.createElement('option');
+        const letter = name.charAt(0).toUpperCase();
+        opt.value = name;
+        opt.textContent = `${letter} · ${name} — just added`;
+        sel.appendChild(opt);
+        sel.value = name;
+        showToast(`"${name}" added and selected`);
+      }, 2200);
     }
 
     document.querySelectorAll('.mode-tabs .tab').forEach(t => {

@@ -327,55 +327,25 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 }
 .vibes-row__label { font-size: 11px; color: var(--muted); margin-right: 4px; }
 
-/* Brand picker (radio cards) */
-.brand-picker {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
-}
-.brand-option {
+/* Brand selector (dropdown + add new button) */
+.brand-select-row {
   display: flex;
-  align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  border: 2px solid var(--border);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.brand-select {
+  flex: 1;
+  min-width: 240px;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
-  cursor: pointer;
-  text-align: left;
   font-family: inherit;
-  position: relative;
-  transition: border-color .15s, background .15s;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
 }
-.brand-option:hover { border-color: var(--border-strong); }
-.brand-option.active { border-color: var(--active); background: var(--accent-bg); }
-.brand-option__logo {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  background: var(--accent-bg);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-.brand-option__logo--plus { background: transparent; border: 2px dashed var(--border); color: var(--muted); font-size: 18px; }
-.brand-option__info { flex: 1; min-width: 0; }
-.brand-option__name { font-weight: 600; font-size: 13px; }
-.brand-option__meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.brand-option__check {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  background: var(--active);
-  color: #fff;
-  font-size: 12px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.brand-option.active .brand-option__check { display: flex; }
-.brand-option--add { border-style: dashed; }
-.brand-option--add:hover { background: var(--accent-bg); }
 
 /* Advanced collapsible */
 .advanced {
