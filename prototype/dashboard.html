@@ -3,135 +3,178 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FabFunnel · Genie Dashboard</title>
+  <title>FabFunnel · Genie 5.0</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="topbar">
     <div>
-      <a href="index.html" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Quick Start</a>
+      <a href="done.html" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">←</a>
       <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
     </div>
-    <div style="font-size:13px; color:var(--muted);">Workspace: My Brand ▾</div>
+    <div style="display:flex; align-items:center; gap:14px; font-size:13px; color:var(--muted);">
+      <span>⚡ 42 credits</span>
+      <span>Client 1 ▾</span>
+    </div>
   </div>
 
-  <div class="dash">
-    <aside class="sidebar">
-      <div class="sidebar__section">Create</div>
-      <a href="#" class="active">✨ Generate Image</a>
-      <a href="#">📚 Templates</a>
-      <a href="#">🖼️ My Library</a>
+  <div class="genie-wrap">
+    <!-- Header -->
+    <div class="genie-header">
+      <h1 style="font-size:22px;">✨ Genie 5.0</h1>
+      <div class="view-toggle">
+        <button class="active">▦ Cards</button>
+        <button>▥ Split</button>
+      </div>
+    </div>
 
-      <div class="sidebar__section">Workspace</div>
-      <a href="#">🎨 Brand Kit</a>
-      <a href="#">⚙️ Preferences</a>
-      <a href="#">👥 Team</a>
+    <!-- Mode + sub-mode tabs -->
+    <div class="mode-tabs">
+      <button class="tab tab--active" data-mode="ecom">🛒 E-com</button>
+      <button class="tab" data-mode="affiliate">⚡ Affiliate</button>
+      <span class="tab-divider"></span>
+      <button class="tab tab--active">Product Ads</button>
+      <button class="tab">Brand Ads</button>
+      <button class="tab">Product Asset Creative</button>
+    </div>
 
-      <div class="sidebar__section">Account</div>
-      <a href="#">💳 Billing</a>
-      <a href="#">❓ Help</a>
-    </aside>
+    <!-- Brand search panel -->
+    <div class="panel">
+      <div class="panel__label">BRAND / URL</div>
+      <div class="search-box">
+        <span style="color:var(--muted);">🔍</span>
+        <input type="text" placeholder="Search brand or paste product URL..." />
+        <span style="color:var(--muted);">▾</span>
+      </div>
+      <div class="brand-pills">
+        <span class="pill">🅰 Airbnb</span>
+        <span class="pill">✺ amalfa.com</span>
+        <span class="pill">🍎 Apple</span>
+        <span class="pill">🦉 Duolingo</span>
+        <span class="pill">◐ Glossier</span>
+        <span class="pill">G google</span>
+        <span class="pill">L Lululemon</span>
+        <span class="pill pill--muted">— Nil</span>
+      </div>
+    </div>
 
-    <main class="main">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:12px;">
-        <h1 style="font-size:24px;">Generate Image</h1>
-        <div class="mode-toggle" id="modeToggle">
-          <button class="active" data-mode="ecom">🛒 E-commerce</button>
-          <button data-mode="affiliate">⚡ Affiliate</button>
+    <!-- Research enrichment (collapsible) -->
+    <div class="panel panel--collapse">
+      <div class="panel__head" onclick="this.parentElement.classList.toggle('open')">
+        <span>▸ RESEARCH ENRICHMENT <span style="color:var(--muted); font-weight:400; font-size:12px;">optional</span></span>
+      </div>
+    </div>
+
+    <!-- Strategies -->
+    <div class="panel">
+      <div class="panel__header-row">
+        <div class="panel__label" style="margin:0;">📋 Strategies <span style="color:var(--muted); font-weight:400; margin-left:6px;">Select at least 1</span></div>
+        <div class="tabs-mini">
+          <button>Saved</button>
+          <button>New</button>
+          <button>Tune</button>
         </div>
       </div>
-      <p class="sub">Pick a use case below. All tools are available in both modes — toggle anytime.</p>
-
-      <!-- ECOM MODE -->
-      <section id="ecomView">
-        <div class="section-title">Popular for E-commerce</div>
-        <div class="tile-grid">
-          <div class="tile"><div class="tile__icon">📦</div><div class="tile__title">Product Photo</div><div class="tile__desc">Clean, studio-style shots from a reference.</div></div>
-          <div class="tile"><div class="tile__icon">🏖️</div><div class="tile__title">Lifestyle Scene</div><div class="tile__desc">Place your product in real-world settings.</div></div>
-          <div class="tile"><div class="tile__icon">📢</div><div class="tile__title">Ad Creative</div><div class="tile__desc">Meta/TikTok-ready ads with hook text.</div></div>
-          <div class="tile"><div class="tile__icon">🎁</div><div class="tile__title">Packaging Mockup</div><div class="tile__desc">Visualize packaging & labels.</div></div>
-          <div class="tile"><div class="tile__icon">📧</div><div class="tile__title">Email Hero</div><div class="tile__desc">Banners sized for campaign emails.</div></div>
-          <div class="tile"><div class="tile__icon">🛒</div><div class="tile__title">Amazon A+ Image</div><div class="tile__desc">Listing-optimized with callouts.</div></div>
-        </div>
-
-        <div class="section-title">Customize output</div>
-        <div class="card">
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Auto-apply brand colors</div><div class="toggle-row__desc">Use palette from your Brand Kit.</div></div>
-            <div class="switch on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Include promotional text</div><div class="toggle-row__desc">Add headline & CTA overlay.</div></div>
-            <div class="switch" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Transparent background</div><div class="toggle-row__desc">For product cutouts.</div></div>
-            <div class="switch" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Generate 4 variations</div><div class="toggle-row__desc">Style-matched versions for A/B testing.</div></div>
-            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+      <div class="strategy-grid">
+        <div class="strategy-card">
+          <div class="strategy-card__thumb">👥</div>
+          <div class="strategy-card__title">Before/After...</div>
+          <div class="strategy-card__desc">See the difference in just 7 days</div>
+          <div class="tag-row">
+            <span class="tag">Comparison</span>
+            <span class="tag">conversion</span>
+            <span class="tag">proof</span>
           </div>
         </div>
-      </section>
-
-      <!-- AFFILIATE MODE -->
-      <section id="affiliateView" class="hidden">
-        <div class="section-title">Popular for Affiliate</div>
-        <div class="tile-grid">
-          <div class="tile"><div class="tile__icon">⚖️</div><div class="tile__title">Comparison Graphic</div><div class="tile__desc">Side-by-side product comparisons.</div></div>
-          <div class="tile"><div class="tile__icon">⭐</div><div class="tile__title">Review Card</div><div class="tile__desc">Rating + verdict visuals.</div></div>
-          <div class="tile"><div class="tile__icon">📱</div><div class="tile__title">Social Post</div><div class="tile__desc">Formatted for IG, TikTok, Pinterest.</div></div>
-          <div class="tile"><div class="tile__icon">🎯</div><div class="tile__title">CTA Banner</div><div class="tile__desc">Click-through banners for blogs.</div></div>
-          <div class="tile"><div class="tile__icon">🎬</div><div class="tile__title">YouTube Thumbnail</div><div class="tile__desc">High-CTR thumbnails.</div></div>
-          <div class="tile"><div class="tile__icon">📊</div><div class="tile__title">Stat / Fact Card</div><div class="tile__desc">Shareable data graphics.</div></div>
-        </div>
-
-        <div class="section-title">Customize output</div>
-        <div class="card">
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Add my handle / watermark</div><div class="toggle-row__desc">Credit yourself on every image.</div></div>
-            <div class="switch on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Platform-sized exports</div><div class="toggle-row__desc">IG / TikTok / YT aspect ratios.</div></div>
-            <div class="switch on" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Include affiliate disclosure</div><div class="toggle-row__desc">Auto-add "#ad" / disclosure text.</div></div>
-            <div class="switch" onclick="this.classList.toggle('on')"></div>
-          </div>
-          <div class="toggle-row">
-            <div><div class="toggle-row__label">Generate 4 variations</div><div class="toggle-row__desc">A/B-ready alternates.</div></div>
-            <div class="switch on" onclick="this.classList.toggle('on')"></div>
+        <div class="strategy-card">
+          <div class="strategy-card__thumb">⭐</div>
+          <div class="strategy-card__title">Social Proof Authority</div>
+          <div class="strategy-card__desc">Join 50K+ satisfied customers</div>
+          <div class="tag-row">
+            <span class="tag">Trust</span>
+            <span class="tag">trust</span>
+            <span class="tag">UGC</span>
           </div>
         </div>
-      </section>
-
-      <div class="actions actions--end">
-        <button class="btn btn--primary">Start Generating →</button>
+        <div class="strategy-card">
+          <div class="strategy-card__thumb">⏰</div>
+          <div class="strategy-card__title">Urgency Flash Sale</div>
+          <div class="strategy-card__desc">Only 24 hours left — don't miss out</div>
+          <div class="tag-row">
+            <span class="tag">FOMO</span>
+            <span class="tag">Custom</span>
+            <span class="tag">sale</span>
+          </div>
+        </div>
       </div>
-    </main>
+    </div>
+
+    <!-- Approach -->
+    <div class="panel">
+      <div class="panel__header-row">
+        <div class="panel__label" style="margin:0;">APPROACH</div>
+        <div class="approach-toggle">
+          <button>📄 Templates</button>
+          <button class="active">✨ Fresh AI</button>
+        </div>
+      </div>
+      <div style="color:var(--muted); font-size:14px;">⚡ AI will generate fresh concepts from scratch</div>
+    </div>
+
+    <!-- Style suggestion chips -->
+    <div style="padding: 12px 0; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-size:13px; color:var(--muted);">📎 Try:</span>
+      <span class="chip">Product Focus</span>
+      <span class="chip">Lifestyle</span>
+      <span class="chip">UGC Style</span>
+      <span class="chip">Offer Highlight</span>
+      <span class="chip">Bold & Eye-catching</span>
+    </div>
+
+    <!-- Prompt -->
+    <div class="prompt-area">
+      <textarea placeholder="Describe the ad you want... (optional)"></textarea>
+    </div>
+
+    <!-- Generate bar -->
+    <div class="genbar">
+      <div class="genbar__left">
+        <span class="genbar__chip">Auto ▾</span>
+        <span class="genbar__chip">− 4 +</span>
+        <span class="genbar__chip">E-com</span>
+        <span class="genbar__chip">Product focused</span>
+        <span class="genbar__chip">Ad Copy</span>
+        <span class="genbar__chip">4 outputs</span>
+      </div>
+      <div class="genbar__right">
+        <span style="color:var(--muted); font-size:13px;">⚡ −4</span>
+        <button class="btn btn--primary">✨ Generate</button>
+      </div>
+    </div>
   </div>
 
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
 
   <script>
-    const params = new URLSearchParams(location.search);
-    const initial = params.get('mode') === 'affiliate' ? 'affiliate' : 'ecom';
-    setMode(initial);
-
-    document.querySelectorAll('#modeToggle button').forEach(btn => {
-      btn.addEventListener('click', () => setMode(btn.dataset.mode));
-    });
-
-    function setMode(mode) {
-      document.querySelectorAll('#modeToggle button').forEach(b => {
-        b.classList.toggle('active', b.dataset.mode === mode);
+    document.querySelectorAll('.mode-tabs .tab').forEach(t => {
+      t.addEventListener('click', () => {
+        // tabs with data-mode are the Ecom/Affiliate group
+        if (t.dataset.mode) {
+          document.querySelectorAll('.mode-tabs .tab[data-mode]').forEach(x => x.classList.remove('tab--active'));
+        } else {
+          document.querySelectorAll('.mode-tabs .tab:not([data-mode])').forEach(x => x.classList.remove('tab--active'));
+        }
+        t.classList.add('tab--active');
       });
-      document.getElementById('ecomView').classList.toggle('hidden', mode !== 'ecom');
-      document.getElementById('affiliateView').classList.toggle('hidden', mode !== 'affiliate');
-    }
+    });
+    document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
+    document.querySelectorAll('.strategy-card').forEach(c => c.addEventListener('click', () => c.classList.toggle('selected')));
+    document.querySelectorAll('.approach-toggle button, .view-toggle button').forEach(b => {
+      b.addEventListener('click', () => {
+        b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+      });
+    });
   </script>
 </body>
 </html>

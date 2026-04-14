@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FabFunnel · Done</title>
+  <title>FabFunnel · Brand Ready</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,7 +13,7 @@
   </div>
 
   <div class="page">
-    <a href="index.html" class="back-link">← Back to Quick Start</a>
+    <a href="javascript:history.back()" class="back-link">← Back</a>
 
     <div class="stepper">
       <div class="stepper__item done">Choose Mode</div>
@@ -22,20 +22,100 @@
       <div class="stepper__item current">Done</div>
     </div>
 
-    <div class="card" style="text-align:center; padding:48px 32px;">
+    <div style="text-align:center; margin-bottom:24px;">
       <div class="done-icon">✓</div>
-      <h1>You're all set!</h1>
-      <p class="sub">Your Genie workspace is ready. Start generating images tailored to your needs.</p>
-      <a href="dashboard.html" class="btn btn--primary" id="goDashboard" style="padding:13px 28px;">Open Dashboard →</a>
+      <h1>Brand Ready!</h1>
+      <p class="sub" style="margin-bottom:0;">Your brand has been analyzed and is ready for generation.</p>
     </div>
 
-    <div class="card" style="margin-top:20px;">
-      <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">Quick tips</div>
-      <ul style="color:var(--muted); padding-left:20px; font-size:14px;">
-        <li>Switch between Ecom and Affiliate modes anytime from the dashboard header.</li>
-        <li>Your brand settings can be edited under Workspace → Brand Kit.</li>
-        <li>Need help? Check the guide or chat with support.</li>
-      </ul>
+    <div class="card">
+      <!-- Top metrics row -->
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric__label">Brand</div>
+          <div class="metric__value">test</div>
+        </div>
+        <div class="metric">
+          <div class="metric__label">Products Found</div>
+          <div class="metric__value">24 products</div>
+        </div>
+        <div class="metric">
+          <div class="metric__label">Platform</div>
+          <div class="metric__value">Shopify</div>
+        </div>
+        <div class="metric">
+          <div class="metric__label">Language</div>
+          <div class="metric__value">English (US)</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Style row -->
+      <div class="metric" style="margin-bottom:18px;">
+        <div class="metric__label">Detected Style</div>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+          <span class="swatch" style="background:#c5e04b;"></span>
+          <span class="swatch" style="background:#3370ff;"></span>
+          <span class="swatch" style="background:#f0f0f0; border:1px solid var(--border);"></span>
+          <span class="swatch" style="background:#111;"></span>
+          <span style="color:var(--muted); font-size:14px;">Modern · Clean</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Extended metrics -->
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric__label">Tone of Voice</div>
+          <div class="metric__value">Friendly · Confident</div>
+        </div>
+        <div class="metric">
+          <div class="metric__label">Target Audience</div>
+          <div class="metric__value">25–40, Urban</div>
+        </div>
+        <div class="metric">
+          <div class="metric__label">Price Range</div>
+          <div class="metric__value">$25 – $120</div>
+        </div>
+        <div class="metric">
+          <div class="metric__label">Logo</div>
+          <div class="metric__value">Extracted ✓</div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="metric">
+        <div class="metric__label">Top Categories</div>
+        <div class="chip-group" style="margin-top:8px;">
+          <span class="chip chip--static">Apparel</span>
+          <span class="chip chip--static">Accessories</span>
+          <span class="chip chip--static">Footwear</span>
+        </div>
+      </div>
+
+      <div class="metric" style="margin-top:18px;">
+        <div class="metric__label">Brand Keywords</div>
+        <div class="chip-group" style="margin-top:8px;">
+          <span class="chip chip--static">sustainable</span>
+          <span class="chip chip--static">minimal</span>
+          <span class="chip chip--static">everyday</span>
+          <span class="chip chip--static">premium</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="dashboard.html" id="goDashboard" class="btn btn--primary"
+       style="display:block; width:100%; text-align:center; padding:14px; margin-top:20px; font-size:15px;">
+      ✨ Start Creating
+    </a>
+
+    <div style="text-align:center; margin-top:14px;">
+      <a href="#" style="font-size:13px; color:var(--muted);">Re-analyze brand</a>
+      <span style="color:var(--subtle); margin:0 8px;">·</span>
+      <a href="input-ecom.html" style="font-size:13px; color:var(--muted);">Edit inputs</a>
     </div>
   </div>
 
