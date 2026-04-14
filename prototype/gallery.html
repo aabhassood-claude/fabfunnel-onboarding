@@ -63,92 +63,92 @@
             <button data-filter="image">🖼 Images <span class="count">9</span></button>
             <button data-filter="video">🎬 Videos <span class="count">3</span></button>
           </div>
-          <div class="pill-toggle">
-            <button class="active">All brands</button>
-            <button>test</button>
-            <button>Glossier</button>
-          </div>
+          <select class="inline-select" id="brandFilter">
+            <option value="all">All brands</option>
+            <option value="test">test</option>
+            <option value="Glossier">Glossier</option>
+          </select>
         </div>
 
         <div class="creatives-grid" id="creativesGrid">
-          <div class="creative" data-type="image">
+          <div class="creative" data-type="image" data-brand="test">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👕</span></div>
             <div class="creative__info">
               <div class="creative__title">Summer Tee Launch</div>
               <div class="creative__meta">test · Product Ads · 2 days ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="test" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👟</span></div>
             <div class="creative__info">
               <div class="creative__title">Sneaker Hero Shot</div>
               <div class="creative__meta">test · Brand Ads · 3 days ago</div>
             </div>
           </div>
-          <div class="creative" data-type="video">
+          <div class="creative" data-brand="test" data-type="video">
             <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🧥</span><span class="creative__duration">15s</span></div>
             <div class="creative__info">
               <div class="creative__title">Linen Jacket Reel</div>
               <div class="creative__meta">test · Product Demo · 4 days ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="test" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">👖</span></div>
             <div class="creative__info">
               <div class="creative__title">Slim Trousers Lifestyle</div>
               <div class="creative__meta">test · Product Ads · 5 days ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="Glossier" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🧢</span></div>
             <div class="creative__info">
               <div class="creative__title">Canvas Cap Social Post</div>
               <div class="creative__meta">Glossier · Product Asset · 1 week ago</div>
             </div>
           </div>
-          <div class="creative" data-type="video">
+          <div class="creative" data-brand="test" data-type="video">
             <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">👜</span><span class="creative__duration">30s</span></div>
             <div class="creative__info">
               <div class="creative__title">Tote Bag Unboxing</div>
               <div class="creative__meta">test · UGC-style Reel · 1 week ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="Glossier" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">💄</span></div>
             <div class="creative__info">
               <div class="creative__title">Lipstick Promo</div>
               <div class="creative__meta">Glossier · Brand Ads · 1 week ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="test" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🌸</span></div>
             <div class="creative__info">
               <div class="creative__title">Spring Collection</div>
               <div class="creative__meta">test · Offer Highlight · 2 weeks ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="test" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">✨</span></div>
             <div class="creative__info">
               <div class="creative__title">Brand Story Hero</div>
               <div class="creative__meta">test · Brand Ads · 2 weeks ago</div>
             </div>
           </div>
-          <div class="creative" data-type="video">
+          <div class="creative" data-brand="test" data-type="video">
             <div class="creative__thumb"><span class="creative__tag creative__tag--video">🎬 Video</span><span class="creative__emoji">🏃</span><span class="creative__duration">6s</span></div>
             <div class="creative__info">
               <div class="creative__title">Flash Sale Teaser</div>
               <div class="creative__meta">test · Brand Story · 3 weeks ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="test" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">🎁</span></div>
             <div class="creative__info">
               <div class="creative__title">Holiday Gift Set</div>
               <div class="creative__meta">test · Product Ads · 1 month ago</div>
             </div>
           </div>
-          <div class="creative" data-type="image">
+          <div class="creative" data-brand="Glossier" data-type="image">
             <div class="creative__thumb"><span class="creative__tag">🖼 Image</span><span class="creative__emoji">📸</span></div>
             <div class="creative__info">
               <div class="creative__title">Campaign Launch</div>
@@ -165,26 +165,29 @@
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
 
   <script>
+    function applyFilters() {
+      const typeBtn = document.querySelector('.gallery-filters .pill-toggle button.active');
+      const typeFilter = typeBtn ? typeBtn.dataset.filter : 'all';
+      const brandFilter = document.getElementById('brandFilter').value;
+      let visibleCount = 0;
+      document.querySelectorAll('.creative').forEach(c => {
+        const typeOk = typeFilter === 'all' || c.dataset.type === typeFilter;
+        const brandOk = brandFilter === 'all' || c.dataset.brand === brandFilter;
+        const show = typeOk && brandOk;
+        c.classList.toggle('hidden', !show);
+        if (show) visibleCount++;
+      });
+      document.getElementById('emptyGallery').classList.toggle('hidden', visibleCount > 0);
+    }
+
     document.querySelectorAll('.gallery-filters .pill-toggle button[data-filter]').forEach(btn => {
       btn.addEventListener('click', () => {
         btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const filter = btn.dataset.filter;
-        let visibleCount = 0;
-        document.querySelectorAll('.creative').forEach(c => {
-          const show = filter === 'all' || c.dataset.type === filter;
-          c.classList.toggle('hidden', !show);
-          if (show) visibleCount++;
-        });
-        document.getElementById('emptyGallery').classList.toggle('hidden', visibleCount > 0);
+        applyFilters();
       });
     });
-    document.querySelectorAll('.gallery-filters .pill-toggle:last-child button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
+    document.getElementById('brandFilter').addEventListener('change', applyFilters);
   </script>
 </body>
 </html>
