@@ -181,41 +181,81 @@
         <div id="creativeModal" class="modal-backdrop hidden" onclick="if (event.target === this) closeCreative()">
           <div class="modal creative-modal">
             <button class="modal__close" onclick="closeCreative()">✕</button>
+
             <div class="creative-modal__body">
+              <!-- Left: preview -->
               <div class="creative-modal__preview">
-                <div id="cmPreview" class="creative-modal__thumb"></div>
+                <div id="cmPreview" class="creative-modal__thumb-wrap"></div>
+                <div class="creative-modal__thumb-caption">
+                  <button class="cm-icon-btn" title="Previous">‹</button>
+                  <span id="cmPager" class="cm-pager">1 of 4</span>
+                  <button class="cm-icon-btn" title="Next">›</button>
+                </div>
               </div>
+
+              <!-- Right: details -->
               <div class="creative-modal__details">
-                <h2 id="cmTitle" style="font-size:20px; margin-bottom:4px;"></h2>
-                <div id="cmSubtitle" style="color:var(--muted); font-size:13px; margin-bottom:18px;"></div>
-
-                <div class="detail-row"><span class="detail-row__label">Format</span><span id="cmFormat" class="detail-row__value"></span></div>
-                <div class="detail-row"><span class="detail-row__label">Brand</span><span id="cmBrand" class="detail-row__value"></span></div>
-                <div class="detail-row"><span class="detail-row__label">Creative type</span><span id="cmType" class="detail-row__value"></span></div>
-                <div class="detail-row"><span class="detail-row__label">Generated</span><span id="cmDate" class="detail-row__value"></span></div>
-                <div class="detail-row"><span class="detail-row__label">Credits used</span><span id="cmCredits" class="detail-row__value"></span></div>
-                <div class="detail-row" id="cmDurationRow"><span class="detail-row__label">Duration</span><span id="cmDuration" class="detail-row__value"></span></div>
-
-                <div class="detail-block">
-                  <div class="detail-block__label">Prompt used</div>
-                  <div id="cmPrompt" class="detail-block__value"></div>
+                <div class="creative-modal__header">
+                  <div>
+                    <h2 id="cmTitle"></h2>
+                    <div id="cmSubtitle" class="creative-modal__subtitle"></div>
+                  </div>
+                  <div class="creative-modal__badges">
+                    <span id="cmFormatBadge" class="cm-badge"></span>
+                  </div>
                 </div>
 
-                <div class="detail-block">
-                  <div class="detail-block__label">Strategy</div>
-                  <div id="cmStrategy" class="detail-block__value"></div>
+                <!-- Primary CTA: Launch -->
+                <button class="btn btn--primary cm-launch" onclick="launchCreative()">🚀 Launch Creative</button>
+                <div class="cm-launch-hint">Push this creative to your connected ad platforms (Meta, TikTok, Google).</div>
+
+                <!-- Meta grid -->
+                <div class="cm-meta-grid">
+                  <div class="cm-meta">
+                    <div class="cm-meta__label">Brand</div>
+                    <div id="cmBrand" class="cm-meta__value"></div>
+                  </div>
+                  <div class="cm-meta">
+                    <div class="cm-meta__label">Creative type</div>
+                    <div id="cmType" class="cm-meta__value"></div>
+                  </div>
+                  <div class="cm-meta">
+                    <div class="cm-meta__label">Generated</div>
+                    <div id="cmDate" class="cm-meta__value"></div>
+                  </div>
+                  <div class="cm-meta" id="cmDurationRow">
+                    <div class="cm-meta__label">Duration</div>
+                    <div id="cmDuration" class="cm-meta__value"></div>
+                  </div>
+                  <div class="cm-meta">
+                    <div class="cm-meta__label">Credits used</div>
+                    <div id="cmCredits" class="cm-meta__value"></div>
+                  </div>
                 </div>
 
-                <div class="detail-block">
-                  <div class="detail-block__label">Vibes applied</div>
+                <!-- Prompt -->
+                <div class="cm-block">
+                  <div class="cm-block__label">💬 Prompt used</div>
+                  <div id="cmPrompt" class="cm-block__value cm-block__value--quote"></div>
+                </div>
+
+                <!-- Strategy + vibes -->
+                <div class="cm-block">
+                  <div class="cm-block__label">📋 Strategy</div>
+                  <div id="cmStrategy" class="cm-block__value"></div>
+                </div>
+
+                <div class="cm-block">
+                  <div class="cm-block__label">✨ Vibes applied</div>
                   <div id="cmVibes" class="chip-group"></div>
                 </div>
 
-                <div class="creative-modal__actions">
-                  <button class="btn btn--primary">⬇ Download</button>
-                  <button class="btn">🎨 Edit in Studio</button>
-                  <button class="btn">🔁 Regenerate</button>
-                  <button class="btn" style="color:#c33;">🗑 Delete</button>
+                <!-- Secondary actions -->
+                <div class="cm-secondary-actions">
+                  <button class="btn btn--ghost">⬇ Download</button>
+                  <button class="btn btn--ghost">🎨 Edit in Studio</button>
+                  <button class="btn btn--ghost">🔁 Regenerate</button>
+                  <button class="btn btn--ghost cm-danger">🗑 Delete</button>
                 </div>
               </div>
             </div>
@@ -278,16 +318,16 @@
 
       document.getElementById('cmTitle').textContent = title;
       document.getElementById('cmSubtitle').textContent = brand + ' · ' + subType;
-      document.getElementById('cmFormat').textContent = type === 'video' ? '🎬 Video' : '🖼 Static Image';
+      document.getElementById('cmFormatBadge').textContent = type === 'video' ? '🎬 Video' : '🖼 Image';
       document.getElementById('cmBrand').textContent = brand;
       document.getElementById('cmType').textContent = subType;
       document.getElementById('cmDate').textContent = date;
       document.getElementById('cmCredits').textContent = type === 'video' ? '20 credits' : '4 credits';
       if (durationEl) {
-        document.getElementById('cmDurationRow').classList.remove('hidden');
+        document.getElementById('cmDurationRow').style.display = '';
         document.getElementById('cmDuration').textContent = durationEl.textContent;
       } else {
-        document.getElementById('cmDurationRow').classList.add('hidden');
+        document.getElementById('cmDurationRow').style.display = 'none';
       }
       document.getElementById('cmPrompt').textContent = '"' + mockPrompts[idx % mockPrompts.length] + '"';
       document.getElementById('cmStrategy').textContent = mockStrategies[idx % mockStrategies.length];
@@ -312,6 +352,9 @@
     }
     function closeCreative() {
       document.getElementById('creativeModal').classList.add('hidden');
+    }
+    function launchCreative() {
+      alert('🚀 Launching to Meta, TikTok, Google Ads — (coming soon in production)');
     }
 
     document.querySelectorAll('.creative').forEach((c, idx) => {
