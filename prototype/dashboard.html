@@ -228,23 +228,65 @@
 
     <!-- Category selection (Affiliate) -->
     <div class="work-section mode-affiliate hidden">
-      <label class="work-label">Select a category <span class="work-label__hint">what vertical are you promoting?</span></label>
+      <label class="work-label">Select your category <span class="work-label__hint">which vertical are you promoting?</span></label>
 
-      <div class="category-box">
-        <span style="color:var(--muted);">🔍</span>
-        <input type="text" id="categorySearch" placeholder="Search or create category..." />
+      <div class="brand-select-row">
+        <select class="brand-select" id="dashboardCategorySelect">
+          <option value="test category 1">🚗 test category 1 — IINsurance</option>
+          <option value="Life Insurance">🛡 Life Insurance — Insurance</option>
+          <option value="Home Insurance">🏠 Home Insurance — Insurance</option>
+          <option value="Pet Insurance">🐾 Pet Insurance — Insurance</option>
+          <option value="Travel Insurance">✈️ Travel Insurance — Insurance</option>
+          <option value="Dental Plans">🦷 Dental Plans — Insurance</option>
+          <option value="Vision Plans">👓 Vision Plans — Insurance</option>
+          <option value="Credit Cards">💳 Credit Cards — Finance</option>
+          <option value="Mortgage">🏡 Mortgage — Finance</option>
+          <option value="Student Loans">🎓 Student Loans — Finance</option>
+          <option value="Business Loans">🏢 Business Loans — Finance</option>
+          <option value="Debt Relief">📉 Debt Relief — Finance</option>
+          <option value="Tax Services">📋 Tax Services — Finance</option>
+          <option value="Crypto Trading">₿ Crypto Trading — Finance</option>
+          <option value="Stock Trading">📈 Stock Trading — Finance</option>
+        </select>
+        <button class="btn" onclick="openAddCategoryModal()">+ Add new category</button>
       </div>
-      <div class="brand-pills" id="categoryPills" style="margin-top:10px;">
-        <span class="pill-chip active" onclick="selectCategory(this)">🏷 test category</span>
-        <span class="pill-chip" onclick="selectCategory(this)">🛡 Life Insurance</span>
-        <span class="pill-chip" onclick="selectCategory(this)">🏠 Home Insurance</span>
-        <span class="pill-chip" onclick="selectCategory(this)">🐶 Pet Insurance</span>
-        <span class="pill-chip" onclick="selectCategory(this)">✈️ Travel Insurance</span>
-        <span class="pill-chip" onclick="selectCategory(this)">🦷 Dental Plans</span>
-        <span class="pill-chip" onclick="selectCategory(this)">👓 Vision Plans</span>
-        <span class="pill-chip" onclick="selectCategory(this)">💳 Credit Cards</span>
-        <span class="pill-chip" onclick="selectCategory(this)">💰 Loans</span>
-        <span class="pill-chip" onclick="selectCategory(this)">₿ Crypto</span>
+    </div>
+
+    <!-- Add Category Modal (Affiliate) -->
+    <div id="addCategoryModalDash" class="modal-backdrop hidden" onclick="if (event.target === this) closeAddCategoryModal()">
+      <div class="modal">
+        <button class="modal__close" onclick="closeAddCategoryModal()">✕</button>
+        <h2 style="font-size:20px; margin-bottom:6px;">Add a new category</h2>
+        <p class="sub" style="margin-bottom:20px; font-size:13px;">Categories help Genie build dedicated knowledge for each vertical you promote.</p>
+
+        <div class="field">
+          <label>Category name <span style="color:#c33;">*</span></label>
+          <input type="text" id="newDashCatName" placeholder="e.g., Auto Insurance" />
+        </div>
+
+        <div class="field">
+          <label>Industry</label>
+          <select id="newDashCatIndustry">
+            <option>Insurance</option>
+            <option>Finance</option>
+            <option>Technology</option>
+            <option>Health &amp; Wellness</option>
+            <option>Travel</option>
+            <option>E-commerce</option>
+            <option>Education</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Icon <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
+          <input type="text" id="newDashCatIcon" placeholder="🏷 (or any emoji)" maxlength="4" />
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+          <button class="btn btn--ghost" onclick="closeAddCategoryModal()">Cancel</button>
+          <button class="btn btn--primary" onclick="saveCategoryInline()">Create &amp; Select</button>
+        </div>
       </div>
     </div>
 
@@ -791,9 +833,28 @@
       selectedTemplate = name;
     }
 
-    function selectCategory(el) {
-      el.parentElement.querySelectorAll('.pill-chip').forEach(x => x.classList.remove('active'));
-      el.classList.add('active');
+    function openAddCategoryModal() {
+      document.getElementById('newDashCatName').value = '';
+      document.getElementById('newDashCatIcon').value = '';
+      document.getElementById('addCategoryModalDash').classList.remove('hidden');
+    }
+    function closeAddCategoryModal() {
+      document.getElementById('addCategoryModalDash').classList.add('hidden');
+    }
+    function saveCategoryInline() {
+      const name = document.getElementById('newDashCatName').value.trim();
+      const industry = document.getElementById('newDashCatIndustry').value;
+      const icon = document.getElementById('newDashCatIcon').value.trim() || '🏷';
+      if (!name) { document.getElementById('newDashCatName').focus(); return; }
+
+      const sel = document.getElementById('dashboardCategorySelect');
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = icon + ' ' + name + ' — ' + industry;
+      sel.insertBefore(opt, sel.firstChild);
+      sel.value = name;
+      closeAddCategoryModal();
+      showToast('"' + name + '" added and selected');
     }
     // Only attach the toggle handler to chips that don't already have an inline onclick handler
     document.querySelectorAll('.chip:not([onclick])').forEach(c => c.addEventListener('click', () => c.classList.toggle('active')));
