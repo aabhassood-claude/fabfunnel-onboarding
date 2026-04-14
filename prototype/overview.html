@@ -47,9 +47,10 @@
             <h1 style="font-size:24px;">👋 Welcome back</h1>
             <p style="color:var(--muted); font-size:13px; margin:0;">Here's what's happening across your Genie workspace.</p>
           </div>
-          <div style="display:flex; gap:8px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <a href="dashboard.html" class="btn btn--primary">✨ Creative Generation</a>
             <a href="brands.html" class="btn">+ Add Brand</a>
+            <a href="categories.html" class="btn">+ Add Category</a>
           </div>
         </div>
 
@@ -65,10 +66,13 @@
             </div>
           </div>
           <div class="ov-kpi">
-            <div class="ov-kpi__label">ACTIVE BRANDS</div>
-            <div class="ov-kpi__value">12</div>
-            <div class="ov-kpi__trend">+2 added this month</div>
-            <div class="ov-kpi__split"><span>Top: Airbnb · 68 creatives</span></div>
+            <div class="ov-kpi__label">WORKSPACES</div>
+            <div class="ov-kpi__value">12 <span style="font-size:14px; color:var(--muted); font-weight:400;">brands</span></div>
+            <div class="ov-kpi__trend">+ 67 categories</div>
+            <div class="ov-kpi__split">
+              <span>🛒 Top ecom: Airbnb · 68</span>
+              <span>⚡ Top affiliate: Life Insurance · 42</span>
+            </div>
           </div>
           <div class="ov-kpi">
             <div class="ov-kpi__label">CREDITS USED</div>
@@ -142,13 +146,17 @@
 
           <!-- Right column -->
           <div>
-            <!-- Top brands -->
+            <!-- Top brands / categories -->
             <div class="ov-card">
               <div class="ov-card__header">
-                <div class="ov-card__title">🏷 Top brands</div>
-                <a href="brands.html" style="font-size:12px; color:var(--muted);">View all →</a>
+                <div class="ov-card__title">🏆 Top performers</div>
+                <div class="pill-toggle" id="topToggle">
+                  <button class="active" data-tab="brands">🏷 Brands</button>
+                  <button data-tab="categories">📁 Categories</button>
+                </div>
               </div>
-              <div class="ov-brand-list">
+
+              <div id="topBrands" class="ov-brand-list">
                 <a href="brand-detail.html?brand=airbnb" class="ov-brand-row">
                   <div class="ov-brand-row__logo">🅰</div>
                   <div class="ov-brand-row__info">
@@ -189,6 +197,51 @@
                   </div>
                   <div class="ov-brand-row__bar"><span style="width:36%;"></span></div>
                 </a>
+                <div style="text-align:right; margin-top:8px;"><a href="brands.html" style="font-size:12px; color:var(--muted); text-decoration:underline;">View all brands →</a></div>
+              </div>
+
+              <div id="topCategories" class="ov-brand-list hidden">
+                <a href="category-detail.html?cat=life-insurance" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">🛡</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Life Insurance</div>
+                    <div class="ov-brand-row__meta">42 creatives · Insurance</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:95%;"></span></div>
+                </a>
+                <a href="category-detail.html?cat=credit-cards" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">💳</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Credit Cards</div>
+                    <div class="ov-brand-row__meta">35 creatives · Finance</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:80%;"></span></div>
+                </a>
+                <a href="category-detail.html?cat=home-insurance" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">🏠</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Home Insurance</div>
+                    <div class="ov-brand-row__meta">28 creatives · Insurance</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:64%;"></span></div>
+                </a>
+                <a href="category-detail.html?cat=crypto" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">₿</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Crypto Trading</div>
+                    <div class="ov-brand-row__meta">21 creatives · Finance</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:48%;"></span></div>
+                </a>
+                <a href="category-detail.html?cat=pet-insurance" class="ov-brand-row">
+                  <div class="ov-brand-row__logo">🐾</div>
+                  <div class="ov-brand-row__info">
+                    <div class="ov-brand-row__name">Pet Insurance</div>
+                    <div class="ov-brand-row__meta">16 creatives · Insurance</div>
+                  </div>
+                  <div class="ov-brand-row__bar"><span style="width:36%;"></span></div>
+                </a>
+                <div style="text-align:right; margin-top:8px;"><a href="categories.html" style="font-size:12px; color:var(--muted); text-decoration:underline;">View all categories →</a></div>
               </div>
             </div>
 
@@ -224,6 +277,13 @@
                   <div class="ov-activity__body">
                     <div>Launched <strong>Lipstick Promo</strong> to Meta Ads</div>
                     <div class="ov-activity__time">yesterday</div>
+                  </div>
+                </div>
+                <div class="ov-activity__item">
+                  <div class="ov-activity__icon">📁</div>
+                  <div class="ov-activity__body">
+                    <div>Added reference URL to <strong>Life Insurance</strong> category</div>
+                    <div class="ov-activity__time">2 days ago</div>
                   </div>
                 </div>
                 <div class="ov-activity__item">
@@ -265,6 +325,13 @@
                 <div class="ov-insight__desc">42% of favorited creatives are Product Ads — try more of this type.</div>
               </div>
             </div>
+            <div class="ov-insight">
+              <div class="ov-insight__icon">⚡</div>
+              <div>
+                <div class="ov-insight__title">Affiliate mode is gaining traction</div>
+                <div class="ov-insight__desc">28% of this week's creatives used Affiliate — up from 9% last month. Insurance categories leading.</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -273,6 +340,18 @@
   </div>
 
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    document.querySelectorAll('#topToggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('topBrands').classList.toggle('hidden', tab !== 'brands');
+        document.getElementById('topCategories').classList.toggle('hidden', tab !== 'categories');
+      });
+    });
+  </script>
 <script src="pricing.js"></script>
 </body>
 </html>
