@@ -40,16 +40,182 @@
     </aside>
 
     <main class="genie-main">
-      <div class="module-placeholder">
-        <div class="module-placeholder__icon">📁</div>
-        <div class="module-placeholder__badge">COMING SOON</div>
-        <h1>Categories</h1>
-        <p>Organize generated creatives by product category, campaign, or custom tags.</p>
+      <div class="genie-wrap">
+        <div class="brands-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <h1 style="font-size:22px;">📁 Categories</h1>
+            <span class="count-bubble" id="catCount">67</span>
+          </div>
+          <button class="btn btn--primary" onclick="openAddCategory()">+ Add Category</button>
+        </div>
+
+        <div class="cat-grid" id="catGrid">
+          <a href="category-detail.html?cat=test" class="cat-card">
+            <div class="cat-card__icon">🚗</div>
+            <div class="cat-card__name">test category 1</div>
+            <div class="cat-card__industry">IINsurance</div>
+          </a>
+          <a href="category-detail.html?cat=life-insurance" class="cat-card">
+            <div class="cat-card__icon">🛡</div>
+            <div class="cat-card__name">Life Insurance</div>
+            <div class="cat-card__industry">Insurance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=home-insurance" class="cat-card">
+            <div class="cat-card__icon">🏠</div>
+            <div class="cat-card__name">Home Insurance</div>
+            <div class="cat-card__industry">Insurance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=pet-insurance" class="cat-card">
+            <div class="cat-card__icon">🐾</div>
+            <div class="cat-card__name">Pet Insurance</div>
+            <div class="cat-card__industry">Insurance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=travel-insurance" class="cat-card">
+            <div class="cat-card__icon">✈️</div>
+            <div class="cat-card__name">Travel Insurance</div>
+            <div class="cat-card__industry">Insurance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=dental" class="cat-card">
+            <div class="cat-card__icon">🦷</div>
+            <div class="cat-card__name">Dental Plans</div>
+            <div class="cat-card__industry">Insurance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=vision" class="cat-card">
+            <div class="cat-card__icon">👓</div>
+            <div class="cat-card__name">Vision Plans</div>
+            <div class="cat-card__industry">Insurance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=credit-cards" class="cat-card">
+            <div class="cat-card__icon">💳</div>
+            <div class="cat-card__name">Credit Cards</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=mortgage" class="cat-card">
+            <div class="cat-card__icon">🏡</div>
+            <div class="cat-card__name">Mortgage</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=student-loans" class="cat-card">
+            <div class="cat-card__icon">🎓</div>
+            <div class="cat-card__name">Student Loans</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=business-loans" class="cat-card">
+            <div class="cat-card__icon">🏢</div>
+            <div class="cat-card__name">Business Loans</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=debt-relief" class="cat-card">
+            <div class="cat-card__icon">📉</div>
+            <div class="cat-card__name">Debt Relief</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=tax" class="cat-card">
+            <div class="cat-card__icon">📋</div>
+            <div class="cat-card__name">Tax Services</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=crypto" class="cat-card">
+            <div class="cat-card__icon">₿</div>
+            <div class="cat-card__name">Crypto Trading</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+          <a href="category-detail.html?cat=stocks" class="cat-card">
+            <div class="cat-card__icon">📈</div>
+            <div class="cat-card__name">Stock Trading</div>
+            <div class="cat-card__industry">Finance</div>
+            <div class="cat-card__refs">🔗 1 reference URL</div>
+          </a>
+        </div>
       </div>
     </main>
   </div>
 
+  <!-- Add Category Modal -->
+  <div id="addCategoryModal" class="modal-backdrop hidden" onclick="if (event.target === this) closeAddCategory()">
+    <div class="modal">
+      <button class="modal__close" onclick="closeAddCategory()">✕</button>
+      <h2 style="font-size:20px; margin-bottom:6px;">Add a new category</h2>
+      <p class="sub" style="margin-bottom:20px; font-size:13px;">Categories help Genie build dedicated knowledge for each vertical you promote.</p>
+
+      <div class="field">
+        <label>Category name <span style="color:#c33;">*</span></label>
+        <input type="text" id="newCatName" placeholder="e.g., Auto Insurance" />
+      </div>
+
+      <div class="field">
+        <label>Industry</label>
+        <select id="newCatIndustry">
+          <option>Insurance</option>
+          <option>Finance</option>
+          <option>Technology</option>
+          <option>Health &amp; Wellness</option>
+          <option>Travel</option>
+          <option>E-commerce</option>
+          <option>Education</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Icon <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
+        <input type="text" id="newCatIcon" placeholder="🏷 (or any emoji)" maxlength="4" />
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn btn--ghost" onclick="closeAddCategory()">Cancel</button>
+        <button class="btn btn--primary" onclick="saveNewCategory()">Create category</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
-<script src="pricing.js"></script>
+
+  <script>
+    function openAddCategory() {
+      document.getElementById('newCatName').value = '';
+      document.getElementById('newCatIcon').value = '';
+      document.getElementById('addCategoryModal').classList.remove('hidden');
+    }
+    function closeAddCategory() {
+      document.getElementById('addCategoryModal').classList.add('hidden');
+    }
+    function saveNewCategory() {
+      const name = document.getElementById('newCatName').value.trim();
+      const industry = document.getElementById('newCatIndustry').value;
+      const icon = document.getElementById('newCatIcon').value.trim() || '🏷';
+      if (!name) { document.getElementById('newCatName').focus(); return; }
+
+      const slug = name.toLowerCase().replace(/\s+/g, '-');
+      const card = document.createElement('a');
+      card.href = 'category-detail.html?cat=' + encodeURIComponent(slug);
+      card.className = 'cat-card';
+      card.innerHTML = `
+        <div class="cat-card__icon">${icon}</div>
+        <div class="cat-card__name">${name}</div>
+        <div class="cat-card__industry">${industry}</div>
+        <div class="cat-card__refs" style="color:var(--active);">✨ Just added</div>
+      `;
+      const grid = document.getElementById('catGrid');
+      grid.insertBefore(card, grid.firstChild);
+      const bubble = document.getElementById('catCount');
+      bubble.textContent = parseInt(bubble.textContent, 10) + 1;
+      closeAddCategory();
+    }
+  </script>
+  <script src="pricing.js"></script>
 </body>
 </html>
