@@ -163,36 +163,36 @@
           <div class="competitor__logo">A</div>
           <div class="competitor__info">
             <div class="competitor__name">Aritzia</div>
-            <div class="competitor__meta">Apparel · $$ · Mid-premium</div>
+            <div class="competitor__meta">Apparel · Tracking: Ad creatives, Visual style</div>
           </div>
-          <span class="competitor__tag">Style match</span>
+          <span class="competitor__tag">2 tracked</span>
           <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
         <div class="competitor">
           <div class="competitor__logo">E</div>
           <div class="competitor__info">
             <div class="competitor__name">Everlane</div>
-            <div class="competitor__meta">Apparel · $$ · Minimal</div>
+            <div class="competitor__meta">Apparel · Tracking: Messaging, Social posts</div>
           </div>
-          <span class="competitor__tag">Audience match</span>
+          <span class="competitor__tag">2 tracked</span>
           <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
         <div class="competitor">
           <div class="competitor__logo">U</div>
           <div class="competitor__info">
             <div class="competitor__name">Uniqlo</div>
-            <div class="competitor__meta">Apparel · $ · Everyday</div>
+            <div class="competitor__meta">Apparel · Tracking: Promotions, Pricing</div>
           </div>
-          <span class="competitor__tag">Category match</span>
+          <span class="competitor__tag">2 tracked</span>
           <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
         <div class="competitor">
           <div class="competitor__logo">C</div>
           <div class="competitor__info">
             <div class="competitor__name">COS</div>
-            <div class="competitor__meta">Apparel · $$$ · Modern</div>
+            <div class="competitor__meta">Apparel · Tracking: Visual style, Product launches</div>
           </div>
-          <span class="competitor__tag">Style match</span>
+          <span class="competitor__tag">2 tracked</span>
           <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
         </div>
       </div>
@@ -228,13 +228,18 @@
           </select>
         </div>
         <div class="field">
-          <label>Why track them?</label>
-          <div class="chip-group">
-            <span class="chip active" onclick="selectMatchType(this)">Style match</span>
-            <span class="chip" onclick="selectMatchType(this)">Audience match</span>
-            <span class="chip" onclick="selectMatchType(this)">Category match</span>
-            <span class="chip" onclick="selectMatchType(this)">Price match</span>
+          <label>What to track <span style="color:var(--muted); font-weight:400;">(select what they do well — we'll apply these learnings to your creatives)</span></label>
+          <div class="chip-group" id="trackChips">
+            <span class="chip active" onclick="toggleTrackChip(this)">🎨 Ad creatives</span>
+            <span class="chip active" onclick="toggleTrackChip(this)">📱 Social posts</span>
+            <span class="chip" onclick="toggleTrackChip(this)">✍️ Messaging & copy</span>
+            <span class="chip" onclick="toggleTrackChip(this)">🖼️ Visual style</span>
+            <span class="chip" onclick="toggleTrackChip(this)">🏷️ Promotions & offers</span>
+            <span class="chip" onclick="toggleTrackChip(this)">🚀 Product launches</span>
+            <span class="chip" onclick="toggleTrackChip(this)">💬 Reviews & UGC</span>
+            <span class="chip" onclick="toggleTrackChip(this)">💰 Pricing strategy</span>
           </div>
+          <div class="field__hint">💡 We'll monitor their top-performing content in these areas and use it to inspire (not copy) your generated creatives.</div>
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
@@ -273,15 +278,16 @@
     function closeCompetitorModal() {
       document.getElementById('competitorModal').classList.add('hidden');
     }
-    function selectMatchType(el) {
-      el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
+    function toggleTrackChip(el) {
+      el.classList.toggle('active');
     }
     function addCompetitor() {
       const name = document.getElementById('compName').value.trim() || 'New Brand';
       const category = document.getElementById('compCategory').value;
-      const matchEl = document.querySelector('#competitorModal .chip.active');
-      const match = matchEl ? matchEl.textContent : 'Style match';
+      const tracked = [...document.querySelectorAll('#trackChips .chip.active')].map(c => c.textContent.trim());
+      const trackSummary = tracked.length
+        ? `Tracking ${tracked.length}: ${tracked.slice(0, 2).join(', ')}${tracked.length > 2 ? '…' : ''}`
+        : 'No tracking set';
       const letter = name.charAt(0).toUpperCase();
 
       const el = document.createElement('div');
@@ -290,9 +296,9 @@
         <div class="competitor__logo">${letter}</div>
         <div class="competitor__info">
           <div class="competitor__name">${name}</div>
-          <div class="competitor__meta">${category}</div>
+          <div class="competitor__meta">${category} · ${trackSummary}</div>
         </div>
-        <span class="competitor__tag">${match}</span>
+        <span class="competitor__tag">${tracked.length} tracked</span>
         <button class="competitor__remove" onclick="removeCompetitor(this)" title="Remove">✕</button>
       `;
       document.getElementById('competitorGrid').appendChild(el);
