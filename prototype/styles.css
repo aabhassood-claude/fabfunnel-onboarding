@@ -335,6 +335,155 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 }
 .vibes-row__label { font-size: 11px; color: var(--muted); margin-right: 4px; }
 
+/* Affiliate dashboard — reference brand pills */
+.ref-brand-pills {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.ref-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px 6px 14px;
+  border-radius: 18px;
+  background: var(--accent-bg);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+.ref-pill--active {
+  background: var(--active);
+  color: #fff;
+}
+.ref-pill button {
+  background: transparent; border: none; cursor: pointer;
+  color: inherit; opacity: 0.7;
+  font-size: 11px;
+  padding: 0 2px;
+}
+.ref-pill button:hover { opacity: 1; }
+.ref-pill-add {
+  background: transparent; border: 1px dashed var(--border);
+  padding: 6px 12px;
+  border-radius: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: inherit;
+}
+.ref-pill-add:hover { background: var(--accent-bg); color: var(--text); }
+
+/* Winner ads row (horizontal scroll) */
+.winner-ads-row {
+  display: flex; gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.winner-ad {
+  flex: 0 0 140px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.winner-ad__head {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.winner-ad__name { font-size: 11px; font-weight: 600; flex: 1; }
+.winner-ad__badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  background: var(--accent-bg);
+  border-radius: 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.winner-ad__pin {
+  background: transparent; border: none; cursor: pointer;
+  font-size: 12px; padding: 0; color: var(--muted);
+}
+.winner-ad__thumb {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  background: linear-gradient(135deg, var(--accent-bg), var(--bg));
+}
+.winner-ad__caption {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 6px 10px 8px;
+}
+
+/* Concept cards */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.concept-card {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface);
+  transition: border-color .15s, transform .15s;
+}
+.concept-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.concept-card.selected { border-color: var(--active); box-shadow: 0 0 0 1px var(--active); }
+.concept-card__thumb {
+  aspect-ratio: 4 / 3;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
+  padding: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.concept-card__title { font-weight: 700; font-size: 13px; padding: 10px 12px 2px; }
+.concept-card__desc { font-size: 11px; color: var(--muted); padding: 0 12px 8px; line-height: 1.4; }
+.concept-card .tag-row { padding: 0 12px 12px; gap: 4px; display: flex; flex-wrap: wrap; }
+
+/* Approach cards */
+.search-wrap {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1; min-width: 220px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  background: var(--surface);
+}
+.search-wrap input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-family: inherit; font-size: 13px;
+}
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.approach-card {
+  display: flex; flex-direction: column;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface);
+  transition: border-color .15s, transform .15s;
+}
+.approach-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.approach-card.selected { border-color: var(--active); box-shadow: 0 0 0 1px var(--active); }
+.approach-card__thumb {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 46px;
+  font-weight: 800;
+}
+.approach-card__info { padding: 10px 12px; }
+.approach-card__name { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+
 /* Reference URL rows in onboarding */
 .ref-url-row {
   display: flex;

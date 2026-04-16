@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFunnel · Genie · Affiliate</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <a href="overview.html" class="back-link" style="margin:0 12px 0 0; vertical-align:middle;">← Overview</a>
+      <span class="brand">FabFunnel</span><span class="brand__tag">GENIE</span>
+    </div>
+    <div class="topbar__right">
+      <div class="credits-pill">
+        <span class="credits-pill__bolt">⚡</span>
+        <span class="credits-pill__count">42</span>
+        <span class="credits-pill__label">credits</span>
+        <button class="credits-pill__buy" onclick="openPricing()">+ Buy more</button>
+      </div>
+      <span style="color:var(--muted);">Client 1 ▾</span>
+    </div>
+  </div>
+
+  <div class="genie-layout">
+    <aside class="genie-sidebar">
+      <div class="genie-sidebar__head">
+        <div class="genie-sidebar__title">✨ Genie</div>
+        <button class="genie-sidebar__collapse" title="Collapse">‹</button>
+      </div>
+      <nav class="genie-sidebar__nav">
+        <a href="overview.html"><span class="nav-icon">🏠</span> Overview</a>
+        <a href="dashboard.html" class="active"><span class="nav-icon">✨</span> Creative Generation</a>
+        <a href="gallery.html"><span class="nav-icon">🖼</span> Gallery</a>
+        <a href="templates.html"><span class="nav-icon">📋</span> Templates</a>
+        <a href="brands.html"><span class="nav-icon">🏷️</span> Brands</a>
+        <a href="categories.html"><span class="nav-icon">📁</span> Categories</a>
+      </nav>
+    </aside>
+
+    <main class="genie-main">
+      <div class="genie-wrap">
+
+        <!-- Mode switcher between Ecom and Affiliate -->
+        <div class="control-strip" style="margin-bottom:16px;">
+          <div class="pill-toggle" role="tablist" aria-label="Industry">
+            <button onclick="location.href='dashboard.html'">🛒 E-com</button>
+            <button class="active">⚡ Affiliate</button>
+          </div>
+
+          <!-- View tabs (right-aligned) -->
+          <div style="margin-left:auto;">
+            <div class="pill-toggle" id="affView">
+              <button class="active" data-view="create">E-Com</button>
+              <button data-view="performance">Performance</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CREATE VIEW -->
+        <div id="affCreateView">
+
+          <!-- Header intro -->
+          <div style="padding:4px 0 18px;">
+            <h1 style="font-size:22px; margin-bottom:2px;">✨ Genie</h1>
+            <p style="color:var(--muted); font-size:13px; margin:0;">Add URLs for research, competitor pages, landing pages, etc.</p>
+          </div>
+
+          <!-- Category section -->
+          <div class="work-section">
+            <label class="work-label">Category</label>
+            <div class="category-box">
+              <span style="color:var(--muted);">🔍</span>
+              <input type="text" id="catSearchAff" value="Home Insurance" placeholder="Search category..." />
+              <span style="color:var(--muted);">▾</span>
+            </div>
+
+            <!-- Reference brand pills -->
+            <div style="margin-top:14px;">
+              <div style="font-size:11px; color:var(--subtle); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; margin-bottom:8px;">Reference brands</div>
+              <div class="ref-brand-pills" id="refBrands">
+                <span class="ref-pill ref-pill--active">Bewakoof <button onclick="removeRefBrand(this)">✕</button></span>
+                <span class="ref-pill">Glowskin <button onclick="removeRefBrand(this)">✕</button></span>
+                <span class="ref-pill">Apple <button onclick="removeRefBrand(this)">✕</button></span>
+                <span class="ref-pill">Google <button onclick="removeRefBrand(this)">✕</button></span>
+                <span class="ref-pill">Amalfa <button onclick="removeRefBrand(this)">✕</button></span>
+                <span class="ref-pill">Zacz <button onclick="removeRefBrand(this)">✕</button></span>
+                <button class="ref-pill-add" onclick="addRefBrand()">+ Add brand</button>
+              </div>
+            </div>
+
+            <!-- Winner Ads -->
+            <div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border);">
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-bottom:12px;">
+                <input type="checkbox" checked /> <strong>Include Winner Ads</strong> <span style="color:var(--muted); font-weight:400;">(7 selected)</span>
+              </label>
+              <div class="winner-ads-row">
+                <div class="winner-ad">
+                  <div class="winner-ad__head">
+                    <span class="winner-ad__name">Page name</span>
+                    <span class="winner-ad__badge">Static</span>
+                    <button class="winner-ad__pin">📌</button>
+                  </div>
+                  <div class="winner-ad__thumb">🖼️</div>
+                  <div class="winner-ad__caption">"The more I eat the…"</div>
+                </div>
+                <div class="winner-ad">
+                  <div class="winner-ad__head">
+                    <span class="winner-ad__name">Page name</span>
+                    <span class="winner-ad__badge">Static</span>
+                    <button class="winner-ad__pin">📌</button>
+                  </div>
+                  <div class="winner-ad__thumb">💊</div>
+                  <div class="winner-ad__caption">"The weight started…"</div>
+                </div>
+                <div class="winner-ad">
+                  <div class="winner-ad__head">
+                    <span class="winner-ad__name">Page name</span>
+                    <span class="winner-ad__badge">Static</span>
+                    <button class="winner-ad__pin">📌</button>
+                  </div>
+                  <div class="winner-ad__thumb">🏡</div>
+                  <div class="winner-ad__caption">"The more I eat the…"</div>
+                </div>
+                <div class="winner-ad">
+                  <div class="winner-ad__head">
+                    <span class="winner-ad__name">Page name</span>
+                    <span class="winner-ad__badge">Static</span>
+                    <button class="winner-ad__pin">📌</button>
+                  </div>
+                  <div class="winner-ad__thumb">🏠</div>
+                  <div class="winner-ad__caption">"The weight started…"</div>
+                </div>
+                <div class="winner-ad">
+                  <div class="winner-ad__head">
+                    <span class="winner-ad__name">Page name</span>
+                    <span class="winner-ad__badge">Static</span>
+                    <button class="winner-ad__pin">📌</button>
+                  </div>
+                  <div class="winner-ad__thumb">📋</div>
+                  <div class="winner-ad__caption">"The more I eat the…"</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Research enrichment -->
+            <div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border);">
+              <div style="font-size:11px; color:var(--subtle); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; margin-bottom:10px;">Research enrichment</div>
+              <div class="chip-group">
+                <span class="chip active" onclick="this.classList.toggle('active')">🔍 Reddit Pain Points</span>
+                <span class="chip active" onclick="this.classList.toggle('active')">🔥 Trending Articles</span>
+                <span class="chip" onclick="this.classList.toggle('active')">📊 Market Signals</span>
+                <span class="chip" onclick="this.classList.toggle('active')">🎯 Competitor Angles</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Concepts section -->
+          <div class="work-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+              <label class="work-label" style="margin:0;">💡 Concepts</label>
+              <div class="pill-toggle" id="conceptTabs">
+                <button onclick="setConceptTab(this)">Saved</button>
+                <button class="active" onclick="setConceptTab(this)">Fresh AI start</button>
+                <button onclick="setConceptTab(this)">Custom</button>
+              </div>
+            </div>
+            <div class="concept-grid">
+              <div class="concept-card selected" onclick="this.classList.toggle('selected')">
+                <div class="concept-card__thumb" style="background:linear-gradient(135deg,#0ea5b7,#1e293b); color:#ffd700;">MEDICARE<br/>FOR YOUNG<br/>MEDICARES</div>
+                <div class="concept-card__title">Luxury Lifestyle</div>
+                <div class="concept-card__desc">Premium setting with rich textures — velvet, gold accents.</div>
+                <div class="tag-row">
+                  <span class="tag-chip">Deep mood</span>
+                  <span class="tag-chip">Dramatic</span>
+                </div>
+              </div>
+              <div class="concept-card" onclick="this.classList.toggle('selected')">
+                <div class="concept-card__thumb" style="background:linear-gradient(135deg,#b91c1c,#ec4899);">Medicare<br/>For Yungs</div>
+                <div class="concept-card__title">Luxury Lifestyle</div>
+                <div class="concept-card__desc">Premium setting with rich textures — velvet, gold accents.</div>
+                <div class="tag-row">
+                  <span class="tag-chip">Deep mood</span>
+                  <span class="tag-chip">Dramatic</span>
+                </div>
+              </div>
+              <div class="concept-card" onclick="this.classList.toggle('selected')">
+                <div class="concept-card__thumb" style="background:linear-gradient(135deg,#fef3c7,#b45309); color:#78350f;">Medicare<br/>for Yungs</div>
+                <div class="concept-card__title">Luxury Lifestyle</div>
+                <div class="concept-card__desc">Premium setting with rich textures — velvet, gold accents.</div>
+                <div class="tag-row">
+                  <span class="tag-chip">Deep mood</span>
+                  <span class="tag-chip">Dramatic</span>
+                </div>
+              </div>
+              <div class="concept-card" onclick="this.classList.toggle('selected')">
+                <div class="concept-card__thumb" style="background:linear-gradient(135deg,#14532d,#22c55e); color:#fff; font-size:13px;">PROVIDERS<br/>ADHERENCE</div>
+                <div class="concept-card__title">Luxury Lifestyle</div>
+                <div class="concept-card__desc">Premium setting with rich textures — velvet, gold accents.</div>
+                <div class="tag-row">
+                  <span class="tag-chip">Deep mood</span>
+                  <span class="tag-chip">Dramatic</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Approach section -->
+          <div class="work-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+              <label class="work-label" style="margin:0;">🎯 Approach <span class="badge-optional">1 selected</span></label>
+              <div class="pill-toggle" id="approachTabs">
+                <button class="active" onclick="setApproachTab(this)">Templates</button>
+                <button onclick="setApproachTab(this)">Fresh AI start</button>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
+              <div class="search-wrap">
+                <span>🔍</span>
+                <input type="text" placeholder="Search by name, Angle, tag..." />
+              </div>
+              <select class="inline-select"><option>Issue ▾</option><option>Deep mood</option><option>Comparison</option></select>
+              <select class="inline-select"><option>Angle ▾</option><option>Savings</option><option>Urgency</option><option>Social proof</option></select>
+            </div>
+            <div class="approach-grid">
+              <div class="approach-card selected" onclick="this.classList.toggle('selected')">
+                <div class="approach-card__thumb" style="background:linear-gradient(135deg,#b91c1c,#f87171); color:#fff;">👟</div>
+                <div class="approach-card__info">
+                  <div class="approach-card__name">Summer sale</div>
+                  <div class="tag-row">
+                    <span class="tag-chip">Flat sale</span>
+                    <span class="tag-chip">E-commerce</span>
+                  </div>
+                </div>
+              </div>
+              <div class="approach-card" onclick="this.classList.toggle('selected')">
+                <div class="approach-card__thumb" style="background:linear-gradient(135deg,#fef3c7,#d6b874); color:#78350f;">N°5</div>
+                <div class="approach-card__info">
+                  <div class="approach-card__name">Luxury Perfume Launch</div>
+                  <div class="tag-row">
+                    <span class="tag-chip">New arrival</span>
+                    <span class="tag-chip">Luxury</span>
+                  </div>
+                </div>
+              </div>
+              <div class="approach-card" onclick="this.classList.toggle('selected')">
+                <div class="approach-card__thumb" style="background:linear-gradient(135deg,#0f172a,#475569); color:#fff;">🧥</div>
+                <div class="approach-card__info">
+                  <div class="approach-card__name">End Season Clearance</div>
+                  <div class="tag-row">
+                    <span class="tag-chip">Clearance</span>
+                    <span class="tag-chip">Sale</span>
+                  </div>
+                </div>
+              </div>
+              <div class="approach-card" onclick="this.classList.toggle('selected')">
+                <div class="approach-card__thumb" style="background:linear-gradient(135deg,#7f1d1d,#ca8a04); color:#fff;">⌚</div>
+                <div class="approach-card__info">
+                  <div class="approach-card__name">Limited Edition Watch</div>
+                  <div class="tag-row">
+                    <span class="tag-chip">Limited edition</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky generate bar -->
+          <div class="genbar">
+            <div class="genbar__left">
+              <span class="genbar__chip">Affiliate</span>
+              <span class="genbar__chip">Home Insurance</span>
+              <span class="genbar__chip">1 concept</span>
+              <span class="genbar__chip">1 template</span>
+            </div>
+            <div class="genbar__right">
+              <span style="color:var(--muted); font-size:13px;">⚡ Uses 4 credits</span>
+              <button class="btn btn--primary" onclick="alert('Generating affiliate creatives... (wireframe)')">✨ Generate →</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PERFORMANCE VIEW -->
+        <div id="affPerfView" class="hidden">
+          <div style="padding:4px 0 18px;">
+            <h1 style="font-size:22px; margin-bottom:2px;">📊 Performance</h1>
+            <p style="color:var(--muted); font-size:13px; margin:0;">See how your affiliate creatives are performing across concepts and platforms.</p>
+          </div>
+
+          <div class="ov-kpis" style="margin-bottom:20px;">
+            <div class="ov-kpi">
+              <div class="ov-kpi__label">IMPRESSIONS</div>
+              <div class="ov-kpi__value">128K</div>
+              <div class="ov-kpi__trend ov-kpi__trend--up">↑ 22% this week</div>
+            </div>
+            <div class="ov-kpi">
+              <div class="ov-kpi__label">CLICKS</div>
+              <div class="ov-kpi__value">4,812</div>
+              <div class="ov-kpi__trend ov-kpi__trend--up">↑ 8% this week</div>
+            </div>
+            <div class="ov-kpi">
+              <div class="ov-kpi__label">CONVERSIONS</div>
+              <div class="ov-kpi__value">312</div>
+              <div class="ov-kpi__trend">CPA $12 · ↓ 14% vs last week</div>
+            </div>
+            <div class="ov-kpi">
+              <div class="ov-kpi__label">REVENUE (EST.)</div>
+              <div class="ov-kpi__value">$15,600</div>
+              <div class="ov-kpi__trend ov-kpi__trend--up">ROI 3.2×</div>
+            </div>
+          </div>
+
+          <div class="module-placeholder" style="margin-top:40px;">
+            <div class="module-placeholder__icon">📈</div>
+            <div class="module-placeholder__badge">COMING SOON</div>
+            <h1>Full performance view</h1>
+            <p>Concept-level CTR, angle winners, platform breakdown, and A/B test results.</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
+
+  <script>
+    function removeRefBrand(btn) {
+      btn.closest('.ref-pill').remove();
+    }
+    function addRefBrand() {
+      const name = prompt('Reference brand name:');
+      if (!name) return;
+      const pill = document.createElement('span');
+      pill.className = 'ref-pill';
+      pill.innerHTML = name + ' <button onclick="removeRefBrand(this)">✕</button>';
+      const list = document.getElementById('refBrands');
+      list.insertBefore(pill, list.querySelector('.ref-pill-add'));
+    }
+
+    function setConceptTab(btn) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    function setApproachTab(btn) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // View toggle (E-Com / Performance)
+    document.querySelectorAll('#affView button').forEach(b => {
+      b.addEventListener('click', () => {
+        b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        const view = b.dataset.view;
+        document.getElementById('affCreateView').classList.toggle('hidden', view !== 'create');
+        document.getElementById('affPerfView').classList.toggle('hidden', view !== 'performance');
+      });
+    });
+  </script>
+  <script src="pricing.js"></script>
+</body>
+</html>

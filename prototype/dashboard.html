@@ -823,14 +823,23 @@
       }, 2200);
     }
 
-    // E-com/Affiliate pill-toggle (in control strip)
+    // E-com/Affiliate pill-toggle — Affiliate now routes to a dedicated dashboard
     document.querySelectorAll('.control-strip .pill-toggle button[data-mode]').forEach(t => {
       t.addEventListener('click', () => {
+        if (t.dataset.mode === 'affiliate') {
+          location.href = 'dashboard-affiliate.html';
+          return;
+        }
         t.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
         t.classList.add('active');
         setMode(t.dataset.mode);
       });
     });
+
+    // If user arrived with ?mode=affiliate, auto-redirect
+    if ((new URLSearchParams(location.search)).get('mode') === 'affiliate') {
+      location.replace('dashboard-affiliate.html');
+    }
 
     function setMode(mode) {
       document.querySelectorAll('.mode-ecom').forEach(el => el.classList.toggle('hidden', mode !== 'ecom'));
