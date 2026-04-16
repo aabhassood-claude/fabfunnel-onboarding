@@ -42,14 +42,18 @@
     <main class="genie-main">
       <div class="genie-wrap">
 
-        <!-- Mode switcher between Ecom and Affiliate -->
+        <!-- Control strip — matches Ecom dashboard (Industry + Format) + right-aligned view tabs -->
         <div class="control-strip" style="margin-bottom:16px;">
           <div class="pill-toggle" role="tablist" aria-label="Industry">
             <button onclick="location.href='dashboard.html'">🛒 E-com</button>
             <button class="active">⚡ Affiliate</button>
           </div>
 
-          <!-- View tabs (right-aligned) -->
+          <div class="pill-toggle" role="tablist" aria-label="Output format">
+            <button class="active" id="fmtImage" onclick="setAffFormat('image')">🖼 Image</button>
+            <button id="fmtVideo" onclick="setAffFormat('video')">🎬 Video</button>
+          </div>
+
           <div style="margin-left:auto;">
             <div class="pill-toggle" id="affView">
               <button class="active" data-view="create">E-Com</button>
@@ -327,6 +331,10 @@
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
 
   <script>
+    function setAffFormat(fmt) {
+      document.getElementById('fmtImage').classList.toggle('active', fmt === 'image');
+      document.getElementById('fmtVideo').classList.toggle('active', fmt === 'video');
+    }
     function removeRefBrand(btn) {
       btn.closest('.ref-pill').remove();
     }
