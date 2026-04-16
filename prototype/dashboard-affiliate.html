@@ -53,13 +53,6 @@
             <button class="active" id="fmtImage" onclick="setAffFormat('image')">🖼 Image</button>
             <button id="fmtVideo" onclick="setAffFormat('video')">🎬 Video</button>
           </div>
-
-          <div style="margin-left:auto;">
-            <div class="pill-toggle" id="affView">
-              <button class="active" data-view="create">E-Com</button>
-              <button data-view="performance">Performance</button>
-            </div>
-          </div>
         </div>
 
         <!-- CREATE VIEW -->
@@ -286,44 +279,6 @@
 
         </div>
 
-        <!-- PERFORMANCE VIEW -->
-        <div id="affPerfView" class="hidden">
-          <div style="padding:4px 0 18px;">
-            <h1 style="font-size:22px; margin-bottom:2px;">📊 Performance</h1>
-            <p style="color:var(--muted); font-size:13px; margin:0;">See how your affiliate creatives are performing across concepts and platforms.</p>
-          </div>
-
-          <div class="ov-kpis" style="margin-bottom:20px;">
-            <div class="ov-kpi">
-              <div class="ov-kpi__label">IMPRESSIONS</div>
-              <div class="ov-kpi__value">128K</div>
-              <div class="ov-kpi__trend ov-kpi__trend--up">↑ 22% this week</div>
-            </div>
-            <div class="ov-kpi">
-              <div class="ov-kpi__label">CLICKS</div>
-              <div class="ov-kpi__value">4,812</div>
-              <div class="ov-kpi__trend ov-kpi__trend--up">↑ 8% this week</div>
-            </div>
-            <div class="ov-kpi">
-              <div class="ov-kpi__label">CONVERSIONS</div>
-              <div class="ov-kpi__value">312</div>
-              <div class="ov-kpi__trend">CPA $12 · ↓ 14% vs last week</div>
-            </div>
-            <div class="ov-kpi">
-              <div class="ov-kpi__label">REVENUE (EST.)</div>
-              <div class="ov-kpi__value">$15,600</div>
-              <div class="ov-kpi__trend ov-kpi__trend--up">ROI 3.2×</div>
-            </div>
-          </div>
-
-          <div class="module-placeholder" style="margin-top:40px;">
-            <div class="module-placeholder__icon">📈</div>
-            <div class="module-placeholder__badge">COMING SOON</div>
-            <h1>Full performance view</h1>
-            <p>Concept-level CTR, angle winners, platform breakdown, and A/B test results.</p>
-          </div>
-        </div>
-
       </div>
     </main>
   </div>
@@ -357,16 +312,6 @@
       btn.classList.add('active');
     }
 
-    // View toggle (E-Com / Performance)
-    document.querySelectorAll('#affView button').forEach(b => {
-      b.addEventListener('click', () => {
-        b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        const view = b.dataset.view;
-        document.getElementById('affCreateView').classList.toggle('hidden', view !== 'create');
-        document.getElementById('affPerfView').classList.toggle('hidden', view !== 'performance');
-      });
-    });
   </script>
   <script src="pricing.js"></script>
 </body>
