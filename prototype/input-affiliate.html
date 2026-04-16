@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FabFunnel · Input — Affiliate</title>
+  <title>FabFunnel · Affiliate setup</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -22,38 +22,76 @@
       <div class="stepper__item">Done</div>
     </div>
 
-    <h1>Pick your niche</h1>
-    <p class="sub">We'll tailor templates and copy to your audience.</p>
+    <h1>Tell us about what you're promoting</h1>
+    <p class="sub">We'll build a knowledge base for your category and tailor ad angles to your audience.</p>
 
     <div class="card">
       <div class="field">
-        <label>Your niche</label>
+        <label>Category name <span style="color:#c33;">*</span></label>
+        <input type="text" id="catName" placeholder="e.g., Auto Insurance" list="catPresets" />
+        <datalist id="catPresets">
+          <option value="Life Insurance"></option>
+          <option value="Home Insurance"></option>
+          <option value="Auto Insurance"></option>
+          <option value="Pet Insurance"></option>
+          <option value="Travel Insurance"></option>
+          <option value="Dental Plans"></option>
+          <option value="Vision Plans"></option>
+          <option value="Credit Cards"></option>
+          <option value="Mortgage"></option>
+          <option value="Student Loans"></option>
+          <option value="Business Loans"></option>
+          <option value="Crypto Trading"></option>
+          <option value="Stock Trading"></option>
+        </datalist>
+        <div class="field__hint">Type your own or pick from the suggestions.</div>
+      </div>
+
+      <div class="field">
+        <label>Industry</label>
+        <select>
+          <option>Insurance</option>
+          <option>Finance</option>
+          <option>Technology</option>
+          <option>Health &amp; Wellness</option>
+          <option>Travel</option>
+          <option>Education</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Where will you post? <span style="color:var(--muted); font-weight:400;">(select all that apply)</span></label>
         <div class="chip-group">
-          <span class="chip active" onclick="toggleChip(this)">Tech & Gadgets</span>
-          <span class="chip" onclick="toggleChip(this)">Beauty & Skincare</span>
-          <span class="chip" onclick="toggleChip(this)">Fitness & Wellness</span>
-          <span class="chip" onclick="toggleChip(this)">Finance & Crypto</span>
-          <span class="chip" onclick="toggleChip(this)">Fashion</span>
-          <span class="chip" onclick="toggleChip(this)">Gaming</span>
-          <span class="chip" onclick="toggleChip(this)">Home & Garden</span>
-          <span class="chip" onclick="toggleChip(this)">Other</span>
+          <span class="chip active" onclick="toggleChip(this)">📱 Instagram</span>
+          <span class="chip active" onclick="toggleChip(this)">🎵 TikTok</span>
+          <span class="chip" onclick="toggleChip(this)">📺 YouTube</span>
+          <span class="chip" onclick="toggleChip(this)">✍️ Blog / Website</span>
+          <span class="chip" onclick="toggleChip(this)">📌 Pinterest</span>
+          <span class="chip" onclick="toggleChip(this)">🐦 X / Twitter</span>
+          <span class="chip" onclick="toggleChip(this)">📧 Email</span>
         </div>
       </div>
 
       <div class="field">
-        <label>Primary platform</label>
-        <div class="chip-group">
-          <span class="chip active" onclick="toggleChip(this, true)">Instagram</span>
-          <span class="chip" onclick="toggleChip(this, true)">TikTok</span>
-          <span class="chip" onclick="toggleChip(this, true)">YouTube</span>
-          <span class="chip" onclick="toggleChip(this, true)">Blog / Website</span>
-          <span class="chip" onclick="toggleChip(this, true)">Pinterest</span>
-        </div>
+        <label>Target audience <span style="color:var(--muted); font-weight:400;">(optional — who are you promoting to?)</span></label>
+        <input type="text" placeholder="e.g., homeowners 30–55 looking to save on premiums" />
       </div>
 
       <div class="field">
-        <label>Product link <span style="color:var(--muted); font-weight:400;">(optional)</span></label>
-        <input type="text" placeholder="Paste affiliate link for faster personalization" />
+        <label>Reference URLs <span style="color:var(--muted); font-weight:400;">(optional — competitor pages, offers, your existing content)</span></label>
+        <div id="refUrlList">
+          <div class="ref-url-row">
+            <input type="text" placeholder="https://..." />
+            <button type="button" class="btn btn--ghost ref-url-remove" onclick="removeRefUrl(this)" title="Remove">✕</button>
+          </div>
+        </div>
+        <button type="button" class="btn" style="margin-top:8px; font-size:12px;" onclick="addRefUrlField()">+ Add another URL</button>
+      </div>
+
+      <div class="field" style="margin-bottom:0;">
+        <label>Affiliate link <span style="color:var(--muted); font-weight:400;">(optional — the offer you're driving clicks to)</span></label>
+        <input type="text" placeholder="Paste your affiliate link for faster personalization" />
       </div>
     </div>
 
@@ -66,11 +104,19 @@
   <div class="wf-banner">WIREFRAME · FLOW REVIEW</div>
 
   <script>
-    function toggleChip(el, singleSelect) {
-      if (singleSelect) {
-        el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      }
+    function toggleChip(el) {
       el.classList.toggle('active');
+    }
+    function addRefUrlField() {
+      const row = document.createElement('div');
+      row.className = 'ref-url-row';
+      row.innerHTML = '<input type="text" placeholder="https://..." /><button type="button" class="btn btn--ghost ref-url-remove" onclick="removeRefUrl(this)" title="Remove">✕</button>';
+      document.getElementById('refUrlList').appendChild(row);
+    }
+    function removeRefUrl(btn) {
+      const list = document.getElementById('refUrlList');
+      if (list.children.length > 1) btn.closest('.ref-url-row').remove();
+      else btn.previousElementSibling.value = '';
     }
   </script>
 </body>

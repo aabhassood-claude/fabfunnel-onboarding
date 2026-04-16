@@ -335,6 +335,21 @@ p.sub { color: var(--muted); margin-bottom: 32px; }
 }
 .vibes-row__label { font-size: 11px; color: var(--muted); margin-right: 4px; }
 
+/* Reference URL rows in onboarding */
+.ref-url-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ref-url-row input {
+  flex: 1;
+}
+.ref-url-remove {
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  color: var(--muted);
+}
+
 /* Affiliate category picker */
 .category-box {
   display: flex; align-items: center; gap: 10px;

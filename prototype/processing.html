@@ -43,6 +43,18 @@
     const params = new URLSearchParams(location.search);
     const mode = params.get('mode') || 'ecom';
     document.getElementById('backLink').href = 'input-' + mode + '.html';
+
+    // Adjust copy and step labels based on mode
+    const stepEls = document.querySelectorAll('.processing__step span:last-child');
+    if (mode === 'affiliate') {
+      document.getElementById('title').textContent = 'Analyzing your category…';
+      document.getElementById('subtitle').textContent = 'We\'re pulling reference content, researching competitors, and detecting angles.';
+      stepEls[0].textContent = 'Reading your category & platforms';
+      stepEls[1].textContent = 'Analyzing reference URLs & competitors';
+      stepEls[2].textContent = 'Detecting angles & keywords';
+      stepEls[3].textContent = 'Finalizing your category profile';
+    }
+
     const steps = document.querySelectorAll('.processing__step');
     let i = 0;
     const iv = setInterval(() => {
@@ -53,7 +65,8 @@
         steps[i].classList.add('active');
       } else {
         clearInterval(iv);
-        location.href = 'done.html?mode=' + mode;
+        const dest = mode === 'affiliate' ? 'done-affiliate.html' : 'done.html';
+        location.href = dest + '?mode=' + mode;
       }
     }, 1200);
   </script>
