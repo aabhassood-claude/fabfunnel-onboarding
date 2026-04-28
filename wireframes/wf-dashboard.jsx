@@ -24,12 +24,17 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
       { id: 'video',      label: 'Video Sage',          icon: '▶' },
       { id: 'script',     label: 'Script Generation',   icon: '✎' },
     ]},
-    { id: 'library', label: 'Creative Library', icon: '🖼' },
     { id: 'insights-grp', label: 'Industry Insights', icon: '⊞', isGroup: true, children: [
       { id: 'discover',     label: 'Discover',     icon: '◎' },
       { id: 'intelligence', label: 'Intelligence', icon: '⚡' },
       { id: 'boards',       label: 'Boards',       icon: '▤' },
     ]},
+    { id: 'library',      label: 'Creative Library',  icon: '🖼' },
+    { id: 'launch',       label: 'Launch',            icon: '🚀' },
+    { id: 'reporting',    label: 'Reporting',         icon: '📊' },
+    { id: 'automation',   label: 'Automation',        icon: '⚙' },
+    { id: 'integrations', label: 'Integrations',      icon: '🔌' },
+    { id: 'user-panel',   label: 'User Panel',        icon: '👤' },
   ];
 
   // Flat lookup for breadcrumb
@@ -379,21 +384,64 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         </React.Fragment>
         )}
 
-        {/* ── Stub for other nav items ── */}
-        {!['home', 'creative', 'video', 'library'].includes(activeNav) && (
+        {/* ── Launch module stub ── */}
+        {activeNav === 'launch' && (
+          <ModuleStub
+            icon="🚀" name="Launch" desc="Push creatives directly to Meta, TikTok, Google Ads, and more. Schedule, A/B test, and track deployment status."
+            features={['One-click publish to ad platforms', 'Campaign scheduling & queue', 'A/B test setup with auto-winner', 'Deployment history & rollback']}
+            onBack={() => setActiveNav('home')}
+          />
+        )}
+
+        {/* ── Reporting module stub ── */}
+        {activeNav === 'reporting' && (
+          <ModuleStub
+            icon="📊" name="Reporting" desc="Track creative performance across platforms. See what's working, what's not, and what to generate next."
+            features={['Cross-platform performance dashboard', 'Creative-level CTR, CPA, ROAS', 'Winning creative patterns & trends', 'Export reports to PDF / CSV']}
+            onBack={() => setActiveNav('home')}
+          />
+        )}
+
+        {/* ── Automation module stub ── */}
+        {activeNav === 'automation' && (
+          <ModuleStub
+            icon="⚙" name="Automation" desc="Set up rules to auto-generate, auto-pause, and auto-scale creatives based on performance triggers."
+            features={['Auto-generate when CTR drops below threshold', 'Pause underperforming creatives automatically', 'Scale winning creatives to new audiences', 'Scheduled generation batches (daily / weekly)']}
+            onBack={() => setActiveNav('home')}
+          />
+        )}
+
+        {/* ── Integrations module stub ── */}
+        {activeNav === 'integrations' && (
+          <ModuleStub
+            icon="🔌" name="Integrations" desc="Connect your ad accounts, CRMs, and creative tools. Sync data in and push creatives out."
+            features={['Meta Ads, Google Ads, TikTok Ads', 'Shopify, WooCommerce, BigCommerce', 'HubSpot, Klaviyo, Mailchimp', 'Zapier & webhook support']}
+            onBack={() => setActiveNav('home')}
+          />
+        )}
+
+        {/* ── User Panel module stub ── */}
+        {activeNav === 'user-panel' && (
+          <ModuleStub
+            icon="👤" name="User Panel" desc="Manage your account, team members, billing, API keys, and workspace settings."
+            features={['Profile & password settings', 'Team members & roles (Admin / Editor / Viewer)', 'Billing, invoices, & plan management', 'API keys & usage logs']}
+            onBack={() => setActiveNav('home')}
+          />
+        )}
+
+        {/* ── Fallback stub for any remaining nav items ── */}
+        {!['home', 'creative', 'video', 'library', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
               {isTrial ? 'Module wireframe — coming next sprint.' : 'Wireframe TBD'}
             </div>
-            {isTrial && (
-              <button onClick={() => setActiveNav('home')} style={{
-                marginTop: 16, padding: '8px 16px',
-                border: '1.5px solid var(--ink)', background: 'var(--paper)',
-                borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
-                fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              }}>← back to dashboard</button>
-            )}
+            <button onClick={() => setActiveNav('home')} style={{
+              marginTop: 16, padding: '8px 16px',
+              border: '1.5px solid var(--ink)', background: 'var(--paper)',
+              borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+              fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>← back to dashboard</button>
           </div>
         )}
 
@@ -434,6 +482,37 @@ const demoBtnStyle = {
   cursor: 'pointer',
   color: 'var(--ink)',
 };
+
+// ── Module stub (reusable placeholder for upcoming modules) ──
+function ModuleStub({ icon, name, desc, features, onBack }) {
+  return (
+    <div style={{ padding: '48px 28px', fontFamily: 'var(--hand)' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ fontSize: 48, marginBottom: 14 }}>{icon}</div>
+        <div style={{ display: 'inline-block', padding: '3px 12px', border: '1.5px dashed var(--ink-faint)', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 1, color: 'var(--ink-faint)', textTransform: 'uppercase', marginBottom: 14 }}>Coming soon</div>
+        <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 8 }}>{name}</h1>
+        <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 480, margin: '0 auto 28px' }}>{desc}</p>
+
+        <Box style={{ padding: 24, textAlign: 'left', background: 'var(--paper)', maxWidth: 440, margin: '0 auto 24px' }}>
+          <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 12 }}>Planned features</div>
+          {features.map((f, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: i < features.length - 1 ? '1px dashed var(--ink-faint)' : 'none' }}>
+              <span style={{ color: 'var(--ink-faint)', fontSize: 12, marginTop: 1 }}>✓</span>
+              <span style={{ fontSize: 13 }}>{f}</span>
+            </div>
+          ))}
+        </Box>
+
+        <button onClick={onBack} style={{
+          padding: '10px 20px',
+          border: '1.5px solid var(--ink)', background: 'var(--paper)',
+          borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+          fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+        }}>← back to dashboard</button>
+      </div>
+    </div>
+  );
+}
 
 // ── Creative Library module ──
 function CreativeLibrary({ screenshotMode, onGenerate }) {
