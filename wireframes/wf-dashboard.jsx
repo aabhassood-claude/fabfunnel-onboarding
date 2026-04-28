@@ -23,8 +23,8 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
       { id: 'creative',   label: 'Creative Generation', icon: '✦' },
       { id: 'video',      label: 'Video Sage',          icon: '▶' },
       { id: 'script',     label: 'Script Generation',   icon: '✎' },
-      { id: 'library',    label: 'Creative Library',    icon: '🖼' },
     ]},
+    { id: 'library', label: 'Creative Library', icon: '🖼' },
     { id: 'insights-grp', label: 'Industry Insights', icon: '⊞', isGroup: true, children: [
       { id: 'discover',     label: 'Discover',     icon: '◎' },
       { id: 'intelligence', label: 'Intelligence', icon: '⚡' },
