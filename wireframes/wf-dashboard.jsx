@@ -30,11 +30,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
       { id: 'boards',       label: 'Boards',       icon: '▤' },
     ]},
     { id: 'library',      label: 'Creative Library',  icon: '🖼' },
-    { id: 'launch',       label: 'Launch',            icon: '🚀' },
-    { id: 'reporting',    label: 'Reporting',         icon: '📊' },
-    { id: 'automation',   label: 'Automation',        icon: '⚙' },
-    { id: 'integrations', label: 'Integrations',      icon: '🔌' },
-    { id: 'user-panel',   label: 'User Panel',        icon: '👤' },
+    { id: 'launch',       label: 'Launch',            icon: '🚀', locked: true },
+    { id: 'reporting',    label: 'Reporting',         icon: '📊', locked: true },
+    { id: 'automation',   label: 'Automation',        icon: '⚙', locked: true },
+    { id: 'integrations', label: 'Integrations',      icon: '🔌', locked: true },
+    { id: 'user-panel',   label: 'User Panel',        icon: '👤', locked: true },
   ];
 
   // Flat lookup for breadcrumb
@@ -69,6 +69,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
             if (!it.isGroup) {
               return (
                 <div key={it.id} onClick={() => {
+                  if (it.locked) { setActiveNav(it.id); return; }
                   setActiveNav(it.id);
                   if (it.id === 'home') window.location.hash = 'dashboard';
                 }}
@@ -81,10 +82,12 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
                     fontSize: 13,
                     fontFamily: 'var(--hand)',
                     fontWeight: activeNav === it.id ? 700 : 400,
+                    opacity: it.locked ? 0.55 : 1,
                     display: 'flex', alignItems: 'center', gap: 10,
                   }}>
                   <span style={{ width: 18, textAlign: 'center' }}>{it.icon}</span>
-                  {it.label}
+                  <span style={{ flex: 1 }}>{it.label}</span>
+                  {it.locked && <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>🔒</span>}
                 </div>
               );
             }
@@ -384,49 +387,36 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         </React.Fragment>
         )}
 
-        {/* ── Launch module stub ── */}
+        {/* ── Locked premium modules ── */}
         {activeNav === 'launch' && (
-          <ModuleStub
-            icon="🚀" name="Launch" desc="Push creatives directly to Meta, TikTok, Google Ads, and more. Schedule, A/B test, and track deployment status."
+          <ModuleStub icon="🚀" name="Launch"
+            desc="Push creatives directly to Meta, TikTok, Google Ads, and more. Schedule, A/B test, and track deployment status."
             features={['One-click publish to ad platforms', 'Campaign scheduling & queue', 'A/B test setup with auto-winner', 'Deployment history & rollback']}
-            onBack={() => setActiveNav('home')}
-          />
+            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
         )}
-
-        {/* ── Reporting module stub ── */}
         {activeNav === 'reporting' && (
-          <ModuleStub
-            icon="📊" name="Reporting" desc="Track creative performance across platforms. See what's working, what's not, and what to generate next."
+          <ModuleStub icon="📊" name="Reporting"
+            desc="Track creative performance across platforms. See what's working, what's not, and what to generate next."
             features={['Cross-platform performance dashboard', 'Creative-level CTR, CPA, ROAS', 'Winning creative patterns & trends', 'Export reports to PDF / CSV']}
-            onBack={() => setActiveNav('home')}
-          />
+            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
         )}
-
-        {/* ── Automation module stub ── */}
         {activeNav === 'automation' && (
-          <ModuleStub
-            icon="⚙" name="Automation" desc="Set up rules to auto-generate, auto-pause, and auto-scale creatives based on performance triggers."
+          <ModuleStub icon="⚙" name="Automation"
+            desc="Set up rules to auto-generate, auto-pause, and auto-scale creatives based on performance triggers."
             features={['Auto-generate when CTR drops below threshold', 'Pause underperforming creatives automatically', 'Scale winning creatives to new audiences', 'Scheduled generation batches (daily / weekly)']}
-            onBack={() => setActiveNav('home')}
-          />
+            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
         )}
-
-        {/* ── Integrations module stub ── */}
         {activeNav === 'integrations' && (
-          <ModuleStub
-            icon="🔌" name="Integrations" desc="Connect your ad accounts, CRMs, and creative tools. Sync data in and push creatives out."
+          <ModuleStub icon="🔌" name="Integrations"
+            desc="Connect your ad accounts, CRMs, and creative tools. Sync data in and push creatives out."
             features={['Meta Ads, Google Ads, TikTok Ads', 'Shopify, WooCommerce, BigCommerce', 'HubSpot, Klaviyo, Mailchimp', 'Zapier & webhook support']}
-            onBack={() => setActiveNav('home')}
-          />
+            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
         )}
-
-        {/* ── User Panel module stub ── */}
         {activeNav === 'user-panel' && (
-          <ModuleStub
-            icon="👤" name="User Panel" desc="Manage your account, team members, billing, API keys, and workspace settings."
+          <ModuleStub icon="👤" name="User Panel"
+            desc="Manage your account, team members, billing, API keys, and workspace settings."
             features={['Profile & password settings', 'Team members & roles (Admin / Editor / Viewer)', 'Billing, invoices, & plan management', 'API keys & usage logs']}
-            onBack={() => setActiveNav('home')}
-          />
+            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
@@ -483,18 +473,34 @@ const demoBtnStyle = {
   color: 'var(--ink)',
 };
 
-// ── Module stub (reusable placeholder for upcoming modules) ──
-function ModuleStub({ icon, name, desc, features, onBack }) {
+// ── Module stub (locked upsell for premium modules) ──
+function ModuleStub({ icon, name, desc, features, onBack, onUpgrade }) {
   return (
     <div style={{ padding: '48px 28px', fontFamily: 'var(--hand)' }}>
       <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
         <div style={{ fontSize: 48, marginBottom: 14 }}>{icon}</div>
-        <div style={{ display: 'inline-block', padding: '3px 12px', border: '1.5px dashed var(--ink-faint)', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 1, color: 'var(--ink-faint)', textTransform: 'uppercase', marginBottom: 14 }}>Coming soon</div>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 14px', background: 'var(--ink)', color: 'var(--paper)', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>🔒 Premium</div>
         <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 8 }}>{name}</h1>
-        <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 480, margin: '0 auto 28px' }}>{desc}</p>
+        <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 480, margin: '0 auto 24px' }}>{desc}</p>
+
+        {/* Upgrade CTA */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 28 }}>
+          <button onClick={onUpgrade} style={{
+            padding: '12px 24px',
+            border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
+            borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
+            fontFamily: 'var(--hand)', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          }}>Upgrade to unlock {name} →</button>
+          <button onClick={onBack} style={{
+            padding: '12px 20px',
+            border: '1.5px solid var(--ink)', background: 'var(--paper)',
+            borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+            fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+          }}>← back</button>
+        </div>
 
         <Box style={{ padding: 24, textAlign: 'left', background: 'var(--paper)', maxWidth: 440, margin: '0 auto 24px' }}>
-          <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 12 }}>Planned features</div>
+          <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 12 }}>What you'll get</div>
           {features.map((f, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: i < features.length - 1 ? '1px dashed var(--ink-faint)' : 'none' }}>
               <span style={{ color: 'var(--ink-faint)', fontSize: 12, marginTop: 1 }}>✓</span>
@@ -503,12 +509,10 @@ function ModuleStub({ icon, name, desc, features, onBack }) {
           ))}
         </Box>
 
-        <button onClick={onBack} style={{
-          padding: '10px 20px',
-          border: '1.5px solid var(--ink)', background: 'var(--paper)',
-          borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
-          fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-        }}>← back to dashboard</button>
+        <div style={{ padding: '16px 20px', background: 'var(--highlight-soft)', border: '1.5px solid var(--ink)', borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px', maxWidth: 440, margin: '0 auto' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>💡 Included in the Growth plan</div>
+          <div className="wf-body" style={{ fontSize: 12 }}>Unlock {name} + all premium modules for one price. No per-seat charges.</div>
+        </div>
       </div>
     </div>
   );
