@@ -6,6 +6,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
   const [activeNav, setActiveNav] = React.useState(initialNav || 'home');
   const [showUpsell, setShowUpsell] = React.useState(true);
   const [trialModal, setTrialModal] = React.useState(null);
+  const [showPricing, setShowPricing] = React.useState(false);
   const isTrial = funnel === 'trial';
   const upsellStyle = trialUpsellStyle || 'subtle';
   const trialDaysLeft = 6;
@@ -392,31 +393,31 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <ModuleStub icon="🚀" name="Launch"
             desc="Push creatives directly to Meta, TikTok, Google Ads, and more. Schedule, A/B test, and track deployment status."
             features={['One-click publish to ad platforms', 'Campaign scheduling & queue', 'A/B test setup with auto-winner', 'Deployment history & rollback']}
-            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
+            onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'reporting' && (
           <ModuleStub icon="📊" name="Reporting"
             desc="Track creative performance across platforms. See what's working, what's not, and what to generate next."
             features={['Cross-platform performance dashboard', 'Creative-level CTR, CPA, ROAS', 'Winning creative patterns & trends', 'Export reports to PDF / CSV']}
-            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
+            onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'automation' && (
           <ModuleStub icon="⚙" name="Automation"
             desc="Set up rules to auto-generate, auto-pause, and auto-scale creatives based on performance triggers."
             features={['Auto-generate when CTR drops below threshold', 'Pause underperforming creatives automatically', 'Scale winning creatives to new audiences', 'Scheduled generation batches (daily / weekly)']}
-            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
+            onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'integrations' && (
           <ModuleStub icon="🔌" name="Integrations"
             desc="Connect your ad accounts, CRMs, and creative tools. Sync data in and push creatives out."
             features={['Meta Ads, Google Ads, TikTok Ads', 'Shopify, WooCommerce, BigCommerce', 'HubSpot, Klaviyo, Mailchimp', 'Zapier & webhook support']}
-            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
+            onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'user-panel' && (
           <ModuleStub icon="👤" name="User Panel"
             desc="Manage your account, team members, billing, API keys, and workspace settings."
             features={['Profile & password settings', 'Team members & roles (Admin / Editor / Viewer)', 'Billing, invoices, & plan management', 'API keys & usage logs']}
-            onBack={() => setActiveNav('home')} onUpgrade={() => openBuyNow && openBuyNow('A')} />
+            onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
@@ -455,6 +456,9 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           />
         )}
       </div>
+
+      {/* ── Pricing Modal ── */}
+      {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
     </div>
   );
 }
@@ -512,6 +516,153 @@ function ModuleStub({ icon, name, desc, features, onBack, onUpgrade }) {
         <div style={{ padding: '16px 20px', background: 'var(--highlight-soft)', border: '1.5px solid var(--ink)', borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px', maxWidth: 440, margin: '0 auto' }}>
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>💡 Included in the Growth plan</div>
           <div className="wf-body" style={{ fontSize: 12 }}>Unlock {name} + all premium modules for one price. No per-seat charges.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Pricing Modal (matching reference: Starter / Pro / Enterprise, monthly/annual toggle) ──
+function PricingModal({ onClose }) {
+  const [billing, setBilling] = React.useState('monthly');
+  const s = { fontFamily: 'var(--hand)' };
+
+  const Check = ({ children }) => (
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '5px 0', fontSize: 12, ...s }}>
+      <span style={{ color: 'var(--ink)', fontSize: 11, marginTop: 1 }}>●</span>
+      <span>{children}</span>
+    </div>
+  );
+
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      background: 'rgba(20,20,20,0.5)', backdropFilter: 'blur(3px)',
+      display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+      padding: '40px 20px', overflowY: 'auto',
+    }}>
+      <div onClick={(e) => e.stopPropagation()} style={{
+        background: 'var(--paper)', borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+        border: '1.5px solid var(--ink)', maxWidth: 980, width: '100%', padding: '40px 32px',
+        position: 'relative', ...s,
+      }}>
+        <button onClick={onClose} className="wf-close" style={{ position: 'absolute', top: 16, right: 16, width: 28, height: 28, fontSize: 14 }}>✕</button>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
+          <h2 style={{ fontSize: 32, fontWeight: 800, lineHeight: 1.1, marginBottom: 8 }}>Simple pricing.<br/>No surprises.</h2>
+          <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 400, margin: '0 auto 20px' }}>Pick a plan that matches where you are — upgrade as you grow.</p>
+
+          {/* Plan toggle: AI / Growth */}
+          <div style={{ display: 'inline-flex', gap: 4, padding: 3, background: 'var(--paper-soft)', border: '1.5px solid var(--ink-faint)', borderRadius: 999, marginBottom: 16 }}>
+            <button style={{ padding: '6px 16px', borderRadius: 999, border: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12, cursor: 'pointer', color: 'var(--ink-faint)' }}>AI</button>
+            <button style={{ padding: '6px 16px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Growth</button>
+          </div>
+
+          {/* Billing toggle */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10, marginTop: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: billing === 'monthly' ? 700 : 400, cursor: 'pointer' }} onClick={() => setBilling('monthly')}>Monthly</span>
+            <div onClick={() => setBilling(b => b === 'monthly' ? 'annual' : 'monthly')} style={{
+              width: 36, height: 20, borderRadius: 10, border: '1.5px solid var(--ink)',
+              background: billing === 'annual' ? 'var(--ink)' : 'var(--paper)', cursor: 'pointer', position: 'relative',
+            }}>
+              <div style={{ width: 14, height: 14, borderRadius: '50%', background: billing === 'annual' ? 'var(--paper)' : 'var(--ink)', position: 'absolute', top: 2, left: billing === 'annual' ? 18 : 2, transition: 'left 120ms' }} />
+            </div>
+            <span style={{ fontSize: 12, fontWeight: billing === 'annual' ? 700 : 400, cursor: 'pointer' }} onClick={() => setBilling('annual')}>Annual</span>
+            <span style={{ fontSize: 10, padding: '2px 8px', background: 'var(--highlight)', borderRadius: 10, fontWeight: 700 }}>Save 20%</span>
+          </div>
+        </div>
+
+        {/* Plans grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, alignItems: 'start' }}>
+
+          {/* Starter */}
+          <Box style={{ padding: 24, background: 'var(--paper)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800 }}>Starter</h3>
+              <span style={{ fontSize: 9, padding: '3px 8px', border: '1.5px solid var(--ink)', borderRadius: 10, fontWeight: 700, letterSpacing: 0.5 }}>POPULAR</span>
+            </div>
+            <p className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', marginBottom: 12 }}>For growing performance marketers</p>
+            <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 2 }}>[TBD]<span style={{ fontSize: 14, fontWeight: 400, color: 'var(--ink-faint)' }}>/mo</span></div>
+            <div className="wf-micro" style={{ fontSize: 10, marginBottom: 16 }}>Billed {billing} · Cancel anytime</div>
+
+            <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>AI Features included</div>
+            <div style={{ padding: '6px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 6, fontSize: 11, marginBottom: 14 }}>Genie Suite · Industry Insights</div>
+
+            <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>Starter features</div>
+            <Check>Manual Bulk Launch — launch ads at scale</Check>
+            <Check>Creative Library — save & reuse winning ads</Check>
+            <Check>Co-pilot — insights & recommendations</Check>
+            <Check>5 Ad Accounts</Check>
+            <Check>Unlimited Team Members</Check>
+            <Check>X+Y Credits per month</Check>
+            <Check>Reporting</Check>
+            <Check>Community Support</Check>
+
+            <button onClick={onClose} style={{
+              width: '100%', marginTop: 18, padding: '12px 16px',
+              border: '1.5px solid var(--ink)', background: 'var(--paper)',
+              borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+              fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            }}>Start free — 14-day trial</button>
+            <div className="wf-micro" style={{ fontSize: 10, marginTop: 8, textAlign: 'center', padding: '6px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>14 days free. No credit card required to start.</div>
+          </Box>
+
+          {/* Pro */}
+          <Box style={{ padding: 24, background: 'var(--paper)', border: '2px solid var(--ink)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800 }}>Pro</h3>
+              <span style={{ fontSize: 9, padding: '3px 8px', background: 'var(--ink)', color: 'var(--paper)', borderRadius: 10, fontWeight: 700, letterSpacing: 0.5 }}>RECOMMENDED</span>
+            </div>
+            <p className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', marginBottom: 12 }}>For serious media buyers & D2C brands</p>
+            <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 2 }}>[TBD]<span style={{ fontSize: 14, fontWeight: 400, color: 'var(--ink-faint)' }}>/mo</span></div>
+            <div className="wf-micro" style={{ fontSize: 10, marginBottom: 16 }}>Billed {billing} · Cancel anytime</div>
+
+            <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>Everything in Starter, plus</div>
+            <Check>Auto Bulk Launch — fully automated launches</Check>
+            <Check>Automation rules — set conditions, run hands-free</Check>
+            <Check>Cloning — duplicate campaigns, creatives & structures instantly</Check>
+            <Check>RedTrack Integration</Check>
+            <Check>15 Ad Accounts</Check>
+            <Check>Unlimited Team Members</Check>
+            <Check>Priority Support</Check>
+
+            <button onClick={onClose} style={{
+              width: '100%', marginTop: 18, padding: '12px 16px',
+              border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
+              borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+              fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            }}>Start free — 14-day trial</button>
+            <div className="wf-micro" style={{ fontSize: 10, marginTop: 8, textAlign: 'center', padding: '6px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>14 days free. No credit card required to start.</div>
+          </Box>
+
+          {/* Enterprise */}
+          <Box style={{ padding: 24, background: 'var(--paper)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <h3 style={{ fontSize: 20, fontWeight: 800 }}>Enterprise</h3>
+              <span style={{ fontSize: 9, padding: '3px 8px', border: '1.5px solid var(--ink-faint)', borderRadius: 10, fontWeight: 700, letterSpacing: 0.5, color: 'var(--ink-faint)' }}>CUSTOM</span>
+            </div>
+            <p className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', marginBottom: 12 }}>For large teams & networks at scale</p>
+            <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 2 }}>Custom</div>
+            <div className="wf-micro" style={{ fontSize: 10, marginBottom: 16 }}>Tailored to seats, ad accounts & volume</div>
+
+            <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>Everything in Pro, plus</div>
+            <Check>Unlimited Team Members & Ad Accounts</Check>
+            <Check>Unlimited Launches — no caps</Check>
+            <Check>Client Management — unlimited clients</Check>
+            <Check>Ad Rejection Management — health & auto-recovery</Check>
+            <Check>Custom SLAs & contracts</Check>
+            <Check>SSO & advanced permissions</Check>
+            <Check>Dedicated Account Manager</Check>
+            <Check>Dedicated Support</Check>
+
+            <button onClick={() => alert('Talk to sales — coming soon')} style={{
+              width: '100%', marginTop: 18, padding: '12px 16px',
+              border: '1.5px solid var(--ink)', background: 'var(--paper)',
+              borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+              fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            }}>Talk to sales</button>
+          </Box>
         </div>
       </div>
     </div>
