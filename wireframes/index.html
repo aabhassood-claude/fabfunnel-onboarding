@@ -63,6 +63,7 @@
   <script type="text/babel" src="wf-dashboard.jsx"></script>
   <script type="text/babel" src="wf-creative-gen.jsx"></script>
   <script type="text/babel" src="wf-creative-gen-affiliate.jsx"></script>
+  <script type="text/babel" src="wf-video-sage.jsx"></script>
   <script type="text/babel" src="wf-funnel-trial.jsx"></script>
 
   <script type="text/babel">
@@ -153,6 +154,7 @@
           case 'compare': return <CompareFunnels onNav={nav} setFunnel={(f) => setTweak('funnel', f)} />;
           case 'dashboard': return <DashboardPage {...sharedProps} funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />;
           case 'creative':  return <DashboardPage {...sharedProps} initialNav="creative" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />;
+          case 'video':     return <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />;
           case 'mobile':    return (
             <div style={{ padding: '40px 24px', display: 'flex', justifyContent: 'center', background: 'var(--paper-soft)' }}>
               <HomeMobile {...sharedProps} />
@@ -176,6 +178,8 @@
                 <DashboardPage {...sharedProps} funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'creative' ? (
                 <DashboardPage {...sharedProps} initialNav="creative" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
+              ) : route === 'video' ? (
+                <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'onboarding' ? (
                 <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />
               ) : route === 'trial-signup' ? (
@@ -252,6 +256,9 @@
                 </DCArtboard>
                 <DCArtboard id="creative-gen" label="Creative Gen module" width={1280} height={1700}>
                   <div className="ab-frame"><DashboardPage {...sharedProps} initialNav="creative" /></div>
+                </DCArtboard>
+                <DCArtboard id="video-sage" label="Video Sage module" width={1280} height={1900}>
+                  <div className="ab-frame"><DashboardPage {...sharedProps} initialNav="video" /></div>
                 </DCArtboard>
               </DCSection>
 
@@ -345,6 +352,7 @@
                   { value: 'onboarding', label: 'Onboarding (E-commerce)' },
                   { value: 'dashboard',  label: 'Dashboard (post-purchase)' },
                   { value: 'creative',   label: 'Creative Gen module' },
+                  { value: 'video',      label: 'Video Sage module' },
                   { value: 'mobile',    label: 'Home — Mobile' },
                   { value: 'trial-signup', label: '— Funnel B · Trial Signup' },
                   { value: 'compare',      label: '— Compare Funnels (mgmt)' },

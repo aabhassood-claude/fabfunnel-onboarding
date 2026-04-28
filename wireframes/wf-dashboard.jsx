@@ -220,6 +220,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <window.CreativeGen />
         )}
 
+        {/* ── Video Sage module ── */}
+        {activeNav === 'video' && window.VideoSage && (
+          <window.VideoSage screenshotMode={screenshotMode} showAnnotations={showAnnotations} />
+        )}
+
         {/* ── Home view — shared by both funnels ── */}
         {activeNav === 'home' && (
         <React.Fragment>
@@ -369,7 +374,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Stub for other nav items ── */}
-        {!['home', 'creative'].includes(activeNav) && (
+        {!['home', 'creative', 'video'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
