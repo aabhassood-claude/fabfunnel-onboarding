@@ -1,0 +1,392 @@
+// ─────────────────────────────────────────────────────────────
+// Creative Generation module — sketchy wireframe vibe
+// Lives inside the dashboard shell (sidebar nav active = "creative")
+// ─────────────────────────────────────────────────────────────
+
+function CreativeGen() {
+  const [profile, setProfile]       = React.useState('ecom');
+  const [media, setMedia]           = React.useState('image');
+  const [creativeType, setCreType]  = React.useState('product');
+  const [template, setTemplate]     = React.useState('none');
+  const [vision, setVision]         = React.useState('');
+  const [vibes, setVibes]           = React.useState(new Set());
+  const [advOpen, setAdvOpen]       = React.useState(false);
+  const [strategy, setStrategy]     = React.useState(null);
+  const [variations, setVariations] = React.useState(1);
+
+  const toggleVibe = (v) => {
+    const next = new Set(vibes);
+    next.has(v) ? next.delete(v) : next.add(v);
+    setVibes(next);
+  };
+
+  const Eyebrow = ({ children, hint, optional }) => (
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}>
+      <span className="wf-eyebrow">{children}</span>
+      {optional && <Pill soft style={{ fontSize: 9 }}>Optional</Pill>}
+      {hint && <span className="wf-micro">{hint}</span>}
+    </div>
+  );
+
+  const TogglePill = ({ active, onClick, children, icon }) => (
+    <button
+      onClick={onClick}
+      className={`wf-pill ${active ? 'wf-pill-hl' : ''}`}
+      style={{ cursor: 'pointer', textTransform: 'none', fontSize: 12, padding: '6px 14px', gap: 6, border: active ? '1.5px solid var(--ink)' : '1.5px solid transparent', background: active ? 'var(--ink)' : 'transparent', color: active ? 'var(--paper)' : 'var(--ink-soft)' }}
+    >
+      {icon && <span style={{ fontSize: 12 }}>{icon}</span>}
+      {children}
+    </button>
+  );
+
+  const CT = ({ id, title, sub, iconKind }) => {
+    const active = creativeType === id;
+    return (
+      <div
+        onClick={() => setCreType(id)}
+        className={active ? 'wf-box' : 'wf-box-soft'}
+        style={{ minWidth: 0, padding: 16, cursor: 'pointer', background: active ? 'var(--paper-soft)' : 'var(--paper)' }}
+      >
+        <div className="wf-icon" style={{ marginBottom: 12 }}>
+          <CreativeIcon kind={iconKind} />
+        </div>
+        <div className="wf-body" style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>{title}</div>
+        <div className="wf-micro" style={{ marginTop: 4 }}>{sub}</div>
+      </div>
+    );
+  };
+
+  const Template = ({ id, label, glyph }) => {
+    const active = template === id;
+    return (
+      <div onClick={() => setTemplate(id)} style={{ width: 124, flexShrink: 0, cursor: 'pointer' }}>
+        <div className={active ? 'wf-box' : 'wf-box-soft'} style={{
+          height: 110,
+          background: id === 'none' ? 'var(--paper)' : 'var(--paper-soft)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 6, position: 'relative',
+          borderWidth: active ? 2 : 1.5,
+        }}>
+          {id === 'none'
+            ? <div className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', textAlign: 'center', lineHeight: 1.3 }}>None<br/><span className="wf-micro">generate from scratch</span></div>
+            : <TemplateGlyph kind={glyph} />}
+        </div>
+        <div className="wf-body" style={{ fontSize: 12, color: 'var(--ink)', fontWeight: 700, marginTop: 8, textAlign: 'center' }}>{label}</div>
+      </div>
+    );
+  };
+
+  const StratTile = ({ id, title, sub, glyph }) => {
+    const active = strategy === id;
+    return (
+      <div onClick={() => setStrategy(active ? null : id)}
+        className={active ? 'wf-box' : 'wf-box-soft'}
+        style={{ minWidth: 0, cursor: 'pointer', padding: 14, background: active ? 'var(--paper-soft)' : 'var(--paper)' }}
+      >
+        <div style={{
+          height: 80, borderRadius: 6,
+          background: 'var(--paper-soft)',
+          border: '1.5px dashed var(--ink-faint)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 12,
+        }}>
+          <StrategyGlyph kind={glyph} />
+        </div>
+        <div className="wf-body" style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>{title}</div>
+        <div className="wf-micro" style={{ marginTop: 3 }}>{sub}</div>
+      </div>
+    );
+  };
+
+  const VAR_OPTIONS = [1, 5, 10, 'Custom'];
+
+  return (
+    <div style={{ background: 'var(--paper)', minHeight: '100%', padding: '24px 28px 100px' }}>
+
+      {/* Top profile + media toggles */}
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 18, flexWrap: 'wrap' }}>
+        <Box style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 999 }}>
+          <TogglePill active={profile === 'ecom'}      onClick={() => setProfile('ecom')}      icon="🛒">E-com</TogglePill>
+          <TogglePill active={profile === 'affiliate'} onClick={() => setProfile('affiliate')} icon="⚡">Affiliate</TogglePill>
+        </Box>
+        <Box style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 999 }}>
+          <TogglePill active={media === 'image'} onClick={() => setMedia('image')} icon="🖼">Image</TogglePill>
+          <TogglePill active={media === 'video'} onClick={() => setMedia('video')} icon="🎬">Video</TogglePill>
+        </Box>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+        {profile === 'affiliate' ? (
+          <window.CreativeGenAffiliate media={media} variations={variations} setVariations={setVariations} VAR_OPTIONS={VAR_OPTIONS} />
+        ) : (
+        <React.Fragment>
+
+        {/* Creative Type */}
+        <Box style={{ padding: 22 }}>
+          <Eyebrow hint="pick the style of ad you're generating">Creative Type</Eyebrow>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
+            <CT id="product" iconKind="cube"  title="Product Ads"          sub="Conversion-focused · price, offer, CTA" />
+            <CT id="brand"   iconKind="store" title="Brand Ads"            sub="Awareness & style · brand storytelling" />
+            <CT id="asset"   iconKind="spark" title="Product Asset Creative" sub="Detail shots · listings, email, PDP" />
+          </div>
+        </Box>
+
+        {/* Brand select */}
+        <Box style={{ padding: 22 }}>
+          <Eyebrow hint="which brand is this creative for?">Select your brand</Eyebrow>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <select className="wf-field" style={{
+                width: '100%', padding: '10px 36px 10px 14px', fontSize: 14,
+                background: 'var(--paper)', fontFamily: 'var(--hand)',
+                appearance: 'none', cursor: 'pointer', color: 'var(--ink)',
+              }}>
+                <option>T · test — 24 products · Apparel</option>
+                <option>Aurora Apparel — 41 products · Apparel</option>
+                <option>Glow Co. — 18 products · Skincare</option>
+              </select>
+              <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ink-faint)', fontSize: 10 }}>▼</span>
+            </div>
+            <Btn variant="ghost" style={{ whiteSpace: 'nowrap' }}>+ Add new brand</Btn>
+          </div>
+        </Box>
+
+        {/* Use a template */}
+        <Box style={{ padding: 22 }}>
+          <Eyebrow hint="start from a proven reference" optional>Use a template</Eyebrow>
+          <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4 }}>
+            <Template id="none"      label="None" />
+            <Template id="hero"      label="Product Hero" glyph="tee" />
+            <Template id="social"    label="Social Proof" glyph="star" />
+            <Template id="ba"        label="Before/After" glyph="ba" />
+            <Template id="story"     label="Brand Story" glyph="figs" />
+            <Template id="lifestyle" label="Lifestyle"   glyph="cube" />
+            <Template id="ugc"       label="UGC"         glyph="phone" />
+          </div>
+          <div style={{ marginTop: 14 }}>
+            <Btn variant="link" style={{ fontSize: 13 }}>Browse all templates →</Btn>
+          </div>
+        </Box>
+
+        {/* Describe your vision */}
+        <Box style={{ padding: 22 }}>
+          <Eyebrow hint="add any specific ideas — or let Genie decide." optional>Describe your vision</Eyebrow>
+          <textarea
+            value={vision}
+            onChange={(e) => setVision(e.target.value)}
+            placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."
+            rows={3}
+            className="wf-field"
+            style={{
+              width: '100%', boxSizing: 'border-box',
+              padding: '10px 14px', fontSize: 14,
+              fontFamily: 'var(--hand)', color: 'var(--ink)', resize: 'vertical', outline: 'none',
+            }}
+          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+            <span className="wf-micro">Quick vibes:</span>
+            {['Product Focus', 'Lifestyle', 'UGC Style', 'Offer Highlight', 'Bold'].map(v => {
+              const active = vibes.has(v);
+              return (
+                <button key={v} onClick={() => toggleVibe(v)} className={`wf-pill ${active ? 'wf-pill-hl' : ''}`} style={{ cursor: 'pointer', textTransform: 'none', fontSize: 12 }}>
+                  {v}
+                </button>
+              );
+            })}
+          </div>
+        </Box>
+
+        {/* Advanced Options */}
+        <Box style={{ padding: 0, overflow: 'hidden' }}>
+          <div onClick={() => setAdvOpen(o => !o)} style={{
+            padding: '18px 22px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 14 }}>⚙</span>
+              <span className="wf-body" style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>Advanced Options</span>
+              <span className="wf-micro">— strategy, video settings, research</span>
+            </div>
+            <span style={{ color: 'var(--ink-faint)', fontSize: 11, transform: advOpen ? 'rotate(180deg)' : 'none', transition: 'transform 140ms' }}>▼</span>
+          </div>
+
+          {advOpen && (
+            <div style={{ padding: '0 22px 22px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, marginTop: 4 }}>
+                <span className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>📋 Strategy</span>
+                <Pill soft style={{ fontSize: 9 }}>Optional</Pill>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
+                <StratTile id="ba"       title="Before / After" sub="Show transformation."   glyph="people" />
+                <StratTile id="social"   title="Social Proof"   sub="Builds trust fast."     glyph="star" />
+                <StratTile id="urgency"  title="Urgency"        sub="Promos & launches."     glyph="clock" />
+              </div>
+
+              <div style={{ marginTop: 24, paddingTop: 18, borderTop: '1.5px dashed var(--ink-faint)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>🔍 Research enrichment</span>
+                  <Pill soft style={{ fontSize: 9 }}>Optional</Pill>
+                </div>
+                <p className="wf-body" style={{ fontSize: 13, marginTop: 6 }}>Add extra context to help Genie match your tone.</p>
+              </div>
+
+              {media === 'video' && (
+                <div style={{ marginTop: 24, paddingTop: 18, borderTop: '1.5px dashed var(--ink-faint)' }}>
+                  <div className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>🎬 Video settings</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                    {[['Duration', '15s'], ['Aspect', '9:16'], ['Captions', 'On']].map(([k, v]) => (
+                      <Box key={k} soft style={{ padding: '8px 12px' }}>
+                        <div className="wf-eyebrow">{k}</div>
+                        <div className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', marginTop: 2 }}>{v}</div>
+                      </Box>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </Box>
+
+        {/* Variations */}
+        </React.Fragment>
+        )}
+
+        {/* Variations */}
+        <Box style={{ padding: 22 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+              <span className="wf-eyebrow">Variations</span>
+              <span className="wf-micro">how many to generate</span>
+            </div>
+            <Box soft style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 999 }}>
+              {VAR_OPTIONS.map(v => {
+                const active = variations === v;
+                return (
+                  <button key={v} onClick={() => setVariations(v)} style={{
+                    padding: '6px 16px', borderRadius: 999, border: 'none',
+                    background: active ? 'var(--ink)' : 'transparent',
+                    color: active ? 'var(--paper)' : 'var(--ink-soft)',
+                    fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--hand)',
+                    minWidth: 36,
+                  }}>{v}</button>
+                );
+              })}
+            </Box>
+          </div>
+        </Box>
+
+        {/* Summary + Generate */}
+        <Box style={{ padding: 22, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
+            <span className="wf-body" style={{ fontSize: 13 }}>{media === 'image' ? '🖼 Static Image' : '🎬 Video'}</span>
+            <span className="wf-body" style={{ fontSize: 13 }}>{typeof variations === 'number' ? `${variations} output${variations > 1 ? 's' : ''}` : 'Custom'}</span>
+            <span className="wf-body" style={{ fontSize: 13 }}>{profile === 'ecom' ? 'E-com' : 'Affiliate'}</span>
+            <span className="wf-body" style={{ fontSize: 13 }}>{
+              creativeType === 'product' ? 'Product Ads' :
+              creativeType === 'brand'   ? 'Brand Ads'   : 'Asset Creative'
+            }</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span className="wf-body" style={{ fontSize: 13 }}>⚡ Uses {(typeof variations === 'number' ? variations : 1) * 4} credits</span>
+            <Btn style={{ gap: 8 }}>✦ Generate →</Btn>
+          </div>
+        </Box>
+
+      </div>
+    </div>
+  );
+}
+
+// ── Small inline icon helpers ──
+function CreativeIcon({ kind }) {
+  const stroke = 'var(--ink-soft)';
+  if (kind === 'cube') return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2 L17 6 L17 14 L10 18 L3 14 L3 6 Z" stroke={stroke} strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M3 6 L10 10 L17 6 M10 10 L10 18" stroke={stroke} strokeWidth="1.4" />
+    </svg>
+  );
+  if (kind === 'store') return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="8" width="14" height="9" stroke={stroke} strokeWidth="1.4" />
+      <path d="M3 8 L4 4 H 16 L17 8" stroke={stroke} strokeWidth="1.4" />
+    </svg>
+  );
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 2 L11.5 8.5 L18 10 L11.5 11.5 L10 18 L8.5 11.5 L2 10 L8.5 8.5 Z" stroke={stroke} strokeWidth="1.2" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function TemplateGlyph({ kind }) {
+  const stroke = 'var(--ink-faint)';
+  const w = 50;
+  if (kind === 'tee') return (
+    <svg width={w} height={w} viewBox="0 0 50 50" fill="none">
+      <path d="M16 12 L10 16 L13 22 L17 19 V40 H33 V19 L37 22 L40 16 L34 12 L29 14 Q25 16 21 14 Z" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+  if (kind === 'star') return (
+    <svg width={w} height={w} viewBox="0 0 50 50" fill="none">
+      <path d="M25 8 L29 20 L42 21 L32 29 L35 42 L25 35 L15 42 L18 29 L8 21 L21 20 Z" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+  if (kind === 'ba') return (
+    <svg width={w} height={w} viewBox="0 0 50 50" fill="none">
+      <rect x="8" y="14" width="14" height="22" stroke={stroke} strokeWidth="1.5" />
+      <rect x="28" y="14" width="14" height="22" stroke={stroke} strokeWidth="1.5" />
+      <text x="15" y="29" fontSize="8" fill={stroke} textAnchor="middle">A</text>
+      <text x="35" y="29" fontSize="8" fill={stroke} textAnchor="middle">B</text>
+    </svg>
+  );
+  if (kind === 'figs') return (
+    <svg width={w} height={w} viewBox="0 0 50 50" fill="none">
+      <circle cx="20" cy="18" r="3.5" stroke={stroke} strokeWidth="1.4" />
+      <path d="M14 36 Q14 26 20 26 Q26 26 26 36" stroke={stroke} strokeWidth="1.4" fill="none" />
+      <circle cx="32" cy="18" r="3.5" stroke={stroke} strokeWidth="1.4" />
+      <path d="M26 36 Q26 26 32 26 Q38 26 38 36" stroke={stroke} strokeWidth="1.4" fill="none" />
+    </svg>
+  );
+  if (kind === 'cube') return (
+    <svg width={w} height={w} viewBox="0 0 50 50" fill="none">
+      <path d="M25 8 L40 16 L40 32 L25 40 L10 32 L10 16 Z" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M10 16 L25 24 L40 16 M25 24 L25 40" stroke={stroke} strokeWidth="1.5" />
+    </svg>
+  );
+  if (kind === 'phone') return (
+    <svg width={w} height={w} viewBox="0 0 50 50" fill="none">
+      <rect x="15" y="8" width="20" height="34" rx="3" stroke={stroke} strokeWidth="1.5" />
+      <circle cx="25" cy="38" r="1" fill={stroke} />
+    </svg>
+  );
+  return null;
+}
+
+function StrategyGlyph({ kind }) {
+  const stroke = 'var(--ink-faint)';
+  if (kind === 'people') return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <circle cx="14" cy="14" r="4" stroke={stroke} strokeWidth="1.5" />
+      <circle cx="26" cy="14" r="4" stroke={stroke} strokeWidth="1.5" />
+      <path d="M6 30 Q6 22 14 22 Q22 22 22 30" stroke={stroke} strokeWidth="1.5" fill="none" />
+      <path d="M18 30 Q18 22 26 22 Q34 22 34 30" stroke={stroke} strokeWidth="1.5" fill="none" />
+    </svg>
+  );
+  if (kind === 'star') return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <path d="M20 6 L23 16 L33 17 L25 23 L28 33 L20 27 L12 33 L15 23 L7 17 L17 16 Z" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+  if (kind === 'clock') return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="22" r="11" stroke={stroke} strokeWidth="1.5" />
+      <path d="M20 14 L20 22 L26 24" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M14 8 L11 11 M26 8 L29 11" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+  return null;
+}
+
+window.CreativeGen = CreativeGen;

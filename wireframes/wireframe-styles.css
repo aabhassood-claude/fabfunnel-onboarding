@@ -1,0 +1,551 @@
+/* ─────────────────────────────────────────────────────────────
+   fabfunnel.ai — wireframe styles
+   Hand-drawn / wobbly vibe. B&W + one yellow highlighter accent.
+   ───────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Architects+Daughter&family=Kalam:wght@300;400;700&display=swap');
+
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --ink-faint: #8a8a8a;
+  --ink-ghost: #c8c8c8;
+  --paper: #fafaf7;
+  --paper-soft: #f2f1ec;
+  --highlight: #fff176;        /* highlighter yellow */
+  --highlight-soft: #fff8c5;
+  --accent: #ff5b3a;           /* sparingly: notes, deletions */
+  --hand: 'Architects Daughter', 'Kalam', cursive;
+  --hand-tight: 'Kalam', cursive;
+  --hand-loose: 'Caveat', cursive;
+}
+
+/* sketchy borders — slightly irregular feel via dashed + offset */
+.wf-box {
+  border: 1.5px solid var(--ink);
+  border-radius: 6px 8px 7px 9px / 7px 6px 9px 8px;
+  background: var(--paper);
+  position: relative;
+}
+.wf-box-dashed {
+  border: 1.5px dashed var(--ink);
+  border-radius: 6px 8px 7px 9px / 7px 6px 9px 8px;
+  background: var(--paper);
+  position: relative;
+}
+.wf-box-soft {
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 6px 8px 7px 9px / 7px 6px 9px 8px;
+  background: var(--paper);
+}
+
+/* image / screenshot placeholder — diagonal cross */
+.wf-img {
+  border: 1.5px solid var(--ink);
+  border-radius: 4px 6px 5px 7px / 6px 4px 7px 5px;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.8px), var(--ink-faint) calc(50% - 0.8px), var(--ink-faint) calc(50% + 0.8px), transparent calc(50% + 0.8px)),
+    linear-gradient(to top left,  transparent calc(50% - 0.8px), var(--ink-faint) calc(50% - 0.8px), var(--ink-faint) calc(50% + 0.8px), transparent calc(50% + 0.8px)),
+    var(--paper-soft);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  font-family: var(--hand);
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+}
+.wf-img > span {
+  background: var(--paper);
+  padding: 2px 8px;
+  border: 1px dashed var(--ink-faint);
+  border-radius: 3px;
+}
+
+/* sketchy button — solid black with slightly off-square corners */
+.wf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--hand);
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 5px 7px 6px 8px / 6px 5px 8px 7px;
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 80ms ease;
+}
+.wf-btn:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+.wf-btn:active { transform: translate(0, 0); box-shadow: none; }
+
+.wf-btn-outline {
+  background: transparent;
+  color: var(--ink);
+}
+.wf-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px dashed var(--ink-faint);
+}
+.wf-btn-link {
+  background: transparent;
+  color: var(--ink);
+  border: none;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 4px;
+  padding: 6px 4px;
+}
+
+/* pills */
+.wf-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--hand);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+}
+.wf-pill-hl {
+  background: var(--highlight);
+  border-color: var(--ink);
+}
+.wf-pill-soft {
+  border-color: var(--ink-faint);
+  color: var(--ink-soft);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+}
+
+/* highlighter swipe behind text */
+.wf-hl {
+  background: linear-gradient(180deg, transparent 55%, var(--highlight) 55%, var(--highlight) 92%, transparent 92%);
+  padding: 0 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* squiggly underline */
+.wf-squig {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--ink-faint);
+  text-underline-offset: 4px;
+}
+
+/* scribble for text-line placeholder */
+.wf-line {
+  height: 8px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--ink-faint) 0 8px,
+      transparent 8px 12px);
+  border-radius: 4px;
+  width: 100%;
+}
+.wf-line.wf-line-bold {
+  height: 10px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--ink) 0 14px,
+      transparent 14px 18px);
+}
+.wf-line.wf-line-soft {
+  height: 6px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--ink-ghost) 0 6px,
+      transparent 6px 10px);
+}
+
+/* sticky note (annotation) */
+.wf-note {
+  position: absolute;
+  background: var(--highlight-soft);
+  border: 1px solid #d6c656;
+  font-family: var(--hand-loose);
+  font-size: 18px;
+  line-height: 1.15;
+  color: var(--ink);
+  padding: 8px 12px;
+  border-radius: 2px 14px 4px 12px / 12px 4px 14px 2px;
+  box-shadow: 2px 3px 0 rgba(0,0,0,0.06);
+  transform: rotate(-1.5deg);
+  max-width: 200px;
+  z-index: 5;
+  pointer-events: none;
+}
+.wf-note.tilt-r { transform: rotate(2deg); }
+.wf-note::before {
+  content: '';
+  position: absolute;
+  top: -6px; left: 14px;
+  width: 24px; height: 8px;
+  background: rgba(255, 200, 100, 0.4);
+  border-radius: 2px;
+}
+
+/* small numbered callout */
+.wf-callout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  font-family: var(--hand);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+/* arrow for "scrolls to" / pointer */
+.wf-arrow-curve {
+  font-family: var(--hand-loose);
+  color: var(--accent);
+  font-size: 22px;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* sketchy headings */
+.wf-h1 {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+.wf-h2 {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0;
+}
+.wf-h3 {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0;
+}
+.wf-eyebrow {
+  font-family: var(--hand);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.wf-body {
+  font-family: var(--hand);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.wf-micro {
+  font-family: var(--hand);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+/* section label tag (left margin marker) */
+.wf-section-tag {
+  position: absolute;
+  left: -8px;
+  top: 18px;
+  transform: translateX(-100%);
+  font-family: var(--hand-loose);
+  font-size: 16px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.wf-section-tag .num {
+  display: inline-block;
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+/* generic icon placeholder — wobbly square */
+.wf-icon {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50% 30% 50% 30% / 30% 50% 30% 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  flex-shrink: 0;
+}
+.wf-icon svg { width: 18px; height: 18px; }
+
+/* check icon for feature list */
+.wf-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-family: var(--hand);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* divider — wobbly */
+.wf-divider {
+  height: 1.5px;
+  background: var(--ink);
+  border-radius: 2px;
+  width: 100%;
+  opacity: 0.5;
+}
+.wf-divider-dashed {
+  height: 0;
+  border-top: 1.5px dashed var(--ink-faint);
+  width: 100%;
+}
+
+/* form fields */
+.wf-field {
+  border: 1.5px solid var(--ink);
+  border-radius: 5px 7px 6px 8px / 6px 5px 8px 7px;
+  background: var(--paper);
+  padding: 10px 12px;
+  font-family: var(--hand);
+  font-size: 13px;
+  color: var(--ink-soft);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* device frame for mobile */
+.wf-device {
+  width: 360px;
+  border: 2.5px solid var(--ink);
+  border-radius: 30px;
+  padding: 8px;
+  background: var(--paper);
+  position: relative;
+  box-shadow: 6px 6px 0 var(--ink-ghost);
+}
+.wf-device::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px; height: 14px;
+  background: var(--ink);
+  border-radius: 8px;
+  z-index: 2;
+}
+.wf-device-screen {
+  border: 1.5px solid var(--ink);
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--paper);
+  height: 720px;
+  overflow-y: auto;
+  position: relative;
+  padding-top: 36px;  /* space for notch */
+}
+
+/* modal backdrop */
+.wf-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg,
+    rgba(0,0,0,0.04) 0 6px,
+    rgba(0,0,0,0.08) 6px 12px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 50px;
+  border-radius: inherit;
+}
+.wf-modal {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 8px 12px 9px 11px / 11px 8px 12px 9px;
+  box-shadow: 4px 5px 0 var(--ink);
+  position: relative;
+}
+
+/* step indicator dots */
+.wf-step-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.wf-step-dot {
+  width: 26px; height: 26px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--hand);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--paper);
+}
+.wf-step-dot.active { background: var(--ink); color: var(--paper); }
+.wf-step-dot.done   { background: var(--highlight); }
+.wf-step-bar {
+  width: 24px;
+  height: 1.5px;
+  background: var(--ink);
+  opacity: 0.4;
+}
+
+/* skeleton/scroll for screenshot of UI inside */
+.wf-mock-ui {
+  background: var(--paper-soft);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--hand);
+  font-size: 11px;
+  color: var(--ink-soft);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+.wf-mock-bar {
+  height: 6px;
+  background: var(--ink-ghost);
+  border-radius: 3px;
+}
+.wf-mock-bar.dark { background: var(--ink-soft); }
+
+/* Google btn */
+.wf-google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 5px 7px 6px 8px / 6px 5px 8px 7px;
+  background: var(--paper);
+  padding: 10px;
+  font-family: var(--hand);
+  font-size: 13px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* tab control */
+.wf-tab {
+  font-family: var(--hand);
+  font-size: 14px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 5px 7px 6px 8px / 6px 5px 8px 7px;
+  background: var(--paper);
+  cursor: pointer;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.wf-tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* faq item */
+.wf-faq-item {
+  border-bottom: 1.5px dashed var(--ink-faint);
+  padding: 14px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  font-family: var(--hand);
+}
+.wf-faq-q { font-size: 16px; color: var(--ink); flex: 1; }
+.wf-faq-toggle {
+  font-size: 22px;
+  color: var(--ink-faint);
+  font-family: var(--hand-loose);
+  line-height: 1;
+}
+.wf-faq-a {
+  font-family: var(--hand);
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* close button */
+.wf-close {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 50%;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--hand);
+  font-size: 14px;
+  color: var(--ink);
+}
+
+/* page reset */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #ececec;
+  font-family: var(--hand);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* svg paper-grain pattern utility */
+.wf-grain {
+  position: relative;
+}
+.wf-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.6;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  border-radius: inherit;
+}

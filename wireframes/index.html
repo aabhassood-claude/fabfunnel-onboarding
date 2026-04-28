@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fabfunnel.ai · Prototype</title>
+  <link rel="stylesheet" href="wireframe-styles.css" />
+  <style>
+    @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+    .live-modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(20, 20, 20, 0.45);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(2px);
+      overflow-y: auto;
+    }
+
+    .ab-frame { background: #fafaf7; overflow: hidden; width: 100%; height: 100%; }
+
+    /* page mode (non-canvas) */
+    body.page-mode { background: var(--paper); }
+    .page-shell { min-height: 100vh; background: var(--paper); }
+
+    /* mode switcher — fixed top bar above everything */
+    .mode-switch {
+      position: fixed; bottom: 16px; left: 16px;
+      z-index: 900;
+      background: var(--paper); border: 1.5px solid var(--ink);
+      border-radius: 999px; padding: 4px;
+      display: flex; gap: 4px;
+      box-shadow: 2px 2px 0 var(--ink);
+      font-family: 'Architects Daughter', cursive;
+    }
+    .mode-switch button {
+      border: none; background: transparent;
+      font-family: inherit; font-size: 12px;
+      padding: 5px 14px; border-radius: 999px;
+      cursor: pointer; color: var(--ink-soft);
+    }
+    .mode-switch button.active { background: var(--ink); color: var(--paper); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="wf-shared.jsx"></script>
+  <script type="text/babel" src="wf-nav.jsx"></script>
+  <script type="text/babel" src="wf-home-desktop.jsx"></script>
+  <script type="text/babel" src="wf-home-mobile.jsx"></script>
+  <script type="text/babel" src="wf-modals.jsx"></script>
+  <script type="text/babel" src="wf-pages.jsx"></script>
+  <script type="text/babel" src="wf-solutions.jsx"></script>
+  <script type="text/babel" src="wf-onboarding.jsx"></script>
+  <script type="text/babel" src="wf-onboarding-affiliate.jsx"></script>
+  <script type="text/babel" src="wf-dashboard.jsx"></script>
+  <script type="text/babel" src="wf-creative-gen.jsx"></script>
+  <script type="text/babel" src="wf-creative-gen-affiliate.jsx"></script>
+  <script type="text/babel" src="wf-funnel-trial.jsx"></script>
+
+  <script type="text/babel">
+    const TWEAKS = /*EDITMODE-BEGIN*/{
+      "screenshotMode": "sketched",
+      "showAnnotations": true,
+      "stepStyle": "dots",
+      "accentHue": "yellow",
+      "viewMode": "prototype",
+      "funnel": "direct",
+      "trialUpsellStyle": "subtle"
+    }/*EDITMODE-END*/;
+
+    function useHashRoute() {
+      const parse = () => (window.location.hash || '#home').replace(/^#/, '') || 'home';
+      const [route, setRoute] = React.useState(parse());
+      React.useEffect(() => {
+        const onHash = () => setRoute(parse());
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+      }, []);
+      const nav = (r) => { window.location.hash = r; window.scrollTo(0, 0); };
+      return [route, nav];
+    }
+
+    function App() {
+      const [tweaks, setTweak] = useTweaks(TWEAKS);
+      const [liveModal, setLiveModal] = React.useState(null);
+      const [route, nav] = useHashRoute();
+
+      const openBuyNow = (variant) => setLiveModal(variant);
+      const closeBuyNow = () => setLiveModal(null);
+
+      // ── Funnel routing: in trial mode, "Buy Now" from public pages
+      // routes to the trial signup; the dashboard's Upgrade button still
+      // opens the real buy modal.
+      const homeBuyAction = (variant) => {
+        if (tweaks.funnel === 'trial') {
+          nav('trial-signup');
+        } else {
+          setLiveModal(variant);
+        }
+      };
+
+      React.useEffect(() => {
+        const map = {
+          yellow: { hl: '#fff176', soft: '#fff8c5', accent: '#ff5b3a' },
+          lime:   { hl: '#d4ff77', soft: '#ecffc3', accent: '#ff5b3a' },
+          pink:   { hl: '#ffadd1', soft: '#ffd6e7', accent: '#1a1a1a' },
+          blue:   { hl: '#a3d9ff', soft: '#d6ecff', accent: '#ff5b3a' },
+          none:   { hl: '#e8e8e8', soft: '#f0f0f0', accent: '#1a1a1a' },
+        };
+        const c = map[tweaks.accentHue] || map.yellow;
+        document.documentElement.style.setProperty('--highlight', c.hl);
+        document.documentElement.style.setProperty('--highlight-soft', c.soft);
+        document.documentElement.style.setProperty('--accent', c.accent);
+      }, [tweaks.accentHue]);
+
+      React.useEffect(() => {
+        document.body.classList.toggle('page-mode', tweaks.viewMode === 'prototype');
+      }, [tweaks.viewMode]);
+
+      const sharedProps = {
+        openBuyNow: homeBuyAction,
+        screenshotMode: tweaks.screenshotMode,
+        showAnnotations: tweaks.showAnnotations,
+        onNav: nav,
+        funnel: tweaks.funnel,
+      };
+
+      // ── Prototype mode: navigable site with hash router ──
+      const renderPage = () => {
+        switch (route) {
+          case 'home':      return <HomeDesktop {...sharedProps} embedded={false} />;
+          case 'sol-creative': return <SolutionPage id="creative" {...sharedProps} openBuyNow={homeBuyAction} />;
+          case 'sol-insights': return <SolutionPage id="insights" {...sharedProps} openBuyNow={homeBuyAction} />;
+          case 'sol-video':    return <SolutionPage id="video" {...sharedProps} openBuyNow={homeBuyAction} />;
+          case 'usecases': return <UseCasesPage {...sharedProps} />;
+          case 'blog':      return <BlogPage {...sharedProps} />;
+          case 'fabagent':  return <FabAgentPage {...sharedProps} />;
+          case 'login':     return <LoginPage {...sharedProps} />;
+          case 'onboarding': return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
+          case 'trial-signup': return <TrialSignup
+              onComplete={() => nav('onboarding')}
+              onLogin={() => nav('login')}
+              onBackToHome={() => nav('home')}
+            />;
+          case 'compare': return <CompareFunnels onNav={nav} setFunnel={(f) => setTweak('funnel', f)} />;
+          case 'dashboard': return <DashboardPage {...sharedProps} funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />;
+          case 'creative':  return <DashboardPage {...sharedProps} initialNav="creative" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />;
+          case 'mobile':    return (
+            <div style={{ padding: '40px 24px', display: 'flex', justifyContent: 'center', background: 'var(--paper-soft)' }}>
+              <HomeMobile {...sharedProps} />
+            </div>
+          );
+          default:          return <HomeDesktop {...sharedProps} embedded={false} />;
+        }
+      };
+
+      return (
+        <>
+          <div className="mode-switch">
+            <button className={tweaks.viewMode === 'prototype' ? 'active' : ''} onClick={() => setTweak('viewMode', 'prototype')}>Prototype</button>
+            <button className={tweaks.viewMode === 'canvas' ? 'active' : ''} onClick={() => setTweak('viewMode', 'canvas')}>Canvas</button>
+          </div>
+
+          {tweaks.viewMode === 'prototype' ? (
+            <div className="page-shell">
+              {/* Dashboard has its own chrome; everything else uses shared nav/footer */}
+              {route === 'dashboard' ? (
+                <DashboardPage {...sharedProps} funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
+              ) : route === 'creative' ? (
+                <DashboardPage {...sharedProps} initialNav="creative" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
+              ) : route === 'onboarding' ? (
+                <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />
+              ) : route === 'trial-signup' ? (
+                <TrialSignup
+                  onComplete={() => nav('onboarding')}
+                  onLogin={() => nav('login')}
+                  onBackToHome={() => nav('home')}
+                />
+              ) : route === 'compare' ? (
+                <CompareFunnels onNav={nav} setFunnel={(f) => setTweak('funnel', f)} />
+              ) : route === 'mobile' ? (
+                renderPage()
+              ) : (
+                <>
+                  <NavBar current={route} onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} setFunnel={(f) => setTweak('funnel', f)} />
+                  {renderPage()}
+                  <FooterBar onNav={nav} />
+                </>
+              )}
+            </div>
+          ) : (
+            <DesignCanvas
+              title="fabfunnel.ai · Wireframes"
+              subtitle="All artboards · click any to focus · or switch to Prototype mode for navigation"
+              background="#ececec"
+            >
+              <DCSection id="home" title="Home page" subtitle="12 sections · desktop + mobile">
+                <DCArtboard id="home-desktop" label="Home — Desktop · 12 sections" width={1280} height={3400}>
+                  <div className="ab-frame"><HomeDesktop {...sharedProps} embedded={true} /></div>
+                </DCArtboard>
+                <DCArtboard id="home-mobile" label="Home — Mobile · key sections" width={400} height={780}>
+                  <div className="ab-frame" style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
+                    <HomeMobile {...sharedProps} />
+                  </div>
+                </DCArtboard>
+              </DCSection>
+
+              <DCSection id="modals" title="Buy Now modal" subtitle="Two variants for A/B test">
+                <DCArtboard id="modal-a" label="Variant A · Direct sales · 3 steps" width={620} height={780}>
+                  <div className="ab-frame" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '40px 20px', background: 'var(--paper-soft)' }}>
+                    <ModalVariantA onClose={() => {}} stepStyle={tweaks.stepStyle} showAnnotations={tweaks.showAnnotations} embedded />
+                  </div>
+                </DCArtboard>
+                <DCArtboard id="modal-b" label="Variant B · Free trial · 2 steps" width={780} height={780}>
+                  <div className="ab-frame" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '40px 20px', background: 'var(--paper-soft)' }}>
+                    <ModalVariantB onClose={() => {}} stepStyle={tweaks.stepStyle} showAnnotations={tweaks.showAnnotations} embedded />
+                  </div>
+                </DCArtboard>
+              </DCSection>
+
+              <DCSection id="solutions" title="Solutions · Core 3" subtitle="Creative Generation · Industry Insights · Video Sage">
+                {SOLUTIONS.map(s => (
+                  <DCArtboard key={s.id} id={'sol-'+s.id} label={s.name} width={1280} height={2100}>
+                    <div className="ab-frame"><SolutionPage id={s.id} {...sharedProps} openBuyNow={openBuyNow} /></div>
+                  </DCArtboard>
+                ))}
+              </DCSection>
+
+              <DCSection id="rest" title="Rest of the site" subtitle="Use Cases · Blog · FabAgent · Login · Dashboard">
+                <DCArtboard id="usecases" label="Use Cases" width={1280} height={1900}>
+                  <div className="ab-frame"><UseCasesPage {...sharedProps} /></div>
+                </DCArtboard>
+                <DCArtboard id="blog" label="Blog" width={1280} height={1700}>
+                  <div className="ab-frame"><BlogPage {...sharedProps} /></div>
+                </DCArtboard>
+                <DCArtboard id="fabagent" label="FabAgent" width={1280} height={2100}>
+                  <div className="ab-frame"><FabAgentPage {...sharedProps} /></div>
+                </DCArtboard>
+                <DCArtboard id="login" label="Login" width={600} height={700}>
+                  <div className="ab-frame"><LoginPage {...sharedProps} /></div>
+                </DCArtboard>
+                <DCArtboard id="dashboard" label="Dashboard (post-purchase)" width={1280} height={900}>
+                  <div className="ab-frame"><DashboardPage {...sharedProps} /></div>
+                </DCArtboard>
+                <DCArtboard id="creative-gen" label="Creative Gen module" width={1280} height={1700}>
+                  <div className="ab-frame"><DashboardPage {...sharedProps} initialNav="creative" /></div>
+                </DCArtboard>
+              </DCSection>
+
+              <DCSection id="onboarding" title="Onboarding · E-commerce" subtitle="Choose Mode → Input → Processing → Done (post-payment)">
+                <DCArtboard id="onb-1" label="1 · Choose Mode" width={980} height={620}>
+                  <div className="ab-frame"><OnbChooseMode onPick={() => {}} onSkip={() => {}} onLogin={() => {}} /></div>
+                </DCArtboard>
+                <DCArtboard id="onb-2" label="2 · Input · Tell us about your store" width={880} height={720}>
+                  <div className="ab-frame"><OnbInput onBack={() => {}} onContinue={() => {}} kind="ecom" /></div>
+                </DCArtboard>
+                <DCArtboard id="onb-3" label="3 · Processing · Setting up workspace" width={980} height={680}>
+                  <div className="ab-frame"><OnbProcessing onBack={() => {}} onDone={() => {}} /></div>
+                </DCArtboard>
+                <DCArtboard id="onb-4" label="4 · Done · Brand Ready" width={980} height={1300}>
+                  <div className="ab-frame"><OnbDone onBack={() => {}} onStart={() => {}} onRestart={() => {}} brandName="test" /></div>
+                </DCArtboard>
+              </DCSection>
+
+              <DCSection id="funnel-b" title="Funnel B · Free Trial" subtitle="Trial signup · Trial dashboard variants · Conversion modals · Compare view">
+                <DCArtboard id="trial-signup" label="1 · Free Trial signup" width={520} height={900}>
+                  <div className="ab-frame"><TrialSignup onComplete={() => {}} onLogin={() => {}} onBackToHome={() => {}} /></div>
+                </DCArtboard>
+                <DCArtboard id="trial-dash-subtle" label="2a · Trial dashboard · subtle upsell" width={1280} height={1100}>
+                  <div className="ab-frame"><DashboardPage {...sharedProps} funnel="trial" trialUpsellStyle="subtle" openBuyNow={openBuyNow} /></div>
+                </DCArtboard>
+                <DCArtboard id="trial-dash-aggressive" label="2b · Trial dashboard · aggressive upsell" width={1280} height={1100}>
+                  <div className="ab-frame"><DashboardPage {...sharedProps} funnel="trial" trialUpsellStyle="aggressive" openBuyNow={openBuyNow} /></div>
+                </DCArtboard>
+                <DCArtboard id="trial-mod-exhausted" label="3a · Modal · credits exhausted" width={520} height={580}>
+                  <div className="ab-frame" style={{ background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+                    <div style={{ width: 460 }}><TrialUpgradeModal kind="exhausted" onClose={() => {}} onUpgrade={() => {}} /></div>
+                  </div>
+                </DCArtboard>
+                <DCArtboard id="trial-mod-download" label="3b · Modal · download blocked" width={520} height={580}>
+                  <div className="ab-frame" style={{ background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+                    <div style={{ width: 460 }}><TrialUpgradeModal kind="download" onClose={() => {}} onUpgrade={() => {}} /></div>
+                  </div>
+                </DCArtboard>
+                <DCArtboard id="trial-mod-expired" label="3c · Modal · trial expired" width={520} height={580}>
+                  <div className="ab-frame" style={{ background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+                    <div style={{ width: 460 }}><TrialUpgradeModal kind="expired" onClose={() => {}} onUpgrade={() => {}} /></div>
+                  </div>
+                </DCArtboard>
+                <DCArtboard id="compare" label="4 · Compare Funnels (for management)" width={1280} height={1700}>
+                  <div className="ab-frame"><CompareFunnels onNav={() => {}} setFunnel={() => {}} /></div>
+                </DCArtboard>
+              </DCSection>
+            </DesignCanvas>
+          )}
+
+          {liveModal && (
+            <div className="live-modal-overlay" onClick={closeBuyNow}>
+              <div onClick={(e) => e.stopPropagation()}>
+                {liveModal === 'A'
+                  ? <ModalVariantA onClose={closeBuyNow} stepStyle={tweaks.stepStyle} showAnnotations={false} />
+                  : <ModalVariantB onClose={closeBuyNow} stepStyle={tweaks.stepStyle} showAnnotations={false} />}
+                <div style={{ marginTop: 12, textAlign: 'center', fontFamily: 'Architects Daughter, cursive', fontSize: 12, color: '#fff', opacity: 0.85 }}>
+                  Viewing Variant {liveModal} · switch to{' '}
+                  <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setLiveModal(liveModal === 'A' ? 'B' : 'A')}>
+                    Variant {liveModal === 'A' ? 'B' : 'A'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <TweaksPanel title="Tweaks">
+            <TweakSection title="View">
+              <TweakRadio
+                label="Mode"
+                value={tweaks.viewMode}
+                onChange={(v) => setTweak('viewMode', v)}
+                options={[
+                  { value: 'prototype', label: 'Prototype' },
+                  { value: 'canvas',    label: 'Canvas' },
+                ]}
+              />
+              <TweakSelect
+                label="Jump to page"
+                value={route}
+                onChange={(v) => nav(v)}
+                options={[
+                  { value: 'home',         label: 'Home' },
+                  { value: 'sol-creative', label: 'Solutions · Creative Generation' },
+                  { value: 'sol-insights', label: 'Solutions · Industry Insights' },
+                  { value: 'sol-video',    label: 'Solutions · Video Sage' },
+                  { value: 'usecases',  label: 'Use Cases' },
+                  { value: 'blog',      label: 'Blog' },
+                  { value: 'fabagent',  label: 'FabAgent' },
+                  { value: 'login',      label: 'Login' },
+                  { value: 'onboarding', label: 'Onboarding (E-commerce)' },
+                  { value: 'dashboard',  label: 'Dashboard (post-purchase)' },
+                  { value: 'creative',   label: 'Creative Gen module' },
+                  { value: 'mobile',    label: 'Home — Mobile' },
+                  { value: 'trial-signup', label: '— Funnel B · Trial Signup' },
+                  { value: 'compare',      label: '— Compare Funnels (mgmt)' },
+                ]}
+              />
+            </TweakSection>
+
+            <TweakSection title="Funnel (demo)">
+              <TweakRadio
+                label="Active funnel"
+                value={tweaks.funnel}
+                onChange={(v) => setTweak('funnel', v)}
+                options={[
+                  { value: 'direct', label: 'A · Direct Buy' },
+                  { value: 'trial',  label: 'B · Free Trial' },
+                ]}
+              />
+              <TweakRadio
+                label="Trial upsell style"
+                value={tweaks.trialUpsellStyle}
+                onChange={(v) => setTweak('trialUpsellStyle', v)}
+                options={[
+                  { value: 'subtle',     label: 'Subtle' },
+                  { value: 'aggressive', label: 'Aggressive' },
+                ]}
+              />
+              <TweakButton onClick={() => nav('compare')}>Open Compare view →</TweakButton>
+            </TweakSection>
+
+            <TweakSection title="Wireframe">
+              <TweakRadio
+                label="Screenshot placeholders"
+                value={tweaks.screenshotMode}
+                onChange={(v) => setTweak('screenshotMode', v)}
+                options={[
+                  { value: 'cross',    label: 'Cross' },
+                  { value: 'sketched', label: 'Sketched' },
+                  { value: 'labeled',  label: 'Labeled' },
+                ]}
+              />
+              <TweakToggle label="Designer annotations" value={tweaks.showAnnotations} onChange={(v) => setTweak('showAnnotations', v)} />
+            </TweakSection>
+
+            <TweakSection title="Buy Now modal">
+              <TweakRadio
+                label="Step indicator"
+                value={tweaks.stepStyle}
+                onChange={(v) => setTweak('stepStyle', v)}
+                options={[
+                  { value: 'dots',     label: 'Dots' },
+                  { value: 'bar',      label: 'Bar' },
+                  { value: 'fraction', label: '1 / N' },
+                ]}
+              />
+              <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                <TweakButton onClick={() => setLiveModal('A')}>Open A</TweakButton>
+                <TweakButton onClick={() => setLiveModal('B')}>Open B</TweakButton>
+              </div>
+            </TweakSection>
+
+            <TweakSection title="Accent">
+              <TweakSelect
+                label="Highlighter"
+                value={tweaks.accentHue}
+                onChange={(v) => setTweak('accentHue', v)}
+                options={[
+                  { value: 'yellow', label: 'Highlighter yellow' },
+                  { value: 'lime',   label: 'Lime' },
+                  { value: 'pink',   label: 'Hot pink' },
+                  { value: 'blue',   label: 'Electric blue' },
+                  { value: 'none',   label: 'None (B&W)' },
+                ]}
+              />
+            </TweakSection>
+          </TweaksPanel>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
