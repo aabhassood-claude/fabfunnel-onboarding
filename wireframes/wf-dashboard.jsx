@@ -23,6 +23,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
       { id: 'creative',   label: 'Creative Generation', icon: '✦' },
       { id: 'video',      label: 'Video Sage',          icon: '▶' },
       { id: 'script',     label: 'Script Generation',   icon: '✎' },
+      { id: 'library',    label: 'Creative Library',    icon: '🖼' },
     ]},
     { id: 'insights-grp', label: 'Industry Insights', icon: '⊞', isGroup: true, children: [
       { id: 'discover',     label: 'Discover',     icon: '◎' },
@@ -225,6 +226,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <window.VideoSage screenshotMode={screenshotMode} showAnnotations={showAnnotations} />
         )}
 
+        {/* ── Creative Library module ── */}
+        {activeNav === 'library' && (
+          <CreativeLibrary screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
+        )}
+
         {/* ── Home view — shared by both funnels ── */}
         {activeNav === 'home' && (
         <React.Fragment>
@@ -259,10 +265,10 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <Box style={{ padding: 20, background: 'var(--paper)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
               <h2 className="wf-h2" style={{ fontSize: 18 }}>Recent generations</h2>
-              <span className="wf-squig" style={{ fontSize: 12, cursor: 'pointer' }}>View all →</span>
+              <span className="wf-squig" onClick={() => setActiveNav('library')} style={{ fontSize: 12, cursor: 'pointer' }}>View all in Library →</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-              {[1,2,3,4,5,6].map(i => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 10 }}>
+              {[1,2,3,4,5,6,7,8,9,10,11,12].map(i => (
                 <div key={i}>
                   {screenshotMode === 'sketched'
                     ? <div className="wf-box" style={{ height: 110, padding: 6 }}><MockUI kind={i % 2 ? 'creative' : 'video'} style={{ height: '100%' }} /></div>
@@ -374,7 +380,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Stub for other nav items ── */}
-        {!['home', 'creative', 'video'].includes(activeNav) && (
+        {!['home', 'creative', 'video', 'library'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -428,3 +434,160 @@ const demoBtnStyle = {
   cursor: 'pointer',
   color: 'var(--ink)',
 };
+
+// ── Creative Library module ──
+function CreativeLibrary({ screenshotMode, onGenerate }) {
+  const [filter, setFilter] = React.useState('all');
+  const [starredIds, setStarredIds] = React.useState(new Set([2, 5, 9]));
+  const [sort, setSort] = React.useState('newest');
+
+  const toggleStar = (id) => {
+    setStarredIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const allCreatives = Array.from({ length: 36 }, (_, i) => ({
+    id: i + 1,
+    name: [
+      'Summer Tee Hero', 'Sneaker Lifestyle', 'Flash Sale Banner', 'Product Demo Reel',
+      'UGC Testimonial', 'Before / After', 'Brand Story Hero', 'Offer Highlight',
+      'Social Proof Card', 'Comparison Grid', 'Holiday Gift Set', 'Lipstick Promo',
+      'Canvas Cap Post', 'Spring Collection', 'Unboxing Reel', 'Flat Lay Product',
+      'Sale Countdown', 'Influencer Hook', 'Price Drop Alert', 'Feature Showcase',
+      'Customer Review', 'Tutorial Clip', 'New Arrival', 'Limited Edition',
+      'Clearance Banner', 'Testimonial Reel', 'Lifestyle Scene', 'Studio Shot',
+      'Campaign Launch', 'Email Hero', 'Amazon A+', 'TikTok Ad',
+      'IG Story', 'FB Carousel', 'Pinterest Pin', 'YouTube Thumb',
+    ][i],
+    type: i % 5 === 3 || i % 7 === 4 ? 'video' : 'image',
+    brand: ['Airbnb', 'Nike', 'Glossier', 'Lululemon', 'Spotify', 'Stripe'][i % 6],
+    daysAgo: Math.floor(i / 3),
+    duration: [6, 15, 30][i % 3],
+    isNew: i < 4,
+  }));
+
+  const filtered = allCreatives.filter(c => {
+    if (filter === 'image') return c.type === 'image';
+    if (filter === 'video') return c.type === 'video';
+    if (filter === 'starred') return starredIds.has(c.id);
+    return true;
+  });
+
+  const imgCount = allCreatives.filter(c => c.type === 'image').length;
+  const vidCount = allCreatives.filter(c => c.type === 'video').length;
+  const starCount = allCreatives.filter(c => starredIds.has(c.id)).length;
+
+  return (
+    <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+      {/* header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <span className="wf-eyebrow">Genie</span>
+          <h1 className="wf-h1" style={{ fontSize: 26, marginTop: 4 }}>🖼 Creative Library</h1>
+          <p className="wf-body" style={{ fontSize: 13, marginTop: 4, color: 'var(--ink-faint)' }}>Every creative generated by Genie — search, filter, star, and re-use.</p>
+        </div>
+        <Btn onClick={onGenerate}>✦ Generate new →</Btn>
+      </div>
+
+      {/* filters + sort */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 4, padding: 3, border: '1.5px solid var(--ink)', borderRadius: 999 }}>
+          {[
+            { id: 'all', label: `All (${allCreatives.length})` },
+            { id: 'image', label: `🖼 Images (${imgCount})` },
+            { id: 'video', label: `🎬 Videos (${vidCount})` },
+            { id: 'starred', label: `★ Starred (${starCount})` },
+          ].map(f => (
+            <button key={f.id} onClick={() => setFilter(f.id)} style={{
+              padding: '5px 14px', borderRadius: 999, border: 'none',
+              background: filter === f.id ? 'var(--ink)' : 'transparent',
+              color: filter === f.id ? 'var(--paper)' : 'var(--ink-soft)',
+              fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>{f.label}</button>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <select value={sort} onChange={(e) => setSort(e.target.value)} style={{
+            padding: '6px 12px', border: '1.5px solid var(--ink)', borderRadius: 999,
+            background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 12, cursor: 'pointer',
+          }}>
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name">By name</option>
+          </select>
+        </div>
+      </div>
+
+      {/* NEW badge row (last 4 creatives flagged as new) */}
+      {filter === 'all' && (
+        <div style={{ marginBottom: 20 }}>
+          <div className="wf-eyebrow" style={{ marginBottom: 10, fontSize: 10 }}>✨ Recently generated</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+            {filtered.filter(c => c.isNew).map(c => (
+              <Box key={c.id} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', position: 'relative', background: 'var(--paper)' }}>
+                <div style={{ position: 'absolute', top: 8, left: 8, padding: '2px 8px', background: 'var(--ink)', color: 'var(--paper)', fontSize: 9, fontWeight: 700, borderRadius: 10, letterSpacing: 0.5 }}>NEW</div>
+                <div style={{ position: 'absolute', top: 8, right: 8, cursor: 'pointer', fontSize: 16, color: starredIds.has(c.id) ? 'var(--highlight)' : 'var(--ink-ghost)' }} onClick={(e) => { e.stopPropagation(); toggleStar(c.id); }}>
+                  {starredIds.has(c.id) ? '★' : '☆'}
+                </div>
+                <div style={{ aspectRatio: '1', background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {screenshotMode === 'sketched'
+                    ? <MockUI kind={c.type === 'video' ? 'video' : 'creative'} style={{ width: '80%', height: '80%' }} />
+                    : <div className="wf-img" style={{ width: '100%', height: '100%' }}><span>{c.type === 'video' ? '▶' : '🖼'}</span></div>}
+                </div>
+                <div style={{ padding: '8px 10px' }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>{c.name}</div>
+                  <div className="wf-micro" style={{ fontSize: 10 }}>{c.brand} · {c.type === 'video' ? `🎬 ${c.duration}s` : '🖼 Image'} · just now</div>
+                </div>
+              </Box>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* divider */}
+      {filter === 'all' && <div className="wf-divider-dashed" style={{ margin: '8px 0 20px' }} />}
+
+      {/* Main grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+        {filtered.filter(c => filter !== 'all' || !c.isNew).map(c => (
+          <Box key={c.id} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', position: 'relative', background: 'var(--paper)' }}>
+            <div style={{ position: 'absolute', top: 8, left: 8, padding: '2px 8px', background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)', border: '1px solid var(--ink)', fontSize: 9, fontWeight: 700, borderRadius: 10 }}>
+              {c.type === 'video' ? '🎬 Video' : '🖼 Image'}
+            </div>
+            {c.type === 'video' && (
+              <div style={{ position: 'absolute', bottom: 62, right: 8, padding: '2px 6px', background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: 9, fontWeight: 700, borderRadius: 8 }}>{c.duration}s</div>
+            )}
+            <div style={{ position: 'absolute', top: 8, right: 8, cursor: 'pointer', fontSize: 16, color: starredIds.has(c.id) ? 'var(--highlight)' : 'var(--ink-ghost)' }} onClick={(e) => { e.stopPropagation(); toggleStar(c.id); }}>
+              {starredIds.has(c.id) ? '★' : '☆'}
+            </div>
+            <div style={{ aspectRatio: '1', background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {screenshotMode === 'sketched'
+                ? <MockUI kind={c.type === 'video' ? 'video' : 'creative'} style={{ width: '80%', height: '80%' }} />
+                : <div className="wf-img" style={{ width: '100%', height: '100%' }}><span>{c.type === 'video' ? '▶' : '🖼'}</span></div>}
+            </div>
+            <div style={{ padding: '8px 10px' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>{c.name}</div>
+              <div className="wf-micro" style={{ fontSize: 10 }}>{c.brand} · {c.daysAgo === 0 ? 'today' : c.daysAgo + 'd ago'}</div>
+            </div>
+          </Box>
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: 40, color: 'var(--ink-faint)' }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>∅</div>
+          <div style={{ fontSize: 14 }}>No creatives match this filter.</div>
+        </div>
+      )}
+
+      {/* footer */}
+      <div style={{ textAlign: 'center', padding: '28px 0', marginTop: 12, borderTop: '1.5px dashed var(--ink-faint)' }}>
+        <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>Showing {filtered.length} of {allCreatives.length} creatives</span>
+      </div>
+    </div>
+  );
+}
