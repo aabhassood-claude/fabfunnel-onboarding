@@ -278,7 +278,7 @@ function OnbDone({ onBack, onStart, onRestart, brandName }) {
             <div className="wf-eyebrow">Sample products fetched · 6 of 24</div>
             <Btn variant="link" style={{ fontSize: 12 }}>View all →</Btn>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginTop: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, marginTop: 14 }}>
             {products.map((p, i) => (
               <Box key={i} soft style={{ overflow: 'hidden', padding: 0 }}>
                 <div style={{ height: 72 }}>

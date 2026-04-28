@@ -134,7 +134,7 @@ function CreativeGenAffiliate({ media }) {
         </div>
 
         {includeWinners && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 10, marginBottom: 18 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10, marginBottom: 18 }}>
             {winnerCards.map((c, i) => (
               <div key={i} className="wf-box-soft" style={{ padding: 10, background: 'var(--paper)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
@@ -180,7 +180,7 @@ function CreativeGenAffiliate({ media }) {
             <SegPill active={conceptTab === 'custom'} onClick={() => setConceptTab('custom')}>Custom</SegPill>
           </Box>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
           {conceptCards.map((c, i) => {
             const active = conceptSel === i;
             return (
@@ -258,7 +258,7 @@ function CreativeGenAffiliate({ media }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
           {approachCards.map((c, i) => {
             const active = apprSel === i;
             return (

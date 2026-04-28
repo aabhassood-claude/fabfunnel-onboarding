@@ -549,3 +549,23 @@ body {
   mix-blend-mode: multiply;
   border-radius: inherit;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Responsive breakpoints
+   ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .wf-section { padding: 32px 24px !important; }
+}
+
+@media (max-width: 768px) {
+  .wf-section { padding: 24px 16px !important; }
+  .wf-h1 { font-size: 26px !important; }
+  .wf-h2 { font-size: 20px !important; }
+}
+
+@media (max-width: 480px) {
+  .wf-h1 { font-size: 22px !important; }
+  .mode-switch { bottom: 8px; left: 8px; }
+  .mode-switch button { font-size: 10px; padding: 4px 10px; }
+}

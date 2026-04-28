@@ -49,8 +49,8 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
   };
 
   const wrapStyle = embedded
-    ? { background: 'var(--paper)', border: '2px solid var(--ink)', borderRadius: 4, width: 1280, fontFamily: 'var(--hand)' }
-    : { background: 'var(--paper)', fontFamily: 'var(--hand)' };
+    ? { background: 'var(--paper)', border: '2px solid var(--ink)', borderRadius: 4, maxWidth: 1280, width: '100%', fontFamily: 'var(--hand)' }
+    : { background: 'var(--paper)', fontFamily: 'var(--hand)', maxWidth: '100%' };
 
   return (
     <div style={wrapStyle}>
@@ -138,7 +138,7 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <h2 className="wf-h2">Performance marketing is a creative bottleneck.</h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 32 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 32 }}>
           {[
             { t: 'Hours spent briefing creators', d: 'Endless Loom calls. Slack threads. Versions.' },
             { t: 'Guessing which creatives will win', d: 'Gut-feel testing burns budget every week.' },
@@ -162,7 +162,7 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 4 — Product Showcase (Genie) ─────────── */}
-      <div id="section-4" style={{ padding: '80px 60px', position: 'relative' }}>
+      <div id="section-4" style={{ padding: '80px max(16px, 4vw)', position: 'relative' }}>
         <SectionTag num="4">Genie suite</SectionTag>
         <div style={{ textAlign: 'center', marginBottom: 60 }}>
           <span className="wf-eyebrow">The Genie suite</span>
@@ -200,9 +200,9 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 5 — Industry Insights ─────────── */}
-      <div style={{ padding: '80px 60px', position: 'relative', background: 'var(--paper-soft)' }}>
+      <div style={{ padding: '80px max(16px, 4vw)', position: 'relative', background: 'var(--paper-soft)' }}>
         <SectionTag num="5">Industry Insights</SectionTag>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 60, alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 60, alignItems: 'center' }}>
           <div>
             <Pill hl style={{ marginBottom: 14 }}>NEW · Distinct capability</Pill>
             <h2 className="wf-h2" style={{ fontSize: 36 }}>
@@ -224,12 +224,12 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 6 — How It Works ─────────── */}
-      <div style={{ padding: '80px 60px', position: 'relative' }}>
+      <div style={{ padding: '80px max(16px, 4vw)', position: 'relative' }}>
         <SectionTag num="6">How it works</SectionTag>
         <div style={{ textAlign: 'center', marginBottom: 50 }}>
           <h2 className="wf-h2" style={{ fontSize: 32 }}>Three steps. Zero ceremony.</h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: 24, alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 24, alignItems: 'center' }}>
           {[
             { n: 1, t: 'Sign up', d: '30 seconds. Email + password.' },
             { n: 2, t: 'Generate', d: 'Describe what you need, get creatives.' },
@@ -260,7 +260,7 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 7 — Use Cases ─────────── */}
-      <div style={{ padding: '80px 60px', position: 'relative' }}>
+      <div style={{ padding: '80px max(16px, 4vw)', position: 'relative' }}>
         <SectionTag num="7">Use cases</SectionTag>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <h2 className="wf-h2" style={{ fontSize: 32 }}>Built for the way solo marketers actually work.</h2>
@@ -293,7 +293,7 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 8 — Pricing ─────────── */}
-      <div style={{ padding: '80px 60px', position: 'relative' }}>
+      <div style={{ padding: '80px max(16px, 4vw)', position: 'relative' }}>
         <SectionTag num="8">Pricing</SectionTag>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <h2 className="wf-h2" style={{ fontSize: 36 }}>{pricingTitle}</h2>
@@ -377,9 +377,9 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 9 — Testimonials ─────────── */}
-      <div style={{ padding: '80px 60px', position: 'relative' }}>
+      <div style={{ padding: '80px max(16px, 4vw)', position: 'relative' }}>
         <SectionTag num="9">Testimonials</SectionTag>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 24 }}>
           {[1,2,3].map(i => (
             <Box key={i} style={{ padding: 24 }}>
               <div style={{ fontFamily: 'var(--hand-loose)', fontSize: 32, color: 'var(--ink-faint)', lineHeight: 1, marginBottom: -8 }}>"</div>
@@ -401,9 +401,9 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
       <div className="wf-divider-dashed" />
 
       {/* ─────────── SECTION 10 — FAQ ─────────── */}
-      <div style={{ padding: '80px 60px', position: 'relative' }}>
+      <div style={{ padding: '80px max(16px, 4vw)', position: 'relative' }}>
         <SectionTag num="10">FAQ</SectionTag>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 60 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 60 }}>
           <h2 className="wf-h2" style={{ fontSize: 32 }}>Frequently<br/>asked questions.</h2>
           <div>
             {faqs.map((q, i) => (

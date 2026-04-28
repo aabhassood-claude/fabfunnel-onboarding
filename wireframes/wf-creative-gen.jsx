@@ -125,7 +125,7 @@ function CreativeGen() {
         {/* Creative Type */}
         <Box style={{ padding: 22 }}>
           <Eyebrow hint="pick the style of ad you're generating">Creative Type</Eyebrow>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
             <CT id="product" iconKind="cube"  title="Product Ads"          sub="Conversion-focused · price, offer, CTA" />
             <CT id="brand"   iconKind="store" title="Brand Ads"            sub="Awareness & style · brand storytelling" />
             <CT id="asset"   iconKind="spark" title="Product Asset Creative" sub="Detail shots · listings, email, PDP" />
@@ -217,7 +217,7 @@ function CreativeGen() {
                 <span className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>📋 Strategy</span>
                 <Pill soft style={{ fontSize: 9 }}>Optional</Pill>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12 }}>
                 <StratTile id="ba"       title="Before / After" sub="Show transformation."   glyph="people" />
                 <StratTile id="social"   title="Social Proof"   sub="Builds trust fast."     glyph="star" />
                 <StratTile id="urgency"  title="Urgency"        sub="Promos & launches."     glyph="clock" />
@@ -234,7 +234,7 @@ function CreativeGen() {
               {media === 'video' && (
                 <div style={{ marginTop: 24, paddingTop: 18, borderTop: '1.5px dashed var(--ink-faint)' }}>
                   <div className="wf-body" style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>🎬 Video settings</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 10 }}>
                     {[['Duration', '15s'], ['Aspect', '9:16'], ['Captions', 'On']].map(([k, v]) => (
                       <Box key={k} soft style={{ padding: '8px 12px' }}>
                         <div className="wf-eyebrow">{k}</div>

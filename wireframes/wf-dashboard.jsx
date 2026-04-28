@@ -236,7 +236,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
 
         {/* quick actions */}
         <div style={{ padding: '20px 28px 0' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
             {[
               ['✦', 'Generate creatives', 'Static + motion ad variants'],
               ['▶', 'Video brief',         'Upload footage, get cuts'],

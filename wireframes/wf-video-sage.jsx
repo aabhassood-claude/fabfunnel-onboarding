@@ -115,7 +115,7 @@ function VideoSage({ screenshotMode, showAnnotations }) {
         {src === 'competitor' && (
           <div>
             <label style={{ fontSize: 11, color: 'var(--ink-soft)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Pick from your saved library</label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 10, marginTop: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10, marginTop: 8 }}>
               {[
                 'Glow Co. · Hero ad #4',
                 'Glow Co. · UGC #12',

@@ -316,7 +316,7 @@ function CompareFunnels({ onNav, setFunnel }) {
         </div>
 
         {/* Hypothesis row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 32 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16, marginBottom: 32 }}>
           <Box soft style={{ padding: 18 }}>
             <div className="wf-eyebrow" style={{ marginBottom: 6 }}>Hypothesis · A</div>
             <div className="wf-body" style={{ fontSize: 13 }}>Higher commitment, fewer signups, better LTV. Wins on already-warm traffic.</div>
@@ -354,7 +354,7 @@ function CompareFunnels({ onNav, setFunnel }) {
 
         <Box style={{ padding: 22, marginTop: 32 }}>
           <div className="wf-eyebrow" style={{ marginBottom: 10 }}>Trial constraints (Funnel B)</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
             {[
               ['7 days',           'Trial duration'],
               ['50 credits',       'Free generations'],

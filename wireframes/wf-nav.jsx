@@ -4,6 +4,7 @@
 
 function NavBar({ current, onNav, openBuyNow, funnel, setFunnel }) {
   const [solOpen, setSolOpen] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const items = [
     { id: 'home',     label: 'Home' },
     { id: '__sols',   label: 'Solutions', mega: true },
@@ -14,8 +15,8 @@ function NavBar({ current, onNav, openBuyNow, funnel, setFunnel }) {
   const onSolGroup = (current || '').startsWith('sol-');
 
   return (
-    <div style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--paper)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 60px', borderBottom: '1.5px dashed var(--ink-faint)', position: 'relative' }}>
+    <div className="wf-nav-bar-wrap" style={{ position: 'sticky', top: 0, zIndex: 10, background: 'var(--paper)' }}>
+      <div className="wf-nav-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 60px', borderBottom: '1.5px dashed var(--ink-faint)', position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
           <div
             onClick={() => onNav('home')}
@@ -48,7 +49,12 @@ function NavBar({ current, onNav, openBuyNow, funnel, setFunnel }) {
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+        {/* Mobile hamburger */}
+        <div className="wf-nav-mobile-toggle" style={{ display: 'none', cursor: 'pointer', fontSize: 22, padding: '4px 8px' }} onClick={() => setMobileMenuOpen(o => !o)}>
+          {mobileMenuOpen ? '✕' : '☰'}
+        </div>
+
+        <div className="wf-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
           {items.map(it => {
             const isActive = it.mega ? (solOpen || onSolGroup) : current === it.id;
             return (
@@ -86,14 +92,28 @@ function NavBar({ current, onNav, openBuyNow, funnel, setFunnel }) {
           <MegaMenu onNav={onNav} onClose={() => setSolOpen(false)} />
         )}
       </div>
+
+      {/* Mobile dropdown menu */}
+      {mobileMenuOpen && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '16px 24px', borderBottom: '1.5px dashed var(--ink-faint)', background: 'var(--paper)' }}>
+          {items.map(it => (
+            <span key={it.id} onClick={() => { if (!it.mega) { onNav(it.id); setMobileMenuOpen(false); } else { setSolOpen(o => !o); } }}
+              style={{ fontFamily: 'var(--hand)', fontSize: 15, cursor: 'pointer', padding: '6px 0', color: (it.mega ? (onSolGroup) : current === it.id) ? 'var(--ink)' : 'var(--ink-faint)' }}>
+              {it.label}{it.mega ? (solOpen ? ' ▴' : ' ▾') : ''}
+            </span>
+          ))}
+          <span onClick={() => { onNav('login'); setMobileMenuOpen(false); }} style={{ fontFamily: 'var(--hand)', fontSize: 14, cursor: 'pointer', color: 'var(--ink-faint)' }}>Login</span>
+          <Btn onClick={() => { openBuyNow('A'); setMobileMenuOpen(false); }}>{funnel === 'trial' ? 'Start Free Trial →' : 'Buy Now'}</Btn>
+        </div>
+      )}
     </div>
   );
 }
 
 function FooterBar({ onNav }) {
   return (
-    <div style={{ padding: '60px 60px 40px', borderTop: '1.5px solid var(--ink)', background: 'var(--paper)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr 1fr', gap: 40 }}>
+    <div style={{ padding: '60px 24px 40px', borderTop: '1.5px solid var(--ink)', background: 'var(--paper)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 40 }}>
         <div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>fabfunnel<span style={{ color: 'var(--ink-faint)' }}>.ai</span></div>
           <p className="wf-body" style={{ marginTop: 10, fontSize: 13 }}>The AI co-pilot for performance marketers.</p>
