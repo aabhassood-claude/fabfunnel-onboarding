@@ -615,7 +615,7 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   let body;
   if (step === 0) body = <OnbChooseMode
     onPick={(kind) => { setData(d => ({ ...d, kind })); goto(1); }}
-    onSkip={() => onNav('dashboard')}
+    onSkip={() => { sessionStorage.setItem('ff_profile_skipped', 'genie'); sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
     onLogin={() => onNav('login')}
   />;
   else if (step === 1) body = isAff

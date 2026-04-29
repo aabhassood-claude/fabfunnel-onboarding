@@ -12,6 +12,13 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
     if (flag) sessionStorage.removeItem('ff_new_user');
     return !!flag;
   });
+  const [skippedProduct, setSkippedProduct] = React.useState(() => {
+    return sessionStorage.getItem('ff_profile_skipped') || null;
+  });
+  const dismissProfileBanner = () => {
+    sessionStorage.removeItem('ff_profile_skipped');
+    setSkippedProduct(null);
+  };
   const [showTrialOffer, setShowTrialOffer] = React.useState(false);
   const [showOfferTimer, setShowOfferTimer] = React.useState(false);
   const [countdown, setCountdown] = React.useState(24 * 60 * 60);
@@ -262,6 +269,53 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
             <span style={{ fontSize: 18 }}>🎉</span>
             <span>You're upgraded! All premium modules are now unlocked.</span>
             <button onClick={() => setUpgradeSuccess(false)} style={{ background: 'transparent', border: 'none', fontSize: 14, cursor: 'pointer', marginLeft: 8 }}>✕</button>
+          </div>
+        )}
+
+        {/* profile incomplete banner — shown when user skipped onboarding */}
+        {skippedProduct && (
+          <div style={{
+            padding: '16px 28px', background: 'var(--paper)',
+            borderBottom: '1.5px solid var(--ink)',
+            display: 'flex', alignItems: 'center', gap: 16,
+            fontFamily: 'var(--hand)', flexWrap: 'wrap',
+          }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: '50%',
+              border: '2px solid var(--accent)', background: 'rgba(255,91,58,0.08)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, flexShrink: 0,
+            }}>⚠</div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Complete your profile to unlock personalized results</div>
+              <div className="wf-body" style={{ fontSize: 12, color: 'var(--ink-soft)', marginTop: 2 }}>
+                {skippedProduct === 'insights'
+                  ? 'Set up your competitor tracking — we\'ll build your intelligence feed automatically.'
+                  : 'Tell us about your brand or niche — Genie generates better creatives with context.'}
+              </div>
+              <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--ink-faint)' }}>
+                  <span style={{ width: 14, height: 14, borderRadius: '50%', border: '1.5px solid var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8 }}>1</span>
+                  <span>Profile setup</span>
+                </div>
+                <span style={{ fontSize: 11, color: 'var(--ink-ghost)' }}>→</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--ink-faint)' }}>
+                  <span style={{ width: 14, height: 14, borderRadius: '50%', border: '1.5px solid var(--ink-faint)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8 }}>2</span>
+                  <span>Personalized results</span>
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <Btn onClick={() => {
+                dismissProfileBanner();
+                window.location.hash = skippedProduct === 'insights' ? 'onboarding-insights' : 'onboarding';
+                window.scrollTo(0, 0);
+              }}>Complete setup →</Btn>
+              <button onClick={dismissProfileBanner} style={{
+                padding: '8px 14px', border: '1.5px solid var(--ink-faint)', borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+                background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12, cursor: 'pointer', color: 'var(--ink-faint)',
+              }}>Later</button>
+            </div>
           </div>
         )}
 
