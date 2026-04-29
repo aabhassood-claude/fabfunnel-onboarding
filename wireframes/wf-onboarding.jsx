@@ -5,8 +5,7 @@
 
 function WelcomeCelebrate({ onDone }) {
   const [phase, setPhase] = React.useState(0);
-  const alreadyOnboarded = !!sessionStorage.getItem('ff_onboarded');
-  const isUpgrade = !!sessionStorage.getItem('ff_upgrade_success');
+  const isDashboardUpgrade = !!sessionStorage.getItem('ff_upgrade_from_dashboard');
 
   React.useEffect(() => {
     const timers = [
@@ -126,8 +125,8 @@ function WelcomeCelebrate({ onDone }) {
             borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
             fontFamily: 'var(--hand)', fontSize: 18, fontWeight: 800,
             cursor: 'pointer', letterSpacing: 0.5,
-          }}>{alreadyOnboarded ? 'Go to your dashboard →' : 'Let\'s set up your account →'}</button>
-          <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-ghost)' }}>{alreadyOnboarded ? 'Your account is ready — all features unlocked' : 'Takes under 2 minutes · You\'ll generate your first creative today'}</div>
+          }}>{isDashboardUpgrade ? 'Go to your dashboard →' : 'Let\'s set up your account →'}</button>
+          <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-ghost)' }}>{isDashboardUpgrade ? 'Your account is ready — all features unlocked' : 'Takes under 2 minutes · You\'ll generate your first creative today'}</div>
         </div>
       </div>
     </div>

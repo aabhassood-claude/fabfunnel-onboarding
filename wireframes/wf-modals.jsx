@@ -215,9 +215,10 @@ function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded 
 
       {/* auto-redirect to celebration screen after payment */}
       {step === 3 && confirmed && (() => {
+        const fromDash = window.location.hash.startsWith('#dashboard') || window.location.hash.startsWith('#creative') || window.location.hash.startsWith('#video');
         setTimeout(() => {
           onClose();
-          sessionStorage.setItem('ff_upgrade_success', '1');
+          if (fromDash) sessionStorage.setItem('ff_upgrade_from_dashboard', '1');
           window.location.hash = 'welcome-celebrate';
           window.scrollTo(0, 0);
         }, 400);
@@ -377,9 +378,10 @@ function ModalVariantB({ onClose, stepStyle = 'dots', showAnnotations, embedded 
       )}
 
       {step === 2 && confirmed && (() => {
+        const fromDash = window.location.hash.startsWith('#dashboard') || window.location.hash.startsWith('#creative') || window.location.hash.startsWith('#video');
         setTimeout(() => {
           onClose();
-          sessionStorage.setItem('ff_upgrade_success', '1');
+          if (fromDash) sessionStorage.setItem('ff_upgrade_from_dashboard', '1');
           window.location.hash = 'welcome-celebrate';
           window.scrollTo(0, 0);
         }, 400);

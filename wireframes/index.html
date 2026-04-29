@@ -146,8 +146,14 @@
           case 'fabagent':  return <FabAgentPage {...sharedProps} />;
           case 'login':     return <LoginPage {...sharedProps} />;
           case 'welcome-celebrate': return <WelcomeCelebrate onDone={() => {
-              const alreadyOnboarded = !!sessionStorage.getItem('ff_onboarded');
-              nav(alreadyOnboarded ? 'dashboard' : 'onboarding');
+              const fromDash = sessionStorage.getItem('ff_upgrade_from_dashboard');
+              if (fromDash) {
+                sessionStorage.removeItem('ff_upgrade_from_dashboard');
+                sessionStorage.setItem('ff_upgrade_success', '1');
+                nav('dashboard');
+              } else {
+                nav('onboarding');
+              }
             }} />;
           case 'trial-welcome': return <TrialWelcome onDone={() => nav('onboarding')} />;
           case 'onboarding': return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
@@ -187,8 +193,14 @@
                 <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'welcome-celebrate' ? (
                 <WelcomeCelebrate onDone={() => {
-                  const alreadyOnboarded = !!sessionStorage.getItem('ff_onboarded');
-                  nav(alreadyOnboarded ? 'dashboard' : 'onboarding');
+                  const fromDash = sessionStorage.getItem('ff_upgrade_from_dashboard');
+                  if (fromDash) {
+                    sessionStorage.removeItem('ff_upgrade_from_dashboard');
+                    sessionStorage.setItem('ff_upgrade_success', '1');
+                    nav('dashboard');
+                  } else {
+                    nav('onboarding');
+                  }
                 }} />
               ) : route === 'trial-welcome' ? (
                 <TrialWelcome onDone={() => nav('onboarding')} />
