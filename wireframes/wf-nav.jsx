@@ -2,7 +2,7 @@
 // Navigation chrome — top nav (with Solutions mega menu) + footer
 // ─────────────────────────────────────────────────────────────
 
-function NavBar({ current, onNav, openBuyNow, funnel, setFunnel }) {
+function NavBar({ current, onNav, openBuyNow, funnel, setFunnel, product, setProduct }) {
   const [solOpen, setSolOpen] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const items = [
@@ -23,26 +23,42 @@ function NavBar({ current, onNav, openBuyNow, funnel, setFunnel }) {
             style={{ fontFamily: 'var(--hand)', fontSize: 22, fontWeight: 700, cursor: 'pointer' }}
           >fabfunnel<span style={{ color: 'var(--ink-faint)' }}>.ai</span></div>
 
-          {/* Demo · funnel toggle — sits beside the logo, framed as a demo control */}
+          {/* Demo · product + funnel toggles */}
           {setFunnel && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6, flexWrap: 'wrap' }}>
               <span style={{ fontFamily: 'var(--hand)', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--ink-faint)' }}>Demo</span>
+
+              {/* Product toggle */}
+              {setProduct && (
+                <div style={{ display: 'flex', gap: 2, padding: 2, background: 'var(--highlight-soft)', borderRadius: 999 }}>
+                  {[{ id: 'genie', label: '✦ Genie' }, { id: 'insights', label: '⊞ Insights' }].map(p => (
+                    <button key={p.id} onClick={() => setProduct(p.id)} style={{
+                      padding: '4px 10px', borderRadius: 999, border: 'none',
+                      background: product === p.id ? 'var(--ink)' : 'transparent',
+                      color: product === p.id ? 'var(--paper)' : 'var(--ink-soft)',
+                      fontFamily: 'var(--hand)', fontSize: 10, fontWeight: 700, cursor: 'pointer',
+                    }}>{p.label}</button>
+                  ))}
+                </div>
+              )}
+
+              {/* Funnel toggle */}
               <div style={{ display: 'flex', gap: 2, padding: 2, background: 'var(--paper-soft)', borderRadius: 999 }}>
                 <button onClick={() => setFunnel('direct')} style={{
                   padding: '4px 10px', borderRadius: 999, border: 'none',
                   background: funnel === 'direct' ? 'var(--ink)' : 'transparent',
                   color:      funnel === 'direct' ? 'var(--paper)' : 'var(--ink-soft)',
-                  fontFamily: 'var(--hand)', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  fontFamily: 'var(--hand)', fontSize: 10, fontWeight: 700, cursor: 'pointer',
                 }}>A · Direct</button>
                 <button onClick={() => setFunnel('trial')} style={{
                   padding: '4px 10px', borderRadius: 999, border: 'none',
                   background: funnel === 'trial' ? 'var(--ink)' : 'transparent',
                   color:      funnel === 'trial' ? 'var(--paper)' : 'var(--ink-soft)',
-                  fontFamily: 'var(--hand)', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  fontFamily: 'var(--hand)', fontSize: 10, fontWeight: 700, cursor: 'pointer',
                 }}>B · Trial</button>
               </div>
               <span onClick={() => onNav('compare')} style={{
-                fontFamily: 'var(--hand)', fontSize: 11, color: 'var(--ink-soft)', cursor: 'pointer',
+                fontFamily: 'var(--hand)', fontSize: 10, color: 'var(--ink-soft)', cursor: 'pointer',
                 textDecoration: 'underline wavy var(--ink-faint)', textUnderlineOffset: 3,
               }}>compare</span>
             </div>
