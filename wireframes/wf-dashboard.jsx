@@ -7,6 +7,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
   const [showUpsell, setShowUpsell] = React.useState(true);
   const [trialModal, setTrialModal] = React.useState(null);
   const [showPricing, setShowPricing] = React.useState(false);
+  const [isNewUser] = React.useState(() => {
+    const flag = sessionStorage.getItem('ff_new_user');
+    if (flag) sessionStorage.removeItem('ff_new_user');
+    return !!flag;
+  });
   const isTrial = funnel === 'trial';
   const upsellStyle = trialUpsellStyle || 'subtle';
   const trialDaysLeft = 6;
@@ -245,11 +250,46 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         <React.Fragment>
         {/* welcome */}
         <div style={{ padding: '32px 28px 0' }}>
-          <span className="wf-eyebrow">{isTrial ? 'Welcome · 7-day trial' : 'Welcome back'}</span>
-          <h1 className="wf-h1" style={{ fontSize: 32, marginTop: 6 }}>What are we shipping today?</h1>
+          <span className="wf-eyebrow">{isTrial ? 'Welcome · 7-day trial' : isNewUser ? 'Welcome to fabfunnel.ai' : 'Welcome back'}</span>
+          <h1 className="wf-h1" style={{ fontSize: 32, marginTop: 6 }}>
+            {isNewUser ? 'Let\'s create your first creative ✦' : 'What are we shipping today?'}
+          </h1>
+          {isNewUser && (
+            <p className="wf-body" style={{ fontSize: 14, marginTop: 8, maxWidth: 520, color: 'var(--ink-soft)' }}>
+              Your account is ready. Pick a starting point below — most users start with generating their first ad creative.
+            </p>
+          )}
         </div>
 
-        {/* quick actions */}
+        {/* new user: getting started steps */}
+        {isNewUser && (
+          <div style={{ padding: '20px 28px 0' }}>
+            <div className="wf-eyebrow" style={{ marginBottom: 12, fontSize: 10 }}>Getting started</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 14 }}>
+              {[
+                { num: '1', icon: '✦', title: 'Generate your first creative', desc: 'Create a static or video ad in under 60 seconds.', action: 'creative', cta: 'Start generating →', primary: true },
+                { num: '2', icon: '⊞', title: 'Explore Industry Insights', desc: 'Save and study winning competitor ads.', action: 'discover', cta: 'Explore →' },
+                { num: '3', icon: '▶', title: 'Analyze a video ad', desc: 'Upload or paste a video — get a breakdown and script.', action: 'video', cta: 'Try Video Sage →' },
+              ].map((s, i) => (
+                <Box key={i} onClick={() => setActiveNav(s.action)} style={{
+                  padding: 20, cursor: 'pointer', background: 'var(--paper)',
+                  border: s.primary ? '2px solid var(--ink)' : undefined,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                    <div style={{ width: 28, height: 28, border: '1.5px solid var(--ink)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, background: s.primary ? 'var(--highlight)' : 'transparent' }}>{s.num}</div>
+                    <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 22 }}>{s.icon}</span>
+                  </div>
+                  <h3 className="wf-h3" style={{ fontSize: 14 }}>{s.title}</h3>
+                  <p className="wf-body" style={{ fontSize: 11, marginTop: 4 }}>{s.desc}</p>
+                  <div style={{ marginTop: 10, fontSize: 12, fontWeight: 700, color: 'var(--ink)' }}>{s.cta}</div>
+                </Box>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* quick actions (returning users) */}
+        {!isNewUser && (
         <div style={{ padding: '20px 28px 0' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
             {[
@@ -266,16 +306,26 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
             ))}
           </div>
         </div>
+        )}
 
         {/* two columns: recent + insights board */}
-        <div style={{ padding: '28px 28px 60px', display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20 }}>
+        <div style={{ padding: '28px 28px 60px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
 
-          {/* recent generations */}
+          {/* recent generations (or empty state for new users) */}
           <Box style={{ padding: 20, background: 'var(--paper)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
               <h2 className="wf-h2" style={{ fontSize: 18 }}>Recent generations</h2>
-              <span className="wf-squig" onClick={() => setActiveNav('library')} style={{ fontSize: 12, cursor: 'pointer' }}>View all in Library →</span>
+              {!isNewUser && <span className="wf-squig" onClick={() => setActiveNav('library')} style={{ fontSize: 12, cursor: 'pointer' }}>View all in Library →</span>}
             </div>
+
+            {isNewUser ? (
+              <div style={{ textAlign: 'center', padding: '32px 16px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>
+                <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>✦</div>
+                <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>No creatives yet</div>
+                <div className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 14 }}>Generate your first ad creative to see it here.</div>
+                <Btn onClick={() => setActiveNav('creative')}>Generate your first creative →</Btn>
+              </div>
+            ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 10 }}>
               {[1,2,3,4,5,6,7,8,9,10,11,12].map(i => (
                 <div key={i}>
@@ -287,6 +337,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
                 </div>
               ))}
             </div>
+            )}
           </Box>
 
           {/* insights board preview */}

@@ -381,13 +381,13 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   else body = isAff
     ? <window.OnbDoneAffiliate
         onBack={() => goto(1)}
-        onStart={() => onNav('dashboard')}
+        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         category={data.category}
       />
     : <OnbDone
         onBack={() => goto(1)}
-        onStart={() => onNav('dashboard')}
+        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         brandName={data.brand}
       />;
