@@ -16,6 +16,8 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
   const [showOfferTimer, setShowOfferTimer] = React.useState(false);
   const [countdown, setCountdown] = React.useState(24 * 60 * 60); // 24h in seconds
 
+  const [upgradeSuccess, setUpgradeSuccess] = React.useState(false);
+
   // Trial offer: popup after 5s if user came from trial-welcome
   React.useEffect(() => {
     const offerFlag = sessionStorage.getItem('ff_trial_offer');
@@ -23,6 +25,14 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
       sessionStorage.removeItem('ff_trial_offer');
       const t = setTimeout(() => { setShowTrialOffer(true); }, 5000);
       return () => clearTimeout(t);
+    }
+    // Check for upgrade-from-dashboard success
+    const upFlag = sessionStorage.getItem('ff_upgrade_success');
+    if (upFlag) {
+      sessionStorage.removeItem('ff_upgrade_success');
+      setUpgradeSuccess(true);
+      setShowOfferTimer(false);
+      setTimeout(() => setUpgradeSuccess(false), 6000);
     }
   }, []);
 
@@ -232,6 +242,19 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
             creditsTotal={trialCreditsTotal}
             onUpgrade={() => openBuyNow && openBuyNow('A')}
           />
+        )}
+
+        {/* upgrade success banner */}
+        {upgradeSuccess && (
+          <div style={{
+            padding: '14px 28px', background: 'var(--highlight)', borderBottom: '1.5px solid var(--ink)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            fontFamily: 'var(--hand)', fontSize: 14, fontWeight: 700,
+          }}>
+            <span style={{ fontSize: 18 }}>🎉</span>
+            <span>You're upgraded! All premium modules are now unlocked.</span>
+            <button onClick={() => setUpgradeSuccess(false)} style={{ background: 'transparent', border: 'none', fontSize: 14, cursor: 'pointer', marginLeft: 8 }}>✕</button>
+          </div>
         )}
 
         {/* top bar — breadcrumb only */}
