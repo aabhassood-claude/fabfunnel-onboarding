@@ -145,7 +145,10 @@
           case 'blog':      return <BlogPage {...sharedProps} />;
           case 'fabagent':  return <FabAgentPage {...sharedProps} />;
           case 'login':     return <LoginPage {...sharedProps} />;
-          case 'welcome-celebrate': return <WelcomeCelebrate onDone={() => nav('onboarding')} />;
+          case 'welcome-celebrate': return <WelcomeCelebrate onDone={() => {
+              const alreadyOnboarded = !!sessionStorage.getItem('ff_onboarded');
+              nav(alreadyOnboarded ? 'dashboard' : 'onboarding');
+            }} />;
           case 'trial-welcome': return <TrialWelcome onDone={() => nav('onboarding')} />;
           case 'onboarding': return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
           case 'trial-signup': return <TrialSignup
@@ -183,7 +186,10 @@
               ) : route === 'video' ? (
                 <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'welcome-celebrate' ? (
-                <WelcomeCelebrate onDone={() => nav('onboarding')} />
+                <WelcomeCelebrate onDone={() => {
+                  const alreadyOnboarded = !!sessionStorage.getItem('ff_onboarded');
+                  nav(alreadyOnboarded ? 'dashboard' : 'onboarding');
+                }} />
               ) : route === 'trial-welcome' ? (
                 <TrialWelcome onDone={() => nav('onboarding')} />
               ) : route === 'onboarding' ? (

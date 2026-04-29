@@ -213,20 +213,18 @@ function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded 
         </div>
       )}
 
-      {/* auto-redirect after payment — dashboard users skip onboarding */}
+      {/* auto-redirect to celebration screen after payment */}
       {step === 3 && confirmed && (() => {
-        const fromDashboard = window.location.hash.startsWith('#dashboard') || window.location.hash.startsWith('#creative') || window.location.hash.startsWith('#video');
-        const dest = fromDashboard ? 'dashboard' : 'welcome-celebrate';
         setTimeout(() => {
           onClose();
-          if (fromDashboard) { sessionStorage.setItem('ff_upgrade_success', '1'); }
-          window.location.hash = dest;
+          sessionStorage.setItem('ff_upgrade_success', '1');
+          window.location.hash = 'welcome-celebrate';
           window.scrollTo(0, 0);
         }, 400);
         return (
           <div style={{ padding: 32, textAlign: 'center' }}>
             <div style={{ width: 36, height: 36, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
-            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>{fromDashboard ? 'Upgrading your account…' : 'Payment confirmed…'}</p>
+            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Payment confirmed…</p>
           </div>
         );
       })()}
@@ -379,18 +377,16 @@ function ModalVariantB({ onClose, stepStyle = 'dots', showAnnotations, embedded 
       )}
 
       {step === 2 && confirmed && (() => {
-        const fromDashboard = window.location.hash.startsWith('#dashboard') || window.location.hash.startsWith('#creative') || window.location.hash.startsWith('#video');
-        const dest = fromDashboard ? 'dashboard' : 'welcome-celebrate';
         setTimeout(() => {
           onClose();
-          if (fromDashboard) { sessionStorage.setItem('ff_upgrade_success', '1'); }
-          window.location.hash = dest;
+          sessionStorage.setItem('ff_upgrade_success', '1');
+          window.location.hash = 'welcome-celebrate';
           window.scrollTo(0, 0);
         }, 400);
         return (
           <div style={{ padding: 32, textAlign: 'center' }}>
             <div style={{ width: 36, height: 36, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
-            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>{fromDashboard ? 'Upgrading your account…' : 'Trial activated…'}</p>
+            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Payment confirmed…</p>
           </div>
         );
       })()}

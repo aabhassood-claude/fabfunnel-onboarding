@@ -5,6 +5,8 @@
 
 function WelcomeCelebrate({ onDone }) {
   const [phase, setPhase] = React.useState(0);
+  const alreadyOnboarded = !!sessionStorage.getItem('ff_onboarded');
+  const isUpgrade = !!sessionStorage.getItem('ff_upgrade_success');
 
   React.useEffect(() => {
     const timers = [
@@ -124,8 +126,8 @@ function WelcomeCelebrate({ onDone }) {
             borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
             fontFamily: 'var(--hand)', fontSize: 18, fontWeight: 800,
             cursor: 'pointer', letterSpacing: 0.5,
-          }}>Let's set up your account →</button>
-          <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-ghost)' }}>Takes under 2 minutes · You'll generate your first creative today</div>
+          }}>{alreadyOnboarded ? 'Go to your dashboard →' : 'Let\'s set up your account →'}</button>
+          <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-ghost)' }}>{alreadyOnboarded ? 'Your account is ready — all features unlocked' : 'Takes under 2 minutes · You\'ll generate your first creative today'}</div>
         </div>
       </div>
     </div>
@@ -633,13 +635,13 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   else body = isAff
     ? <window.OnbDoneAffiliate
         onBack={() => goto(1)}
-        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
+        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         category={data.category}
       />
     : <OnbDone
         onBack={() => goto(1)}
-        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
+        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         brandName={data.brand}
       />;
