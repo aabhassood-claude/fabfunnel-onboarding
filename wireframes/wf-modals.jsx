@@ -213,18 +213,16 @@ function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded 
         </div>
       )}
 
-      {/* confirmation / success state */}
-      {step === 3 && confirmed && (
-        <div style={{ padding: 32, textAlign: 'center' }}>
-          <div style={{ width: 60, height: 60, border: '2px solid var(--ink)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', background: 'var(--highlight)' }}>
-            <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 32 }}>✓</span>
+      {/* auto-redirect to onboarding after payment confirmation */}
+      {step === 3 && confirmed && (() => {
+        setTimeout(() => { onClose(); window.location.hash = 'onboarding'; window.scrollTo(0, 0); }, 600);
+        return (
+          <div style={{ padding: 32, textAlign: 'center' }}>
+            <div style={{ width: 36, height: 36, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
+            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Payment confirmed — setting up your account…</p>
           </div>
-          <h3 className="wf-h2" style={{ fontSize: 22, marginTop: 16 }}>You're in.</h3>
-          <p className="wf-body" style={{ fontSize: 13, marginTop: 6 }}>Your AI Individual subscription is active.</p>
-          <Btn style={{ marginTop: 18 }} onClick={() => { onClose(); window.location.hash = 'onboarding'; window.scrollTo(0,0); }}>Set up your account →</Btn>
-          <div className="wf-micro" style={{ marginTop: 10 }}>Next: tell us about your store</div>
-        </div>
-      )}
+        );
+      })()}
     </ModalShell>
   );
 }
@@ -373,16 +371,15 @@ function ModalVariantB({ onClose, stepStyle = 'dots', showAnnotations, embedded 
         </div>
       )}
 
-      {step === 2 && confirmed && (
-        <div style={{ padding: 32, textAlign: 'center' }}>
-          <div style={{ width: 60, height: 60, border: '2px solid var(--ink)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', background: 'var(--highlight)' }}>
-            <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 32 }}>✓</span>
+      {step === 2 && confirmed && (() => {
+        setTimeout(() => { onClose(); window.location.hash = 'onboarding'; window.scrollTo(0, 0); }, 600);
+        return (
+          <div style={{ padding: 32, textAlign: 'center' }}>
+            <div style={{ width: 36, height: 36, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
+            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Trial activated — setting up your account…</p>
           </div>
-          <h3 className="wf-h2" style={{ fontSize: 22, marginTop: 16 }}>Your trial is live.</h3>
-          <p className="wf-body" style={{ fontSize: 13, marginTop: 6 }}>7 days. No card. Generate your first creative now.</p>
-          <Btn style={{ marginTop: 18 }} onClick={() => { onClose(); window.location.hash = 'onboarding'; window.scrollTo(0,0); }}>Set up your account →</Btn>
-        </div>
-      )}
+        );
+      })()}
     </ModalShell>
   );
 }
