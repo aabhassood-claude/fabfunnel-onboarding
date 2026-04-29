@@ -58,9 +58,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
   const isTrialFunnel = funnel === 'trial';
   const isTrial = isTrialFunnel && !upgraded;
   const upsellStyle = trialUpsellStyle || 'subtle';
-  const trialDaysLeft = 6;
-  const trialCreditsUsed = 12;
-  const trialCreditsTotal = 50;
+  const trialDaysLeft = isNewUser ? 7 : 6;
+  const trialCreditsTotal = 20;
+  const trialCreditsUsed = isNewUser ? 0 : 8;
+  const paidCreditsTotal = 100;
+  const paidCreditsRemaining = isNewUser || upgraded ? paidCreditsTotal : 62;
 
   // Sync hash → activeNav so #creative deep-links into the module
   React.useEffect(() => {
@@ -216,13 +218,13 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
             <Box soft style={{ padding: 12 }}>
               <div className="wf-eyebrow" style={{ fontSize: 9 }}>Credits this month</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 4 }}>
-                <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 22, fontWeight: 700 }}>62</span>
-                <span className="wf-body" style={{ fontSize: 11 }}>/ 100</span>
+                <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 22, fontWeight: 700 }}>{paidCreditsRemaining}</span>
+                <span className="wf-body" style={{ fontSize: 11 }}>/ {paidCreditsTotal}</span>
               </div>
               <div style={{ height: 6, background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 3, marginTop: 8, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: '62%', background: 'var(--highlight)' }} />
+                <div style={{ height: '100%', width: (paidCreditsRemaining / paidCreditsTotal * 100) + '%', background: 'var(--highlight)' }} />
               </div>
-              <div className="wf-micro" style={{ fontSize: 10, marginTop: 6 }}>Resets in 12 days</div>
+              <div className="wf-micro" style={{ fontSize: 10, marginTop: 6 }}>{isNewUser || upgraded ? 'Full credits — ready to go!' : 'Resets in 12 days'}</div>
             </Box>
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px' }}>
