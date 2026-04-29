@@ -119,8 +119,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
             if (!it.isGroup) {
               return (
                 <div key={it.id} onClick={() => {
-                  const isLocked = it.locked && !upgraded;
-                  if (isLocked) { setActiveNav(it.id); return; }
+                  if (it.locked) { setActiveNav(it.id); return; }
                   setActiveNav(it.id);
                   if (it.id === 'home') window.location.hash = 'dashboard';
                 }}
@@ -133,12 +132,12 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
                     fontSize: 13,
                     fontFamily: 'var(--hand)',
                     fontWeight: activeNav === it.id ? 700 : 400,
-                    opacity: (it.locked && !upgraded) ? 0.55 : 1,
+                    opacity: it.locked ? 0.55 : 1,
                     display: 'flex', alignItems: 'center', gap: 10,
                   }}>
                   <span style={{ width: 18, textAlign: 'center' }}>{it.icon}</span>
                   <span style={{ flex: 1 }}>{it.label}</span>
-                  {it.locked && !upgraded && <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>🔒</span>}
+                  {it.locked && <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>🔒</span>}
                 </div>
               );
             }
@@ -514,31 +513,31 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
 
         {/* ── Locked premium modules ── */}
         {activeNav === 'launch' && (
-          <ModuleStub icon="🚀" name="Launch" unlocked={upgraded}
+          <ModuleStub icon="🚀" name="Launch"
             desc="Push creatives directly to Meta, TikTok, Google Ads, and more. Schedule, A/B test, and track deployment status."
             features={['One-click publish to ad platforms', 'Campaign scheduling & queue', 'A/B test setup with auto-winner', 'Deployment history & rollback']}
             onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'reporting' && (
-          <ModuleStub icon="📊" name="Reporting" unlocked={upgraded}
+          <ModuleStub icon="📊" name="Reporting"
             desc="Track creative performance across platforms. See what's working, what's not, and what to generate next."
             features={['Cross-platform performance dashboard', 'Creative-level CTR, CPA, ROAS', 'Winning creative patterns & trends', 'Export reports to PDF / CSV']}
             onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'automation' && (
-          <ModuleStub icon="⚙" name="Automation" unlocked={upgraded}
+          <ModuleStub icon="⚙" name="Automation"
             desc="Set up rules to auto-generate, auto-pause, and auto-scale creatives based on performance triggers."
             features={['Auto-generate when CTR drops below threshold', 'Pause underperforming creatives automatically', 'Scale winning creatives to new audiences', 'Scheduled generation batches (daily / weekly)']}
             onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'integrations' && (
-          <ModuleStub icon="🔌" name="Integrations" unlocked={upgraded}
+          <ModuleStub icon="🔌" name="Integrations"
             desc="Connect your ad accounts, CRMs, and creative tools. Sync data in and push creatives out."
             features={['Meta Ads, Google Ads, TikTok Ads', 'Shopify, WooCommerce, BigCommerce', 'HubSpot, Klaviyo, Mailchimp', 'Zapier & webhook support']}
             onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
         )}
         {activeNav === 'user-panel' && (
-          <ModuleStub icon="👤" name="User Panel" unlocked={upgraded}
+          <ModuleStub icon="👤" name="User Panel"
             desc="Manage your account, team members, billing, API keys, and workspace settings."
             features={['Profile & password settings', 'Team members & roles (Admin / Editor / Viewer)', 'Billing, invoices, & plan management', 'API keys & usage logs']}
             onBack={() => setActiveNav('home')} onUpgrade={() => setShowPricing(true)} />
@@ -698,64 +697,44 @@ const demoBtnStyle = {
 };
 
 // ── Module stub (locked upsell for premium modules) ──
-function ModuleStub({ icon, name, desc, features, onBack, onUpgrade, unlocked }) {
+function ModuleStub({ icon, name, desc, features, onBack, onUpgrade }) {
   return (
     <div style={{ padding: '48px 28px', fontFamily: 'var(--hand)' }}>
       <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
         <div style={{ fontSize: 48, marginBottom: 14 }}>{icon}</div>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 14px', background: 'var(--ink)', color: 'var(--paper)', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>🔒 Sold separately</div>
+        <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 8 }}>{name}</h1>
+        <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 480, margin: '0 auto 24px' }}>{desc}</p>
 
-        {unlocked ? (
-          <React.Fragment>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 14px', background: 'var(--highlight)', color: 'var(--ink)', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>✓ Unlocked</div>
-            <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 8 }}>{name}</h1>
-            <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 480, margin: '0 auto 24px' }}>{desc}</p>
-            <div style={{ display: 'inline-block', padding: '12px 20px', border: '1.5px dashed var(--ink-faint)', borderRadius: 8, marginBottom: 24, fontSize: 13, color: 'var(--ink-faint)' }}>
-              Module wireframe coming next sprint — you have full access.
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 28 }}>
+          <button onClick={onUpgrade} style={{
+            padding: '12px 24px',
+            border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
+            borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
+            fontFamily: 'var(--hand)', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+          }}>Purchase {name} →</button>
+          <button onClick={onBack} style={{
+            padding: '12px 20px',
+            border: '1.5px solid var(--ink)', background: 'var(--paper)',
+            borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
+            fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+          }}>← back</button>
+        </div>
+
+        <Box style={{ padding: 24, textAlign: 'left', background: 'var(--paper)', maxWidth: 440, margin: '0 auto 24px' }}>
+          <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 12 }}>What's included</div>
+          {features.map((f, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: i < features.length - 1 ? '1px dashed var(--ink-faint)' : 'none' }}>
+              <span style={{ color: 'var(--ink-faint)', fontSize: 12, marginTop: 1 }}>✓</span>
+              <span style={{ fontSize: 13 }}>{f}</span>
             </div>
-            <br/>
-            <button onClick={onBack} style={{
-              padding: '10px 20px', border: '1.5px solid var(--ink)', background: 'var(--paper)',
-              borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
-              fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-            }}>← back to dashboard</button>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 14px', background: 'var(--ink)', color: 'var(--paper)', borderRadius: 10, fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>🔒 Premium</div>
-            <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 8 }}>{name}</h1>
-            <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', maxWidth: 480, margin: '0 auto 24px' }}>{desc}</p>
+          ))}
+        </Box>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 28 }}>
-              <button onClick={onUpgrade} style={{
-                padding: '12px 24px',
-                border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
-                borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
-                fontFamily: 'var(--hand)', fontSize: 14, fontWeight: 700, cursor: 'pointer',
-              }}>Upgrade to unlock {name} →</button>
-              <button onClick={onBack} style={{
-                padding: '12px 20px',
-                border: '1.5px solid var(--ink)', background: 'var(--paper)',
-                borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
-                fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-              }}>← back</button>
-            </div>
-
-            <Box style={{ padding: 24, textAlign: 'left', background: 'var(--paper)', maxWidth: 440, margin: '0 auto 24px' }}>
-              <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 12 }}>What you'll get</div>
-              {features.map((f, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: i < features.length - 1 ? '1px dashed var(--ink-faint)' : 'none' }}>
-                  <span style={{ color: 'var(--ink-faint)', fontSize: 12, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 13 }}>{f}</span>
-                </div>
-              ))}
-            </Box>
-
-            <div style={{ padding: '16px 20px', background: 'var(--highlight-soft)', border: '1.5px solid var(--ink)', borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px', maxWidth: 440, margin: '0 auto' }}>
-              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>💡 Included in the Growth plan</div>
-              <div className="wf-body" style={{ fontSize: 12 }}>Unlock {name} + all premium modules for one price. No per-seat charges.</div>
-            </div>
-          </React.Fragment>
-        )}
+        <div style={{ padding: '16px 20px', background: 'var(--highlight-soft)', border: '1.5px solid var(--ink)', borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px', maxWidth: 440, margin: '0 auto' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>💡 Available as an add-on</div>
+          <div className="wf-body" style={{ fontSize: 12 }}>{name} is sold separately from the base plan. Purchase individually or bundle with other modules for a discount.</div>
+        </div>
       </div>
     </div>
   );
