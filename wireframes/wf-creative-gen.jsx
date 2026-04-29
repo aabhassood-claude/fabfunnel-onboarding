@@ -15,8 +15,21 @@ function CreativeGen() {
   const [variations, setVariations] = React.useState(1);
   const [customVar, setCustomVar]   = React.useState(15);
   const [showAddBrand, setShowAddBrand] = React.useState(false);
+  const [genState, setGenState] = React.useState(null); // null | 'loading' | 'done'
+  const [genStep, setGenStep] = React.useState(0);
 
   const effectiveVariations = variations === 'custom' ? customVar : variations;
+
+  const startGeneration = () => {
+    setGenState('loading');
+    setGenStep(0);
+    const stages = 4;
+    const timers = Array.from({ length: stages }, (_, i) =>
+      setTimeout(() => setGenStep(i + 1), (i + 1) * 900)
+    );
+    const done = setTimeout(() => setGenState('done'), stages * 900 + 400);
+    // cleanup not needed for prototype
+  };
 
   const toggleVibe = (v) => {
     const next = new Set(vibes);
@@ -346,9 +359,62 @@ function CreativeGen() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <span className="wf-body" style={{ fontSize: 13 }}>⚡ Uses {effectiveVariations * (media === 'image' ? 4 : 20)} credits</span>
-            <Btn style={{ gap: 8 }}>✦ Generate →</Btn>
+            <Btn style={{ gap: 8 }} onClick={startGeneration}>✦ Generate →</Btn>
           </div>
         </Box>
+
+        {/* Inline loading */}
+        {genState === 'loading' && (
+          <Box style={{ padding: 32, textAlign: 'center' }}>
+            <div style={{ width: 40, height: 40, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
+            <h3 className="wf-h2" style={{ fontSize: 18, marginBottom: 6 }}>Generating your creatives…</h3>
+            <p className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 20 }}>Usually takes 15–30 seconds.</p>
+            <div style={{ textAlign: 'left', maxWidth: 320, margin: '0 auto' }}>
+              {['Reading brand & prompt', 'Applying strategy & style', 'Rendering variations', 'Saving to Library'].map((s, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 12 }}>
+                  <div style={{ width: 18, height: 18, borderRadius: '50%', border: '1.5px solid var(--ink)', background: i < genStep ? 'var(--highlight)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700 }}>{i < genStep ? '✓' : ''}</div>
+                  <span style={{ color: i < genStep ? 'var(--ink)' : i === genStep ? 'var(--ink)' : 'var(--ink-faint)', fontWeight: i === genStep ? 700 : 400 }}>{s}</span>
+                </div>
+              ))}
+            </div>
+          </Box>
+        )}
+
+        {/* Results grid */}
+        {genState === 'done' && (() => {
+          const count = Math.min(effectiveVariations, 10);
+          const names = ['Product Hero', 'Lifestyle Shot', 'Ad Creative', 'Social Post', 'Offer Banner', 'UGC Style', 'Before/After', 'Brand Story', 'Email Hero', 'Comparison'];
+          const emojis = ['👕', '🏖', '📢', '📱', '🎁', '👥', '⚖️', '✨', '📧', '📊'];
+          return (
+            <Box style={{ padding: 0, overflow: 'hidden' }}>
+              <div style={{ padding: '18px 22px', borderBottom: '1.5px solid var(--ink-faint)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+                <div>
+                  <h3 className="wf-h2" style={{ fontSize: 18, marginBottom: 2 }}>✦ {count} creatives generated</h3>
+                  <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>Saved to your Creative Library · click any to preview</span>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Btn variant="ghost" onClick={() => window.location.hash = 'dashboard'}>🖼 Open Library</Btn>
+                  <Btn variant="ghost" onClick={() => { setGenState(null); }}>✦ Generate more</Btn>
+                </div>
+              </div>
+              <div style={{ padding: '18px 22px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
+                {Array.from({ length: count }, (_, i) => (
+                  <div key={i} style={{ border: '1.5px solid var(--ink-faint)', borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px', overflow: 'hidden', cursor: 'pointer', background: 'var(--paper)' }}>
+                    <div style={{ position: 'relative', aspectRatio: '1', background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ position: 'absolute', top: 6, left: 6, padding: '2px 8px', fontSize: 9, fontWeight: 700, border: '1px solid var(--ink)', borderRadius: 8, background: media === 'video' ? 'var(--ink)' : 'var(--paper)', color: media === 'video' ? 'var(--paper)' : 'var(--ink)' }}>{media === 'video' ? '🎬 Video' : '🖼 Image'}</span>
+                      <span style={{ position: 'absolute', top: 6, right: 6, padding: '2px 6px', fontSize: 9, fontWeight: 700, background: 'var(--highlight)', borderRadius: 8 }}>NEW</span>
+                      <MockUI kind={media === 'video' ? 'video' : 'creative'} style={{ width: '80%', height: '80%' }} />
+                    </div>
+                    <div style={{ padding: '8px 10px' }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>{names[i % names.length]} #{i + 1}</div>
+                      <div className="wf-micro" style={{ fontSize: 10 }}>just now</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Box>
+          );
+        })()}
 
       </div>
     </div>
