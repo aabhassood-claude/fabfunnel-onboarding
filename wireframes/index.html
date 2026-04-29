@@ -145,6 +145,7 @@
           case 'blog':      return <BlogPage {...sharedProps} />;
           case 'fabagent':  return <FabAgentPage {...sharedProps} />;
           case 'login':     return <LoginPage {...sharedProps} />;
+          case 'welcome-celebrate': return <WelcomeCelebrate onDone={() => nav('onboarding')} />;
           case 'onboarding': return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
           case 'trial-signup': return <TrialSignup
               onComplete={() => nav('onboarding')}
@@ -180,6 +181,8 @@
                 <DashboardPage {...sharedProps} initialNav="creative" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'video' ? (
                 <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
+              ) : route === 'welcome-celebrate' ? (
+                <WelcomeCelebrate onDone={() => nav('onboarding')} />
               ) : route === 'onboarding' ? (
                 <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />
               ) : route === 'trial-signup' ? (

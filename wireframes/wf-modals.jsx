@@ -213,13 +213,13 @@ function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded 
         </div>
       )}
 
-      {/* auto-redirect to onboarding after payment confirmation */}
+      {/* auto-redirect to celebration screen after payment confirmation */}
       {step === 3 && confirmed && (() => {
-        setTimeout(() => { onClose(); window.location.hash = 'onboarding'; window.scrollTo(0, 0); }, 600);
+        setTimeout(() => { onClose(); window.location.hash = 'welcome-celebrate'; window.scrollTo(0, 0); }, 400);
         return (
           <div style={{ padding: 32, textAlign: 'center' }}>
             <div style={{ width: 36, height: 36, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
-            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Payment confirmed — setting up your account…</p>
+            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Payment confirmed…</p>
           </div>
         );
       })()}
@@ -372,11 +372,11 @@ function ModalVariantB({ onClose, stepStyle = 'dots', showAnnotations, embedded 
       )}
 
       {step === 2 && confirmed && (() => {
-        setTimeout(() => { onClose(); window.location.hash = 'onboarding'; window.scrollTo(0, 0); }, 600);
+        setTimeout(() => { onClose(); window.location.hash = 'welcome-celebrate'; window.scrollTo(0, 0); }, 400);
         return (
           <div style={{ padding: 32, textAlign: 'center' }}>
             <div style={{ width: 36, height: 36, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
-            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Trial activated — setting up your account…</p>
+            <p className="wf-body" style={{ fontSize: 13, marginTop: 16 }}>Trial activated…</p>
           </div>
         );
       })()}

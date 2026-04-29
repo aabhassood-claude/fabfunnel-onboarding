@@ -1,4 +1,140 @@
 // ─────────────────────────────────────────────────────────────
+// Welcome / Celebration screen — post-payment, pre-onboarding
+// Animated brag numbers + punchy headline → auto-advances
+// ─────────────────────────────────────────────────────────────
+
+function WelcomeCelebrate({ onDone }) {
+  const [phase, setPhase] = React.useState(0);
+
+  React.useEffect(() => {
+    const timers = [
+      setTimeout(() => setPhase(1), 600),
+      setTimeout(() => setPhase(2), 1800),
+      setTimeout(() => setPhase(3), 3200),
+      setTimeout(() => setPhase(4), 4800),
+      setTimeout(() => setPhase(5), 6200),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const fadeIn = (atPhase) => ({
+    opacity: phase >= atPhase ? 1 : 0,
+    transform: phase >= atPhase ? 'translateY(0)' : 'translateY(20px)',
+    transition: 'all 0.6s ease-out',
+  });
+
+  const counterAnim = (target, atPhase) => {
+    if (phase < atPhase) return '0';
+    return target;
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh', background: 'var(--ink)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'var(--hand)', color: 'var(--paper)',
+      overflow: 'hidden', position: 'relative', flexDirection: 'column',
+      padding: '40px 24px',
+    }}>
+      {/* Background decorative elements */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: '10%', left: '5%', fontSize: 80, opacity: phase >= 1 ? 0.06 : 0, transition: 'opacity 1s', fontFamily: 'var(--hand-loose)' }}>✦</div>
+        <div style={{ position: 'absolute', top: '20%', right: '8%', fontSize: 60, opacity: phase >= 2 ? 0.06 : 0, transition: 'opacity 1s', fontFamily: 'var(--hand-loose)' }}>◎</div>
+        <div style={{ position: 'absolute', bottom: '15%', left: '10%', fontSize: 70, opacity: phase >= 3 ? 0.06 : 0, transition: 'opacity 1s', fontFamily: 'var(--hand-loose)' }}>▶</div>
+        <div style={{ position: 'absolute', bottom: '25%', right: '12%', fontSize: 50, opacity: phase >= 2 ? 0.06 : 0, transition: 'opacity 1s', fontFamily: 'var(--hand-loose)' }}>⊞</div>
+      </div>
+
+      <div style={{ maxWidth: 700, width: '100%', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+
+        {/* Phase 0 → 1: Payment confirmed check */}
+        <div style={{ ...fadeIn(0), marginBottom: 32 }}>
+          <div style={{
+            width: 72, height: 72, border: '3px solid var(--highlight)', borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto', background: 'rgba(255,241,118,0.15)',
+          }}>
+            <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 40 }}>✓</span>
+          </div>
+          <div style={{ fontSize: 14, color: 'var(--ink-ghost)', marginTop: 14, letterSpacing: 1 }}>PAYMENT CONFIRMED</div>
+        </div>
+
+        {/* Phase 1: Big headline */}
+        <div style={{ ...fadeIn(1), marginBottom: 40 }}>
+          <h1 style={{ fontSize: 42, fontWeight: 800, lineHeight: 1.1, marginBottom: 12 }}>
+            Your journey from Affiliate<br/>
+            to <span style={{ color: 'var(--highlight)', position: 'relative' }}>
+              Super Affiliate
+              <span style={{ position: 'absolute', bottom: -4, left: 0, right: 0, height: 4, background: 'var(--highlight)', borderRadius: 2, opacity: 0.6 }}></span>
+            </span> begins.
+          </h1>
+          <p style={{ fontSize: 16, color: 'var(--ink-ghost)', maxWidth: 480, margin: '0 auto' }}>
+            You just unlocked the most powerful creative engine in performance marketing.
+          </p>
+        </div>
+
+        {/* Phase 2–3: Brag numbers */}
+        <div style={{ ...fadeIn(2), marginBottom: 36 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
+            {[
+              { num: '50M+', label: 'Ads analyzed', icon: '◎', at: 2 },
+              { num: '12K+', label: 'Marketers trust us', icon: '★', at: 2 },
+              { num: '4.2×', label: 'Avg. ROAS lift', icon: '↑', at: 3 },
+              { num: '<60s', label: 'First creative ready', icon: '⚡', at: 3 },
+            ].map((s, i) => (
+              <div key={i} style={{
+                ...fadeIn(s.at),
+                padding: '20px 16px',
+                border: '1.5px solid rgba(255,255,255,0.12)',
+                borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+                background: 'rgba(255,255,255,0.04)',
+              }}>
+                <div style={{ fontSize: 12, color: 'var(--ink-ghost)', marginBottom: 6 }}>{s.icon}</div>
+                <div style={{ fontSize: 32, fontWeight: 800, fontFamily: 'var(--hand-loose)', color: 'var(--highlight)' }}>
+                  {counterAnim(s.num, s.at)}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--ink-ghost)', marginTop: 4 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Phase 4: What you'll unlock */}
+        <div style={{ ...fadeIn(4), marginBottom: 36 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 24, flexWrap: 'wrap' }}>
+            {[
+              ['✦', 'AI Creative Generation'],
+              ['▶', 'Video Sage Analysis'],
+              ['⊞', 'Industry Intelligence'],
+              ['🖼', 'Creative Library'],
+            ].map(([icon, label], i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+                <span style={{ width: 28, height: 28, border: '1.5px solid var(--highlight)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13 }}>{icon}</span>
+                <span style={{ color: 'var(--paper)' }}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Phase 5: CTA */}
+        <div style={{ ...fadeIn(5) }}>
+          <button onClick={onDone} style={{
+            padding: '16px 36px',
+            border: '2px solid var(--highlight)',
+            background: 'var(--highlight)', color: 'var(--ink)',
+            borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+            fontFamily: 'var(--hand)', fontSize: 18, fontWeight: 800,
+            cursor: 'pointer', letterSpacing: 0.5,
+          }}>Let's set up your account →</button>
+          <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-ghost)' }}>Takes under 2 minutes · You'll generate your first creative today</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.WelcomeCelebrate = WelcomeCelebrate;
+
+// ─────────────────────────────────────────────────────────────
 // E-commerce onboarding flow — sketchy wireframe vibe
 // Choose Mode → Input → Processing → Done
 // ─────────────────────────────────────────────────────────────
