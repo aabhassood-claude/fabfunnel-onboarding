@@ -146,9 +146,10 @@
           case 'fabagent':  return <FabAgentPage {...sharedProps} />;
           case 'login':     return <LoginPage {...sharedProps} />;
           case 'welcome-celebrate': return <WelcomeCelebrate onDone={() => nav('onboarding')} />;
+          case 'trial-welcome': return <TrialWelcome onDone={() => nav('onboarding')} />;
           case 'onboarding': return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
           case 'trial-signup': return <TrialSignup
-              onComplete={() => nav('onboarding')}
+              onComplete={() => nav('trial-welcome')}
               onLogin={() => nav('login')}
               onBackToHome={() => nav('home')}
             />;
@@ -183,11 +184,13 @@
                 <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'welcome-celebrate' ? (
                 <WelcomeCelebrate onDone={() => nav('onboarding')} />
+              ) : route === 'trial-welcome' ? (
+                <TrialWelcome onDone={() => nav('onboarding')} />
               ) : route === 'onboarding' ? (
                 <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />
               ) : route === 'trial-signup' ? (
                 <TrialSignup
-                  onComplete={() => nav('onboarding')}
+                  onComplete={() => nav('trial-welcome')}
                   onLogin={() => nav('login')}
                   onBackToHome={() => nav('home')}
                 />

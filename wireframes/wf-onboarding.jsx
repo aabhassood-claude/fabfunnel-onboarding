@@ -135,6 +135,122 @@ function WelcomeCelebrate({ onDone }) {
 window.WelcomeCelebrate = WelcomeCelebrate;
 
 // ─────────────────────────────────────────────────────────────
+// Trial Welcome screen — lighter "few steps away" screen
+// ─────────────────────────────────────────────────────────────
+
+function TrialWelcome({ onDone }) {
+  const [phase, setPhase] = React.useState(0);
+
+  React.useEffect(() => {
+    const t = [
+      setTimeout(() => setPhase(1), 500),
+      setTimeout(() => setPhase(2), 1600),
+      setTimeout(() => setPhase(3), 2800),
+      setTimeout(() => setPhase(4), 4000),
+    ];
+    // Set the trial offer flag so dashboard shows 30% popup after 5s
+    sessionStorage.setItem('ff_trial_offer', '1');
+    return () => t.forEach(clearTimeout);
+  }, []);
+
+  const fadeIn = (at) => ({
+    opacity: phase >= at ? 1 : 0,
+    transform: phase >= at ? 'translateY(0)' : 'translateY(16px)',
+    transition: 'all 0.5s ease-out',
+  });
+
+  const steps = [
+    { icon: '①', label: 'Tell us about you', desc: 'E-com brand or Affiliate — pick your path' },
+    { icon: '②', label: 'We analyze your niche', desc: 'Products, competitors, angles — all automated' },
+    { icon: '③', label: 'Generate your first creative', desc: 'Static or video ad in under 60 seconds' },
+  ];
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(170deg, var(--paper) 0%, var(--paper-soft) 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'var(--hand)', padding: '40px 24px',
+    }}>
+      <div style={{ maxWidth: 560, width: '100%', textAlign: 'center' }}>
+
+        {/* Eyebrow */}
+        <div style={{ ...fadeIn(0), marginBottom: 24 }}>
+          <span style={{
+            display: 'inline-block', padding: '5px 16px',
+            border: '1.5px solid var(--ink)', borderRadius: 999,
+            fontSize: 12, fontWeight: 700, letterSpacing: 0.5,
+          }}>🎉 Welcome to the free trial</span>
+        </div>
+
+        {/* Headline */}
+        <div style={{ ...fadeIn(1), marginBottom: 36 }}>
+          <h1 style={{ fontSize: 38, fontWeight: 800, lineHeight: 1.15, color: 'var(--ink)', marginBottom: 10 }}>
+            You're a few steps away<br/>from becoming a <span style={{
+              background: 'var(--highlight)', padding: '0 6px',
+              borderRadius: '4px 6px 5px 7px / 5px 4px 7px 6px',
+            }}>Super Affiliate</span>
+          </h1>
+          <p className="wf-body" style={{ fontSize: 15, color: 'var(--ink-soft)', maxWidth: 420, margin: '0 auto' }}>
+            Set up your profile in under 2 minutes and generate your first creative — no credit card needed.
+          </p>
+        </div>
+
+        {/* Steps */}
+        <div style={{ ...fadeIn(2), marginBottom: 36 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, textAlign: 'left', maxWidth: 400, margin: '0 auto' }}>
+            {steps.map((s, i) => (
+              <div key={i} style={{
+                display: 'flex', gap: 14, alignItems: 'flex-start',
+                padding: '14px 18px',
+                border: '1.5px solid var(--ink-faint)',
+                borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
+                background: 'var(--paper)',
+              }}>
+                <span style={{ fontSize: 22, lineHeight: 1 }}>{s.icon}</span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700 }}>{s.label}</div>
+                  <div className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginTop: 2 }}>{s.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* What's included */}
+        <div style={{ ...fadeIn(3), marginBottom: 32 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 18, flexWrap: 'wrap', marginBottom: 8 }}>
+            {[
+              ['50', 'Free credits'],
+              ['7', 'Day trial'],
+              ['∞', 'Generations'],
+            ].map(([num, label], i) => (
+              <div key={i} style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 28, fontWeight: 800, fontFamily: 'var(--hand-loose)', color: 'var(--ink)' }}>{num}</div>
+                <div style={{ fontSize: 11, color: 'var(--ink-faint)' }}>{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{ ...fadeIn(4) }}>
+          <button onClick={onDone} style={{
+            padding: '14px 32px',
+            border: '2px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
+            borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+            fontFamily: 'var(--hand)', fontSize: 16, fontWeight: 800, cursor: 'pointer',
+          }}>Let's set up your profile →</button>
+          <div style={{ marginTop: 12, fontSize: 12, color: 'var(--ink-faint)' }}>No credit card required · Cancel anytime</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.TrialWelcome = TrialWelcome;
+
+// ─────────────────────────────────────────────────────────────
 // E-commerce onboarding flow — sketchy wireframe vibe
 // Choose Mode → Input → Processing → Done
 // ─────────────────────────────────────────────────────────────

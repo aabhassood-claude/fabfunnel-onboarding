@@ -12,6 +12,34 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
     if (flag) sessionStorage.removeItem('ff_new_user');
     return !!flag;
   });
+  const [showTrialOffer, setShowTrialOffer] = React.useState(false);
+  const [showOfferTimer, setShowOfferTimer] = React.useState(false);
+  const [countdown, setCountdown] = React.useState(24 * 60 * 60); // 24h in seconds
+
+  // Trial offer: popup after 5s if user came from trial-welcome
+  React.useEffect(() => {
+    const offerFlag = sessionStorage.getItem('ff_trial_offer');
+    if (offerFlag) {
+      sessionStorage.removeItem('ff_trial_offer');
+      const t = setTimeout(() => { setShowTrialOffer(true); }, 5000);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
+  // Countdown timer (runs when offer timer is visible)
+  React.useEffect(() => {
+    if (!showOfferTimer) return;
+    const iv = setInterval(() => setCountdown(c => c > 0 ? c - 1 : 0), 1000);
+    return () => clearInterval(iv);
+  }, [showOfferTimer]);
+
+  const fmtCountdown = (s) => {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  };
+
   const isTrial = funnel === 'trial';
   const upsellStyle = trialUpsellStyle || 'subtle';
   const trialDaysLeft = 6;
@@ -525,6 +553,102 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
 
       {/* ── Pricing Modal ── */}
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
+
+      {/* 30% discount offer popup (trial users only, fires 5s after landing) */}
+      {showTrialOffer && (
+        <div onClick={() => { setShowTrialOffer(false); setShowOfferTimer(true); }} style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(20,20,20,0.6)', backdropFilter: 'blur(3px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            background: 'var(--ink)', color: 'var(--paper)', fontFamily: 'var(--hand)',
+            borderRadius: '10px 14px 11px 13px / 12px 10px 14px 11px',
+            maxWidth: 520, width: '100%', padding: '40px 36px', position: 'relative', textAlign: 'center',
+            border: '2px solid var(--highlight)',
+          }}>
+            <button onClick={() => { setShowTrialOffer(false); setShowOfferTimer(true); }} style={{
+              position: 'absolute', top: 14, right: 14, background: 'transparent', border: 'none',
+              color: 'var(--ink-ghost)', fontSize: 18, cursor: 'pointer',
+            }}>✕</button>
+
+            {/* Flash sale badge */}
+            <div style={{
+              display: 'inline-block', padding: '5px 18px', marginBottom: 20,
+              background: 'var(--highlight)', color: 'var(--ink)',
+              borderRadius: 999, fontSize: 12, fontWeight: 800, letterSpacing: 1,
+            }}>⚡ EXCLUSIVE OFFER</div>
+
+            <h2 style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.1, marginBottom: 10 }}>
+              Upgrade now &<br/>save <span style={{ color: 'var(--highlight)', fontSize: 42 }}>30%</span>
+            </h2>
+            <p style={{ fontSize: 14, color: 'var(--ink-ghost)', maxWidth: 380, margin: '0 auto 20px' }}>
+              Lock in the discounted rate before your trial ends. This offer expires in 24 hours.
+            </p>
+
+            {/* Countdown preview */}
+            <div style={{
+              display: 'inline-flex', gap: 8, padding: '12px 20px', marginBottom: 24,
+              border: '1.5px solid rgba(255,255,255,0.2)', borderRadius: 10,
+              background: 'rgba(255,255,255,0.06)',
+            }}>
+              {['23', '59', '59'].map((v, i) => (
+                <React.Fragment key={i}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 28, fontWeight: 800, fontFamily: 'var(--hand-loose)', color: 'var(--highlight)' }}>{v}</div>
+                    <div style={{ fontSize: 9, color: 'var(--ink-ghost)', letterSpacing: 0.5 }}>{['HRS', 'MIN', 'SEC'][i]}</div>
+                  </div>
+                  {i < 2 && <span style={{ fontSize: 24, color: 'var(--ink-ghost)', alignSelf: 'flex-start', marginTop: 4 }}>:</span>}
+                </React.Fragment>
+              ))}
+            </div>
+
+            {/* What you get */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginBottom: 24, flexWrap: 'wrap', fontSize: 12 }}>
+              {['Unlimited creatives', 'No watermarks', 'Priority support', 'All modules'].map((f, i) => (
+                <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--paper)' }}>
+                  <span style={{ color: 'var(--highlight)' }}>✓</span> {f}
+                </span>
+              ))}
+            </div>
+
+            <button onClick={() => { setShowTrialOffer(false); setShowOfferTimer(true); openBuyNow && openBuyNow('A'); }} style={{
+              padding: '14px 32px', border: '2px solid var(--highlight)',
+              background: 'var(--highlight)', color: 'var(--ink)',
+              borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+              fontFamily: 'var(--hand)', fontSize: 16, fontWeight: 800, cursor: 'pointer',
+            }}>Upgrade & save 30% →</button>
+
+            <div style={{ marginTop: 12, fontSize: 12, color: 'var(--ink-ghost)' }}>
+              <span onClick={() => { setShowTrialOffer(false); setShowOfferTimer(true); }} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+                Maybe later — I'll keep exploring
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Persistent countdown timer banner (shown after dismissing offer) */}
+      {showOfferTimer && countdown > 0 && (
+        <div style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 800,
+          background: 'var(--ink)', color: 'var(--paper)', fontFamily: 'var(--hand)',
+          padding: '10px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, flexWrap: 'wrap',
+          borderTop: '2px solid var(--highlight)',
+        }}>
+          <span style={{ fontSize: 12, color: 'var(--ink-ghost)' }}>⚡ 30% OFF — Upgrade in the next</span>
+          <span style={{ fontSize: 18, fontWeight: 800, fontFamily: 'var(--hand-loose)', color: 'var(--highlight)', letterSpacing: 2 }}>{fmtCountdown(countdown)}</span>
+          <button onClick={() => { setShowOfferTimer(false); openBuyNow && openBuyNow('A'); }} style={{
+            padding: '6px 16px', border: '1.5px solid var(--highlight)',
+            background: 'var(--highlight)', color: 'var(--ink)',
+            borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+          }}>Claim 30% off →</button>
+          <button onClick={() => setShowOfferTimer(false)} style={{
+            background: 'transparent', border: 'none', color: 'var(--ink-ghost)', fontSize: 14, cursor: 'pointer',
+          }}>✕</button>
+        </div>
+      )}
     </div>
   );
 }
