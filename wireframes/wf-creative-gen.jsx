@@ -13,6 +13,10 @@ function CreativeGen() {
   const [advOpen, setAdvOpen]       = React.useState(false);
   const [strategy, setStrategy]     = React.useState(null);
   const [variations, setVariations] = React.useState(1);
+  const [customVar, setCustomVar]   = React.useState(15);
+  const [showAddBrand, setShowAddBrand] = React.useState(false);
+
+  const effectiveVariations = variations === 'custom' ? customVar : variations;
 
   const toggleVibe = (v) => {
     const next = new Set(vibes);
@@ -148,9 +152,44 @@ function CreativeGen() {
               </select>
               <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ink-faint)', fontSize: 10 }}>▼</span>
             </div>
-            <Btn variant="ghost" style={{ whiteSpace: 'nowrap' }}>+ Add new brand</Btn>
+            <Btn variant="ghost" style={{ whiteSpace: 'nowrap' }} onClick={() => setShowAddBrand(true)}>+ Add new brand</Btn>
           </div>
         </Box>
+
+        {/* Add Brand Modal */}
+        {showAddBrand && (
+          <div onClick={() => setShowAddBrand(false)} style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(20,20,20,0.45)', backdropFilter: 'blur(2px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+          }}>
+            <div onClick={(e) => e.stopPropagation()} style={{
+              background: 'var(--paper)', border: '1.5px solid var(--ink)',
+              borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+              width: 440, padding: '28px', fontFamily: 'var(--hand)', position: 'relative',
+            }}>
+              <button onClick={() => setShowAddBrand(false)} className="wf-close" style={{ position: 'absolute', top: 14, right: 14, width: 24, height: 24, fontSize: 12 }}>✕</button>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Add a new brand</h3>
+              <p className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 18 }}>We'll auto-pull products, colors, and branding.</p>
+
+              <div style={{ marginBottom: 14 }}>
+                <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 6 }}>Store URL <span style={{ color: 'var(--accent)' }}>*</span></div>
+                <input className="wf-field" placeholder="https://yourstore.com" style={{ width: '100%', padding: '10px 12px', fontSize: 13 }} />
+                <div className="wf-micro" style={{ marginTop: 4, fontSize: 10 }}>Works with Shopify, WooCommerce, Amazon, and most platforms.</div>
+              </div>
+
+              <div style={{ marginBottom: 18 }}>
+                <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 6 }}>Brand name <span style={{ fontWeight: 400, color: 'var(--ink-faint)' }}>optional — we'll detect</span></div>
+                <input className="wf-field" placeholder="e.g., Aurora Apparel" style={{ width: '100%', padding: '10px 12px', fontSize: 13 }} />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+                <Btn variant="ghost" onClick={() => setShowAddBrand(false)}>Cancel</Btn>
+                <Btn onClick={() => setShowAddBrand(false)}>Analyze & Add →</Btn>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Use a template */}
         <Box style={{ padding: 22 }}>
@@ -169,31 +208,40 @@ function CreativeGen() {
           </div>
         </Box>
 
-        {/* Describe your vision */}
-        <Box style={{ padding: 22 }}>
-          <Eyebrow hint="add any specific ideas — or let Genie decide." optional>Describe your vision</Eyebrow>
-          <textarea
-            value={vision}
-            onChange={(e) => setVision(e.target.value)}
-            placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."
-            rows={3}
-            className="wf-field"
-            style={{
-              width: '100%', boxSizing: 'border-box',
-              padding: '10px 14px', fontSize: 14,
-              fontFamily: 'var(--hand)', color: 'var(--ink)', resize: 'vertical', outline: 'none',
-            }}
-          />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-            <span className="wf-micro">Quick vibes:</span>
-            {['Product Focus', 'Lifestyle', 'UGC Style', 'Offer Highlight', 'Bold'].map(v => {
-              const active = vibes.has(v);
-              return (
-                <button key={v} onClick={() => toggleVibe(v)} className={`wf-pill ${active ? 'wf-pill-hl' : ''}`} style={{ cursor: 'pointer', textTransform: 'none', fontSize: 12 }}>
-                  {v}
-                </button>
-              );
-            })}
+        {/* Describe your vision — prominent prompt area */}
+        <Box style={{ padding: 0, overflow: 'hidden', border: '2px solid var(--ink)' }}>
+          <div style={{ padding: '16px 22px 12px', background: 'var(--highlight-soft)', borderBottom: '1.5px solid var(--ink)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 18 }}>✦</span>
+              <Eyebrow hint="add any specific ideas — or let Genie decide." optional>Describe your vision</Eyebrow>
+            </div>
+          </div>
+          <div style={{ padding: '18px 22px 22px' }}>
+            <textarea
+              value={vision}
+              onChange={(e) => setVision(e.target.value)}
+              placeholder="e.g., Summer vibes, people laughing on a beach, warm colors..."
+              rows={4}
+              className="wf-field"
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                padding: '14px 16px', fontSize: 15, lineHeight: 1.5,
+                fontFamily: 'var(--hand)', color: 'var(--ink)', resize: 'vertical', outline: 'none',
+                border: '1.5px dashed var(--ink-faint)', borderRadius: 6,
+                background: 'var(--paper)',
+              }}
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+              <span className="wf-micro">Quick vibes:</span>
+              {['Product Focus', 'Lifestyle', 'UGC Style', 'Offer Highlight', 'Bold'].map(v => {
+                const active = vibes.has(v);
+                return (
+                  <button key={v} onClick={() => toggleVibe(v)} className={`wf-pill ${active ? 'wf-pill-hl' : ''}`} style={{ cursor: 'pointer', textTransform: 'none', fontSize: 12 }}>
+                    {v}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </Box>
 
@@ -259,20 +307,29 @@ function CreativeGen() {
               <span className="wf-eyebrow">Variations</span>
               <span className="wf-micro">how many to generate</span>
             </div>
-            <Box soft style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 999 }}>
-              {VAR_OPTIONS.map(v => {
-                const active = variations === v;
-                return (
-                  <button key={v} onClick={() => setVariations(v)} style={{
-                    padding: '6px 16px', borderRadius: 999, border: 'none',
-                    background: active ? 'var(--ink)' : 'transparent',
-                    color: active ? 'var(--paper)' : 'var(--ink-soft)',
-                    fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--hand)',
-                    minWidth: 36,
-                  }}>{v}</button>
-                );
-              })}
-            </Box>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Box soft style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 999 }}>
+                {VAR_OPTIONS.map(v => {
+                  const active = variations === v;
+                  return (
+                    <button key={v} onClick={() => setVariations(v)} style={{
+                      padding: '6px 16px', borderRadius: 999, border: 'none',
+                      background: active ? 'var(--ink)' : 'transparent',
+                      color: active ? 'var(--paper)' : 'var(--ink-soft)',
+                      fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--hand)',
+                      minWidth: 36,
+                    }}>{typeof v === 'string' ? v : v}</button>
+                  );
+                })}
+              </Box>
+              {variations === 'Custom' && (
+                <input type="number" value={customVar} onChange={(e) => setCustomVar(Math.max(1, Math.min(50, parseInt(e.target.value) || 1)))}
+                  min="1" max="50"
+                  className="wf-field"
+                  style={{ width: 64, padding: '6px 10px', fontSize: 14, textAlign: 'center', fontFamily: 'var(--hand)', borderRadius: 999 }}
+                />
+              )}
+            </div>
           </div>
         </Box>
 
@@ -280,7 +337,7 @@ function CreativeGen() {
         <Box style={{ padding: 22, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
             <span className="wf-body" style={{ fontSize: 13 }}>{media === 'image' ? '🖼 Static Image' : '🎬 Video'}</span>
-            <span className="wf-body" style={{ fontSize: 13 }}>{typeof variations === 'number' ? `${variations} output${variations > 1 ? 's' : ''}` : 'Custom'}</span>
+            <span className="wf-body" style={{ fontSize: 13 }}>{effectiveVariations} output{effectiveVariations > 1 ? 's' : ''}</span>
             <span className="wf-body" style={{ fontSize: 13 }}>{profile === 'ecom' ? 'E-com' : 'Affiliate'}</span>
             <span className="wf-body" style={{ fontSize: 13 }}>{
               creativeType === 'product' ? 'Product Ads' :
@@ -288,7 +345,7 @@ function CreativeGen() {
             }</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span className="wf-body" style={{ fontSize: 13 }}>⚡ Uses {(typeof variations === 'number' ? variations : 1) * 4} credits</span>
+            <span className="wf-body" style={{ fontSize: 13 }}>⚡ Uses {effectiveVariations * (media === 'image' ? 4 : 20)} credits</span>
             <Btn style={{ gap: 8 }}>✦ Generate →</Btn>
           </div>
         </Box>
