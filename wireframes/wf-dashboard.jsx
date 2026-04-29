@@ -255,6 +255,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <IntelligenceModule screenshotMode={screenshotMode} />
         )}
 
+        {/* ── Boards module (Industry Insights) ── */}
+        {activeNav === 'boards' && (
+          <BoardsModule screenshotMode={screenshotMode} />
+        )}
+
         {/* ── Home view — shared by both funnels ── */}
         {activeNav === 'home' && (
         <React.Fragment>
@@ -482,7 +487,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
-        {!['home', 'creative', 'video', 'library', 'discover', 'intelligence', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
+        {!['home', 'creative', 'video', 'library', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -896,6 +901,7 @@ function DiscoverModule({ screenshotMode, onSave }) {
   const [search, setSearch] = React.useState('');
   const [sort, setSort] = React.useState('recent');
   const [savedIds, setSavedIds] = React.useState(new Set([3, 8, 14]));
+  const [addToBoardAd, setAddToBoardAd] = React.useState(null);
 
   const toggleSave = (id) => setSavedIds(prev => {
     const next = new Set(prev);
@@ -1085,21 +1091,27 @@ function DiscoverModule({ screenshotMode, onSave }) {
                 <p className="wf-body" style={{ fontSize: 11, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{ad.caption}</p>
               </div>
 
-              {/* actions */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderTop: '1px solid var(--ink-ghost)' }}>
+              {/* actions — Save + Generate Variation + Add to Board */}
+              <div style={{ display: 'flex', gap: 6, padding: '8px 12px', borderTop: '1px solid var(--ink-ghost)', flexWrap: 'wrap' }}>
                 <button onClick={(e) => { e.stopPropagation(); toggleSave(ad.id); }} style={{
-                  padding: '4px 10px', fontSize: 11, fontWeight: 700,
+                  padding: '4px 10px', fontSize: 10, fontWeight: 700,
                   border: '1.5px solid var(--ink)', borderRadius: 999,
                   background: isSaved ? 'var(--ink)' : 'var(--paper)',
                   color: isSaved ? 'var(--paper)' : 'var(--ink)',
                   fontFamily: 'var(--hand)', cursor: 'pointer',
-                }}>{isSaved ? '✓ Saved' : '+ Save'}</button>
+                }}>{isSaved ? '✓ Saved' : '☆ Save'}</button>
                 <button style={{
-                  padding: '4px 10px', fontSize: 11,
+                  padding: '4px 10px', fontSize: 10,
                   border: '1.5px solid var(--ink-faint)', borderRadius: 999,
-                  background: 'transparent', color: 'var(--ink-faint)',
+                  background: 'transparent', color: 'var(--ink)',
                   fontFamily: 'var(--hand)', cursor: 'pointer',
-                }}>⋯ More</button>
+                }}>✦ Variation</button>
+                <button onClick={(e) => { e.stopPropagation(); setAddToBoardAd(ad.id); }} style={{
+                  padding: '4px 10px', fontSize: 10,
+                  border: '1.5px solid var(--ink-faint)', borderRadius: 999,
+                  background: 'transparent', color: 'var(--ink)',
+                  fontFamily: 'var(--hand)', cursor: 'pointer',
+                }}>▤ Board</button>
               </div>
             </Box>
           );
@@ -1121,6 +1133,249 @@ function DiscoverModule({ screenshotMode, onSave }) {
           <div className="wf-micro" style={{ marginTop: 8, fontSize: 10, color: 'var(--ink-faint)' }}>Updated every 6 hours · Last refresh: 2 hours ago</div>
         </div>
       )}
+
+      {/* "Add to Board" mini-modal */}
+      {addToBoardAd && (
+        <AddToBoardModal
+          adId={addToBoardAd}
+          onClose={() => setAddToBoardAd(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+// ── Add to Board modal (used by Discover) ──
+const BOARDS_DATA = [
+  { id: 'mortgage', name: 'Mortgage', ads: 1, updated: '1 month ago', tags: [] },
+  { id: 'new', name: 'New', ads: 0, updated: '23 days ago', tags: [] },
+  { id: 'home', name: 'home', ads: 2, updated: '22 days ago', tags: ['home insurance'] },
+  { id: 'auto', name: 'auto', ads: 1, updated: '22 days ago', tags: ['auto'] },
+  { id: 'dccd', name: 'dccd', ads: 0, updated: '7 days ago', tags: ['dccds'] },
+  { id: 'demo', name: 'Demo', ads: 0, updated: '7 days ago', tags: [] },
+];
+
+function AddToBoardModal({ adId, onClose }) {
+  const [boards, setBoards] = React.useState(BOARDS_DATA);
+  const [newBoardName, setNewBoardName] = React.useState('');
+  const [showCreate, setShowCreate] = React.useState(false);
+
+  const addToBoard = (boardId) => {
+    setBoards(prev => prev.map(b => b.id === boardId ? { ...b, ads: b.ads + 1 } : b));
+    onClose();
+  };
+
+  const createBoard = () => {
+    if (!newBoardName.trim()) return;
+    const slug = newBoardName.toLowerCase().replace(/\s+/g, '-');
+    setBoards(prev => [{ id: slug, name: newBoardName, ads: 1, updated: 'just now', tags: [] }, ...prev]);
+    setNewBoardName('');
+    setShowCreate(false);
+    onClose();
+  };
+
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 1000,
+      background: 'rgba(20,20,20,0.45)', backdropFilter: 'blur(2px)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+    }}>
+      <div onClick={(e) => e.stopPropagation()} style={{
+        background: 'var(--paper)', border: '1.5px solid var(--ink)',
+        borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+        width: 400, maxHeight: '80vh', overflow: 'auto', fontFamily: 'var(--hand)',
+      }}>
+        <div style={{ padding: '18px 20px', borderBottom: '1.5px dashed var(--ink-faint)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700 }}>▤ Add to board</h3>
+          <button className="wf-close" onClick={onClose} style={{ width: 24, height: 24, fontSize: 12 }}>✕</button>
+        </div>
+        <div style={{ padding: '12px 20px' }}>
+          {boards.map(b => (
+            <div key={b.id} onClick={() => addToBoard(b.id)} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '10px 0', borderBottom: '1px solid var(--ink-ghost)', cursor: 'pointer',
+            }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>{b.name}</div>
+                <div className="wf-micro" style={{ fontSize: 10 }}>{b.ads} ads · {b.updated}</div>
+              </div>
+              <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>+</span>
+            </div>
+          ))}
+
+          {showCreate ? (
+            <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+              <input value={newBoardName} onChange={(e) => setNewBoardName(e.target.value)} placeholder="Board name…"
+                style={{ flex: 1, padding: '7px 10px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 12 }} autoFocus />
+              <Btn onClick={createBoard}>Create</Btn>
+            </div>
+          ) : (
+            <button onClick={() => setShowCreate(true)} style={{
+              width: '100%', marginTop: 12, padding: '10px',
+              border: '1.5px dashed var(--ink-faint)', borderRadius: 8,
+              background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>+ Create new board</button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Boards module (Industry Insights — folder view) ──
+function BoardsModule({ screenshotMode }) {
+  const [boards, setBoards] = React.useState(BOARDS_DATA.map(b => ({ ...b })));
+  const [openBoard, setOpenBoard] = React.useState(null);
+  const [search, setSearch] = React.useState('');
+  const [showCreate, setShowCreate] = React.useState(false);
+  const [newName, setNewName] = React.useState('');
+
+  const createBoard = () => {
+    if (!newName.trim()) return;
+    const slug = newName.toLowerCase().replace(/\s+/g, '-');
+    setBoards(prev => [{ id: slug, name: newName, ads: 0, updated: 'just now', tags: [] }, ...prev]);
+    setNewName('');
+    setShowCreate(false);
+  };
+
+  const deleteBoard = (id) => setBoards(prev => prev.filter(b => b.id !== id));
+
+  const filtered = boards.filter(b => !search || b.name.toLowerCase().includes(search.toLowerCase()));
+
+  // Sample ads to show inside a board
+  const boardAds = [
+    { id: 101, brand: 'LawClerk.Legal', type: 'Static', caption: 'Check out the FAQs for our new Hourly Associate program to get all the 411!', days: 554, industry: 'Insurance' },
+    { id: 102, brand: 'CoverMe', type: 'Dynamic', caption: 'Your home deserves the best protection. Get a quote in 60 seconds.', days: 120, industry: 'Insurance' },
+    { id: 103, brand: 'SafeGuard', type: 'Static', caption: 'Peace of mind starts here. Compare plans instantly.', days: 89, industry: 'Insurance' },
+  ];
+
+  if (openBoard) {
+    const b = boards.find(x => x.id === openBoard);
+    return (
+      <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+        {/* Board detail header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+          <button onClick={() => setOpenBoard(null)} style={{
+            padding: '6px 12px', border: '1.5px solid var(--ink)', borderRadius: 999,
+            background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+          }}>← Boards</button>
+          <h1 className="wf-h1" style={{ fontSize: 24 }}>{b ? b.name : 'Board'}</h1>
+          <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>{b ? b.ads : 0} ads</span>
+        </div>
+
+        {/* Filters row */}
+        <Box style={{ padding: '10px 14px', marginBottom: 14, background: 'var(--paper)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1.5px solid var(--ink)', borderRadius: 999, padding: '5px 10px', flex: 1, minWidth: 160 }}>
+            <span style={{ color: 'var(--ink-faint)', fontSize: 12 }}>⌕</span>
+            <input placeholder="Search…" style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 11, flex: 1 }} />
+          </div>
+          <select style={{ padding: '5px 8px', border: '1.5px solid var(--ink)', borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)', cursor: 'pointer' }}>
+            <option>Status</option><option>Active</option><option>Inactive</option>
+          </select>
+          <select style={{ padding: '5px 8px', border: '1.5px solid var(--ink)', borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)', cursor: 'pointer' }}>
+            <option>Type</option><option>Static</option><option>Dynamic</option><option>Carousel</option>
+          </select>
+          <select style={{ padding: '5px 8px', border: '1.5px solid var(--ink)', borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)', cursor: 'pointer' }}>
+            <option>Running…</option><option>7 Days</option><option>15 Days</option><option>30 Days</option>
+          </select>
+        </Box>
+
+        {/* Ads masonry */}
+        <div style={{ columnCount: 3, columnGap: 14 }}>
+          {boardAds.slice(0, b ? b.ads : 0).concat(boardAds).slice(0, Math.max(b ? b.ads : 1, 1)).map((ad, i) => (
+            <Box key={i} style={{ padding: 0, overflow: 'hidden', marginBottom: 14, breakInside: 'avoid', background: 'var(--paper)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', borderBottom: '1px solid var(--ink-ghost)' }}>
+                <span style={{ fontSize: 6, color: '#22c55e' }}>●</span>
+                <span className="wf-micro" style={{ fontSize: 9 }}>Active since: {ad.days} Days</span>
+                <span style={{ marginLeft: 'auto', fontSize: 11, cursor: 'pointer', color: 'var(--ink-faint)' }}>⊡</span>
+              </div>
+              <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--ink-ghost)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <div style={{ width: 20, height: 20, border: '1.5px solid var(--ink)', borderRadius: '50%', fontSize: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{ad.brand.charAt(0)}</div>
+                  <span style={{ fontSize: 11, fontWeight: 700 }}>{ad.brand}</span>
+                  <span className="wf-micro" style={{ fontSize: 9, marginLeft: 4, color: 'var(--ink-faint)' }}>{ad.type}</span>
+                </div>
+                <p className="wf-body" style={{ fontSize: 11, lineHeight: 1.4 }}>{ad.caption}</p>
+              </div>
+              <div style={{ height: 200, background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {screenshotMode === 'sketched' ? <MockUI kind="creative" style={{ width: '90%', height: '85%' }} /> : <div className="wf-img" style={{ width: '100%', height: '100%' }}><span>🖼</span></div>}
+              </div>
+              <div style={{ display: 'flex', gap: 8, padding: '8px 12px', borderTop: '1px solid var(--ink-ghost)' }}>
+                <span style={{ fontSize: 12, cursor: 'pointer', color: 'var(--ink-faint)' }} title="Analyze">◎</span>
+                <span style={{ fontSize: 12, cursor: 'pointer', color: 'var(--ink-faint)' }} title="Generate variation">✦</span>
+                <span style={{ fontSize: 12, cursor: 'pointer', color: 'var(--ink-faint)', marginLeft: 'auto' }} title="More">⋯</span>
+              </div>
+            </Box>
+          ))}
+        </div>
+
+        {(b && b.ads === 0) && (
+          <div style={{ textAlign: 'center', padding: 48, color: 'var(--ink-faint)' }}>
+            <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>▤</div>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>This board is empty</div>
+            <div className="wf-body" style={{ fontSize: 12 }}>Save ads from Discover or Intelligence to populate this board.</div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+      {/* Board list header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="wf-eyebrow">Industry Insights</span>
+            <span style={{ fontSize: 10, padding: '2px 8px', background: 'var(--paper-soft)', border: '1.5px solid var(--ink-faint)', borderRadius: 8, fontWeight: 700 }}>Meta Only</span>
+          </div>
+          <h1 className="wf-h1" style={{ fontSize: 26, marginTop: 4 }}>▤ Boards</h1>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Btn onClick={() => setShowCreate(true)}>+ Create new board</Btn>
+        </div>
+      </div>
+
+      {/* Search */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1.5px solid var(--ink)', borderRadius: 999, padding: '7px 14px', maxWidth: 280, marginBottom: 18 }}>
+        <span style={{ color: 'var(--ink-faint)', fontSize: 13 }}>⌕</span>
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name"
+          style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12, flex: 1 }} />
+      </div>
+
+      {/* Create new board inline */}
+      {showCreate && (
+        <Box style={{ padding: 16, marginBottom: 14, background: 'var(--paper)', display: 'flex', gap: 10 }}>
+          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Board name…"
+            style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 12 }} autoFocus />
+          <Btn onClick={createBoard}>Create</Btn>
+          <button onClick={() => setShowCreate(false)} style={{ padding: '6px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 8, background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 12, cursor: 'pointer' }}>Cancel</button>
+        </Box>
+      )}
+
+      {/* Board cards grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+        {filtered.map(b => (
+          <Box key={b.id} onClick={() => setOpenBoard(b.id)} style={{ padding: 16, cursor: 'pointer', background: 'var(--paper)', position: 'relative' }}>
+            <button onClick={(e) => { e.stopPropagation(); deleteBoard(b.id); }} style={{
+              position: 'absolute', top: 12, right: 12,
+              background: 'transparent', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer',
+            }} title="Delete">🗑</button>
+            <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{b.name}</div>
+            <div className="wf-micro" style={{ fontSize: 10, marginBottom: 2 }}>▤ {b.ads} ads</div>
+            <div className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)', marginBottom: 8 }}>Updated {b.updated}</div>
+            {b.tags.length > 0 ? (
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {b.tags.map((t, i) => (
+                  <span key={i} style={{ fontSize: 10, padding: '2px 8px', background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 6 }}>{t}</span>
+                ))}
+              </div>
+            ) : (
+              <span className="wf-micro" style={{ fontSize: 10, fontStyle: 'italic', color: 'var(--ink-faint)' }}>*No tags*</span>
+            )}
+          </Box>
+        ))}
+      </div>
     </div>
   );
 }
