@@ -250,6 +250,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <DiscoverModule screenshotMode={screenshotMode} onSave={() => setActiveNav('boards')} />
         )}
 
+        {/* ── Intelligence module (Industry Insights) ── */}
+        {activeNav === 'intelligence' && (
+          <IntelligenceModule screenshotMode={screenshotMode} />
+        )}
+
         {/* ── Home view — shared by both funnels ── */}
         {activeNav === 'home' && (
         <React.Fragment>
@@ -477,7 +482,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
-        {!['home', 'creative', 'video', 'library', 'discover', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
+        {!['home', 'creative', 'video', 'library', 'discover', 'intelligence', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -1114,6 +1119,236 @@ function DiscoverModule({ screenshotMode, onSave }) {
         <div style={{ textAlign: 'center', padding: '28px 0', marginTop: 8 }}>
           <Btn variant="ghost">Load more ads ↓</Btn>
           <div className="wf-micro" style={{ marginTop: 8, fontSize: 10, color: 'var(--ink-faint)' }}>Updated every 6 hours · Last refresh: 2 hours ago</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Intelligence module (Industry Insights — My Feed / Competitor / Saved Ads) ──
+function IntelligenceModule({ screenshotMode }) {
+  const [tab, setTab] = React.useState('feed');
+  const [status, setStatus] = React.useState('all');
+  const [type, setType] = React.useState('all');
+  const [running, setRunning] = React.useState('all');
+  const [industry, setIndustry] = React.useState('all');
+  const [search, setSearch] = React.useState('');
+  const [sort, setSort] = React.useState('recent');
+  const [savedIds, setSavedIds] = React.useState(new Set([2, 5, 11, 16]));
+  const [dateFrom, setDateFrom] = React.useState('');
+  const [dateTo, setDateTo] = React.useState('');
+
+  const toggleSave = (id) => setSavedIds(prev => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+
+  const industries = ['Insurance', 'Finance', 'E-commerce', 'SaaS', 'Health & Wellness', 'Education', 'Real Estate'];
+  const competitors = ['GEICO', 'Progressive', 'State Farm', 'Lemonade', 'AllState', 'Liberty Mutual'];
+
+  const feedAds = [
+    { id: 1, brand: 'GEICO', headline: 'Ride into Savings', caption: 'Save when you talk to GEICO. Bundle auto & home for even more.', type: 'static', days: 67, industry: 'Insurance' },
+    { id: 2, brand: 'Progressive', headline: 'Wake Me When It\'s Boat Season', caption: 'Protect every ride. Start your free quote and watch the savings roll in.', type: 'static', days: 45, industry: 'Insurance' },
+    { id: 3, brand: 'State Farm', headline: '', caption: 'Like a good neighbor, State Farm is there. Get a free quote in under 5 minutes.', type: 'dynamic', days: 30, industry: 'Insurance' },
+    { id: 4, brand: 'Lemonade', headline: '', caption: 'Insurance powered by AI. Sign up in 90 seconds. Claims paid in 3 minutes.', type: 'carousel', days: 14, industry: 'Insurance' },
+    { id: 5, brand: 'GEICO', headline: '', caption: 'It\'s easy to see. 15 minutes could save you 15% or more on car insurance.', type: 'static', days: 87, industry: 'Insurance' },
+    { id: 6, brand: 'AllState', headline: 'Mayhem is coming', caption: 'Are you in good hands? Get protected against the unexpected.', type: 'dynamic', days: 21, industry: 'Insurance' },
+    { id: 7, brand: 'Liberty Mutual', headline: 'Only pay for what you need', caption: 'Customize your coverage. Why pay for things you don\'t need?', type: 'static', days: 38, industry: 'Insurance' },
+    { id: 8, brand: 'GEICO', headline: '', caption: 'Bundling your home & auto could save you hundreds. Get your quote today.', type: 'carousel', days: 52, industry: 'Insurance' },
+  ];
+
+  const competitorAds = [
+    { id: 9, brand: 'GEICO', headline: '', caption: 'Real customers. Real savings. Hear their stories.', type: 'dynamic', days: 12, industry: 'Insurance' },
+    { id: 10, brand: 'GEICO', headline: 'Switch & Save', caption: 'Drivers who switched saved an average of $500/year.', type: 'static', days: 28, industry: 'Insurance' },
+    { id: 11, brand: 'Progressive', headline: 'Name your price', caption: 'Tell us what you want to pay and we\'ll find the coverage that fits.', type: 'static', days: 34, industry: 'Insurance' },
+    { id: 12, brand: 'Progressive', headline: '', caption: 'Flo knows. Get a quote from Progressive and start saving today.', type: 'carousel', days: 7, industry: 'Insurance' },
+    { id: 13, brand: 'State Farm', headline: 'Drive Safe & Save', caption: 'Safe driving pays off. Download the app and start earning discounts.', type: 'dynamic', days: 45, industry: 'Insurance' },
+    { id: 14, brand: 'Lemonade', headline: 'Insurance in seconds', caption: 'Powered by AI. Zero paperwork. Instant everything.', type: 'static', days: 19, industry: 'Insurance' },
+  ];
+
+  const savedAdsData = feedAds.concat(competitorAds).filter(ad => savedIds.has(ad.id));
+
+  const currentAds = tab === 'feed' ? feedAds
+    : tab === 'competitor' ? competitorAds
+    : savedAdsData;
+
+  const filtered = currentAds.filter(ad => {
+    if (status !== 'all' && (status === 'active' ? ad.days < 60 : ad.days >= 60) === false) return false;
+    if (type !== 'all' && ad.type !== type) return false;
+    if (running === '7' && ad.days > 7) return false;
+    if (running === '15' && ad.days > 15) return false;
+    if (running === '30' && ad.days > 30) return false;
+    if (industry !== 'all' && ad.industry !== industry) return false;
+    if (search && !ad.brand.toLowerCase().includes(search.toLowerCase()) && !ad.caption.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  const hs = { fontFamily: 'var(--hand)' };
+
+  const FilterPill = ({ label, value, onChange, options }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <span className="wf-micro" style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: 0.5, fontWeight: 700, color: 'var(--ink-faint)' }}>{label}</span>
+      <select value={value} onChange={(e) => onChange(e.target.value)} style={{
+        padding: '6px 10px', border: '1.5px solid var(--ink)', borderRadius: 999,
+        background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 11, cursor: 'pointer',
+      }}>
+        {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
+    </div>
+  );
+
+  return (
+    <div style={{ padding: '28px', ...hs }}>
+      {/* header */}
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span className="wf-eyebrow">Industry Insights</span>
+          <span className="wf-micro" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>·</span>
+          <span style={{ fontSize: 10, padding: '2px 8px', background: 'var(--highlight)', borderRadius: 8, fontWeight: 700 }}>Meta Ads</span>
+        </div>
+        <h1 className="wf-h1" style={{ fontSize: 26, marginTop: 4 }}>⚡ Intelligence</h1>
+      </div>
+
+      {/* search + date range + sort */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1.5px solid var(--ink)', borderRadius: 999, padding: '7px 14px', flex: 1, minWidth: 220 }}>
+          <span style={{ color: 'var(--ink-faint)', fontSize: 13 }}>⌕</span>
+          <input value={search} onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search brand, keyword, or competitor…"
+            style={{ border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12, flex: 1 }} />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} style={{ padding: '6px 8px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)' }} />
+          <span style={{ fontSize: 11, color: 'var(--ink-faint)' }}>to</span>
+          <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} style={{ padding: '6px 8px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)' }} />
+        </div>
+        <select value={sort} onChange={(e) => setSort(e.target.value)} style={{
+          padding: '7px 12px', border: '1.5px solid var(--ink)', borderRadius: 999,
+          background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 11, cursor: 'pointer',
+        }}>
+          <option value="recent">Most recent</option>
+          <option value="longest">Longest running</option>
+          <option value="likes">Most engagement</option>
+        </select>
+      </div>
+
+      {/* tabs: My Feed / Competitor / Saved Ads */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 4, padding: 3, border: '1.5px solid var(--ink)', borderRadius: 999 }}>
+          {[
+            { id: 'feed', label: 'My Feed', count: feedAds.length },
+            { id: 'competitor', label: 'Competitor', count: competitorAds.length },
+            { id: 'saved', label: 'Saved Ads', count: savedIds.size },
+          ].map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{
+              padding: '6px 14px', borderRadius: 999, border: 'none',
+              background: tab === t.id ? 'var(--ink)' : 'transparent',
+              color: tab === t.id ? 'var(--paper)' : 'var(--ink-soft)',
+              fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>{t.label} ({t.count})</button>
+          ))}
+        </div>
+
+        {/* inline filters */}
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <FilterPill label="Status" value={status} onChange={setStatus} options={[
+            { value: 'all', label: 'All' }, { value: 'active', label: '● Active' }, { value: 'inactive', label: '○ Inactive' },
+          ]} />
+          <FilterPill label="Type" value={type} onChange={setType} options={[
+            { value: 'all', label: 'All' }, { value: 'static', label: 'Static' }, { value: 'dynamic', label: 'Dynamic' }, { value: 'carousel', label: 'Carousel' },
+          ]} />
+          <FilterPill label="Running" value={running} onChange={setRunning} options={[
+            { value: 'all', label: 'Any' }, { value: '7', label: '7d' }, { value: '15', label: '15d' }, { value: '30', label: '30d' },
+          ]} />
+        </div>
+      </div>
+
+      {/* results count */}
+      <div className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 14 }}>
+        Showing {filtered.length} ads {tab === 'competitor' ? '· tracking ' + competitors.length + ' competitors' : tab === 'saved' ? '· from your saved collection' : '· personalized to your profile'}
+      </div>
+
+      {/* masonry grid */}
+      <div style={{ columnCount: 4, columnGap: 14 }}>
+        {filtered.map(ad => {
+          const isSaved = savedIds.has(ad.id);
+          const aspectH = [280, 340, 300, 380, 260, 320, 290, 350][ad.id % 8];
+          return (
+            <Box key={ad.id} style={{
+              padding: 0, overflow: 'hidden', marginBottom: 14, breakInside: 'avoid',
+              background: 'var(--paper)', cursor: 'pointer',
+              border: isSaved ? '2px solid var(--ink)' : undefined,
+            }}>
+              {/* header bar */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', borderBottom: '1px solid var(--ink-ghost)', fontSize: 10 }}>
+                <span style={{ color: ad.days < 60 ? '#22c55e' : 'var(--ink-faint)', fontSize: 6 }}>●</span>
+                <span className="wf-micro">{ad.days < 60 ? 'active' : 'inactive'}</span>
+                <span className="wf-micro" style={{ color: 'var(--ink-faint)' }}>· since: {ad.days} Days</span>
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+                  <span style={{ cursor: 'pointer', color: 'var(--ink-faint)' }} title="Analyze">◎</span>
+                  <span style={{ cursor: 'pointer', color: 'var(--ink-faint)' }} title="Download">↓</span>
+                  <span onClick={(e) => { e.stopPropagation(); toggleSave(ad.id); }} style={{ cursor: 'pointer', color: isSaved ? 'var(--ink)' : 'var(--ink-faint)', fontWeight: isSaved ? 700 : 400 }} title="Save">{isSaved ? '★' : '☆'}</span>
+                </div>
+              </div>
+
+              {/* visual */}
+              <div style={{ height: aspectH, background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                {screenshotMode === 'sketched'
+                  ? <MockUI kind={ad.type === 'dynamic' ? 'video' : 'creative'} style={{ width: '90%', height: '85%' }} />
+                  : <div className="wf-img" style={{ width: '100%', height: '100%' }}><span>{ad.type === 'dynamic' ? '▶' : '🖼'}</span></div>
+                }
+                {ad.headline && (
+                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 14px 12px', background: 'linear-gradient(transparent, rgba(0,0,0,0.7))', color: '#fff' }}>
+                    <div style={{ fontSize: 16, fontWeight: 800, lineHeight: 1.2 }}>{ad.headline}</div>
+                  </div>
+                )}
+                <span style={{
+                  position: 'absolute', top: 8, left: 8,
+                  padding: '2px 8px', fontSize: 9, fontWeight: 700,
+                  background: ad.type === 'dynamic' ? 'var(--ink)' : 'var(--paper)',
+                  color: ad.type === 'dynamic' ? 'var(--paper)' : 'var(--ink)',
+                  border: '1px solid var(--ink)', borderRadius: 8,
+                  textTransform: 'uppercase', letterSpacing: 0.3,
+                }}>{ad.type}</span>
+              </div>
+
+              {/* brand + caption */}
+              <div style={{ padding: '10px 12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                  <div style={{ width: 22, height: 22, border: '1.5px solid var(--ink)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700 }}>{ad.brand.charAt(0)}</div>
+                  <span style={{ fontSize: 12, fontWeight: 700 }}>{ad.brand}</span>
+                  <span className="wf-micro" style={{ marginLeft: 'auto', fontSize: 9, color: 'var(--ink-faint)' }}>{ad.industry}</span>
+                </div>
+                <p className="wf-body" style={{ fontSize: 11, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{ad.caption}</p>
+              </div>
+
+              {/* footer actions */}
+              <div style={{ display: 'flex', gap: 6, padding: '8px 12px', borderTop: '1px solid var(--ink-ghost)' }}>
+                <button onClick={(e) => { e.stopPropagation(); toggleSave(ad.id); }} style={{
+                  padding: '4px 10px', fontSize: 10, fontWeight: 700,
+                  border: '1.5px solid var(--ink)', borderRadius: 999,
+                  background: isSaved ? 'var(--ink)' : 'var(--paper)',
+                  color: isSaved ? 'var(--paper)' : 'var(--ink)',
+                  fontFamily: 'var(--hand)', cursor: 'pointer',
+                }}>{isSaved ? '✓ Saved' : '+ Save'}</button>
+                <button style={{ padding: '4px 10px', fontSize: 10, border: '1.5px solid var(--ink-faint)', borderRadius: 999, background: 'transparent', color: 'var(--ink-faint)', fontFamily: 'var(--hand)', cursor: 'pointer' }}>✦ Remix</button>
+                <button style={{ padding: '4px 10px', fontSize: 10, border: '1.5px solid var(--ink-faint)', borderRadius: 999, background: 'transparent', color: 'var(--ink-faint)', fontFamily: 'var(--hand)', cursor: 'pointer', marginLeft: 'auto' }}>⋯</button>
+              </div>
+            </Box>
+          );
+        })}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: 48, color: 'var(--ink-faint)' }}>
+          <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>⚡</div>
+          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>
+            {tab === 'saved' ? 'No saved ads yet' : 'No ads match your filters'}
+          </div>
+          <div className="wf-body" style={{ fontSize: 12 }}>
+            {tab === 'saved' ? 'Star ads from My Feed or Competitor tabs to build your collection.' : 'Try broadening your search or adjusting the filters.'}
+          </div>
         </div>
       )}
     </div>
