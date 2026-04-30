@@ -362,7 +362,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
 
         {/* ── Studio module ── */}
         {activeNav === 'studio' && (
-          <StudioModule screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
+          <StudioModule screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} onMoveToLibrary={() => setActiveNav('library')} />
         )}
 
         {/* ── Templates module (Genie) ── */}
@@ -1199,15 +1199,21 @@ function CreativeLibrary({ screenshotMode, onGenerate }) {
 
 // ── Discover module (Industry Insights — ad feed) ──
 // ── Studio module (Genie — visual grid of all generated creatives) ──
-function StudioModule({ screenshotMode, onGenerate }) {
+function StudioModule({ screenshotMode, onGenerate, onMoveToLibrary }) {
   const [filter, setFilter] = React.useState('all');
   const [brand, setBrand] = React.useState('all');
   const [sort, setSort] = React.useState('newest');
   const [starredIds, setStarredIds] = React.useState(new Set([1, 6]));
   const [search, setSearch] = React.useState('');
   const [selectedCreative, setSelectedCreative] = React.useState(null);
+  const [selectedIds, setSelectedIds] = React.useState(new Set());
+  const [movedIds, setMovedIds] = React.useState(new Set());
 
   const toggleStar = (id) => setStarredIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const toggleSelect = (id) => setSelectedIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const selectAll = () => setSelectedIds(new Set(creatives.filter(c => !movedIds.has(c.id)).map(c => c.id)));
+  const clearSelection = () => setSelectedIds(new Set());
+  const moveToLibrary = () => { setMovedIds(prev => { const n = new Set(prev); selectedIds.forEach(id => n.add(id)); return n; }); setSelectedIds(new Set()); };
 
   const creatives = [
     { id: 1, name: 'Summer Tee Launch', brand: 'test', subType: 'Product Ads', type: 'image', daysAgo: 2 },
@@ -1238,6 +1244,8 @@ function StudioModule({ screenshotMode, onGenerate }) {
   const vidCount = creatives.filter(c => c.type === 'video').length;
   const favCount = creatives.filter(c => starredIds.has(c.id)).length;
 
+  const studioCount = creatives.filter(c => !movedIds.has(c.id)).length;
+
   return (
     <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 6, flexWrap: 'wrap', gap: 12 }}>
@@ -1251,7 +1259,38 @@ function StudioModule({ screenshotMode, onGenerate }) {
             style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12 }} />
         </div>
       </div>
-      <p className="wf-body" style={{ fontSize: 13, color: 'var(--ink-faint)', marginBottom: 18 }}>All your generated creatives in one place.</p>
+      <p className="wf-body" style={{ fontSize: 13, color: 'var(--ink-faint)', marginBottom: 12 }}>
+        Review generated creatives here. Select the ones you're happy with and move them to your Creative Library.
+      </p>
+
+      {/* Selection bar — shows when items are selected */}
+      {selectedIds.size > 0 && (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+          padding: '10px 18px', marginBottom: 14,
+          background: 'var(--highlight-soft)', border: '1.5px solid var(--ink)',
+          borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px', flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 13, fontWeight: 700 }}>{selectedIds.size} selected</span>
+            <span onClick={selectAll} style={{ fontSize: 11, cursor: 'pointer', textDecoration: 'underline', color: 'var(--ink-soft)' }}>Select all</span>
+            <span onClick={clearSelection} style={{ fontSize: 11, cursor: 'pointer', textDecoration: 'underline', color: 'var(--ink-soft)' }}>Clear</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Btn onClick={moveToLibrary}>🖼 Move to Creative Library →</Btn>
+            <Btn variant="ghost" style={{ fontSize: 11 }}>🗑 Delete selected</Btn>
+          </div>
+        </div>
+      )}
+
+      {/* Moved success toast */}
+      {movedIds.size > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', marginBottom: 14, background: 'var(--paper)', border: '1.5px solid var(--ink-faint)', borderRadius: 8 }}>
+          <span style={{ fontSize: 13 }}>✓</span>
+          <span className="wf-body" style={{ fontSize: 12, flex: 1 }}>{movedIds.size} creative{movedIds.size > 1 ? 's' : ''} moved to Creative Library</span>
+          <span onClick={() => onMoveToLibrary && onMoveToLibrary()} style={{ fontSize: 11, cursor: 'pointer', textDecoration: 'underline', color: 'var(--ink-soft)' }}>View in Library →</span>
+        </div>
+      )}
 
       {/* Filters + brand + sort */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
@@ -1291,12 +1330,26 @@ function StudioModule({ screenshotMode, onGenerate }) {
 
       {/* Creative grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 14 }}>
-        {filtered.map(c => {
+        {filtered.filter(c => !movedIds.has(c.id)).map(c => {
           const isSaved = starredIds.has(c.id);
+          const isSelected = selectedIds.has(c.id);
           return (
-            <Box key={c.id} onClick={() => setSelectedCreative(c)} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', background: 'var(--paper)', position: 'relative' }}>
+            <Box key={c.id} onClick={() => setSelectedCreative(c)} style={{
+              padding: 0, overflow: 'hidden', cursor: 'pointer', background: 'var(--paper)', position: 'relative',
+              border: isSelected ? '2px solid var(--ink)' : undefined,
+              boxShadow: isSelected ? '0 0 0 2px var(--highlight)' : undefined,
+            }}>
+              {/* Selection checkbox */}
+              <div onClick={(e) => { e.stopPropagation(); toggleSelect(c.id); }} style={{
+                position: 'absolute', top: 8, left: 8, zIndex: 2,
+                width: 22, height: 22, borderRadius: 4,
+                border: '1.5px solid var(--ink)',
+                background: isSelected ? 'var(--ink)' : 'var(--paper)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', fontSize: 12, color: 'var(--paper)',
+              }}>{isSelected ? '✓' : ''}</div>
               {/* Type badge */}
-              <div style={{ position: 'absolute', top: 8, left: 8, padding: '3px 10px', fontSize: 10, fontWeight: 700, border: '1px solid var(--ink)', borderRadius: 8, background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)', zIndex: 1 }}>
+              <div style={{ position: 'absolute', top: 8, left: 38, padding: '3px 10px', fontSize: 10, fontWeight: 700, border: '1px solid var(--ink)', borderRadius: 8, background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)', zIndex: 1 }}>
                 {c.type === 'video' ? '🎬 Video' : '🖼 Image'}
               </div>
               {/* Star */}
@@ -1308,7 +1361,7 @@ function StudioModule({ screenshotMode, onGenerate }) {
                 <div style={{ position: 'absolute', bottom: 62, right: 8, padding: '2px 8px', background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: 10, fontWeight: 700, borderRadius: 10, zIndex: 1 }}>{c.duration}s</div>
               )}
               {/* Thumbnail */}
-              <div style={{ aspectRatio: '1', background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ aspectRatio: '1', background: isSelected ? 'var(--highlight-soft)' : 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 80ms' }}>
                 <MockUI kind={c.type === 'video' ? 'video' : 'creative'} style={{ width: '75%', height: '75%' }} />
               </div>
               {/* Info */}
