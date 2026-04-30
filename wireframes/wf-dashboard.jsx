@@ -1492,33 +1492,46 @@ function DiscoverModule({ screenshotMode, onSave }) {
 }
 
 // ── Add to Board modal (used by Discover) ──
-const BOARDS_DATA = [
-  { id: 'mortgage', name: 'Mortgage', ads: 1, updated: '1 month ago', tags: [] },
-  { id: 'new', name: 'New', ads: 0, updated: '23 days ago', tags: [] },
-  { id: 'home', name: 'home', ads: 2, updated: '22 days ago', tags: ['home insurance'] },
-  { id: 'auto', name: 'auto', ads: 1, updated: '22 days ago', tags: ['auto'] },
-  { id: 'dccd', name: 'dccd', ads: 0, updated: '7 days ago', tags: ['dccds'] },
-  { id: 'demo', name: 'Demo', ads: 0, updated: '7 days ago', tags: [] },
-];
+const BOARDS_DATA = {
+  categories: [
+    { id: 'mortgage', name: 'Mortgage', ads: 1, updated: '1 month ago', tags: [], section: 'categories' },
+    { id: 'home', name: 'home', ads: 2, updated: '22 days ago', tags: ['home insurance'], section: 'categories' },
+    { id: 'auto', name: 'auto', ads: 1, updated: '22 days ago', tags: ['auto'], section: 'categories' },
+    { id: 'dccd', name: 'dccd', ads: 0, updated: '7 days ago', tags: ['dccds'], section: 'categories' },
+  ],
+  brands: [
+    { id: 'new', name: 'New', ads: 0, updated: '23 days ago', tags: [], section: 'brands' },
+    { id: 'demo', name: 'Demo', ads: 0, updated: '7 days ago', tags: [], section: 'brands' },
+    { id: 'geico', name: 'GEICO', ads: 4, updated: '2 days ago', tags: ['insurance'], section: 'brands' },
+    { id: 'progressive', name: 'Progressive', ads: 3, updated: '5 days ago', tags: ['insurance'], section: 'brands' },
+  ],
+};
 
 function AddToBoardModal({ adId, onClose }) {
-  const [boards, setBoards] = React.useState(BOARDS_DATA);
+  const [boards, setBoards] = React.useState({ ...BOARDS_DATA, categories: [...BOARDS_DATA.categories], brands: [...BOARDS_DATA.brands] });
   const [newBoardName, setNewBoardName] = React.useState('');
+  const [newBoardSection, setNewBoardSection] = React.useState('categories');
   const [showCreate, setShowCreate] = React.useState(false);
 
-  const addToBoard = (boardId) => {
-    setBoards(prev => prev.map(b => b.id === boardId ? { ...b, ads: b.ads + 1 } : b));
+  const addToBoard = (boardId, section) => {
+    setBoards(prev => ({
+      ...prev,
+      [section]: prev[section].map(b => b.id === boardId ? { ...b, ads: b.ads + 1 } : b),
+    }));
     onClose();
   };
 
   const createBoard = () => {
     if (!newBoardName.trim()) return;
     const slug = newBoardName.toLowerCase().replace(/\s+/g, '-');
-    setBoards(prev => [{ id: slug, name: newBoardName, ads: 1, updated: 'just now', tags: [] }, ...prev]);
+    const newBoard = { id: slug, name: newBoardName, ads: 1, updated: 'just now', tags: [], section: newBoardSection };
+    setBoards(prev => ({ ...prev, [newBoardSection]: [newBoard, ...prev[newBoardSection]] }));
     setNewBoardName('');
     setShowCreate(false);
     onClose();
   };
+
+  const allBoards = [...boards.categories, ...boards.brands];
 
   return (
     <div onClick={onClose} style={{
@@ -1529,15 +1542,17 @@ function AddToBoardModal({ adId, onClose }) {
       <div onClick={(e) => e.stopPropagation()} style={{
         background: 'var(--paper)', border: '1.5px solid var(--ink)',
         borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
-        width: 400, maxHeight: '80vh', overflow: 'auto', fontFamily: 'var(--hand)',
+        width: 420, maxHeight: '80vh', overflow: 'auto', fontFamily: 'var(--hand)',
       }}>
         <div style={{ padding: '18px 20px', borderBottom: '1.5px dashed var(--ink-faint)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ fontSize: 16, fontWeight: 700 }}>▤ Add to board</h3>
           <button className="wf-close" onClick={onClose} style={{ width: 24, height: 24, fontSize: 12 }}>✕</button>
         </div>
         <div style={{ padding: '12px 20px' }}>
-          {boards.map(b => (
-            <div key={b.id} onClick={() => addToBoard(b.id)} style={{
+          {/* Categories section */}
+          <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8, marginTop: 4 }}>📁 Categories</div>
+          {boards.categories.map(b => (
+            <div key={b.id} onClick={() => addToBoard(b.id, 'categories')} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '10px 0', borderBottom: '1px solid var(--ink-ghost)', cursor: 'pointer',
             }}>
@@ -1545,19 +1560,46 @@ function AddToBoardModal({ adId, onClose }) {
                 <div style={{ fontSize: 13, fontWeight: 700 }}>{b.name}</div>
                 <div className="wf-micro" style={{ fontSize: 10 }}>{b.ads} ads · {b.updated}</div>
               </div>
-              <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>+</span>
+              <span style={{ fontSize: 14, color: 'var(--ink-faint)' }}>+</span>
+            </div>
+          ))}
+
+          {/* Brands section */}
+          <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8, marginTop: 16 }}>🏷 Brands</div>
+          {boards.brands.map(b => (
+            <div key={b.id} onClick={() => addToBoard(b.id, 'brands')} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '10px 0', borderBottom: '1px solid var(--ink-ghost)', cursor: 'pointer',
+            }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>{b.name}</div>
+                <div className="wf-micro" style={{ fontSize: 10 }}>{b.ads} ads · {b.updated}</div>
+              </div>
+              <span style={{ fontSize: 14, color: 'var(--ink-faint)' }}>+</span>
             </div>
           ))}
 
           {showCreate ? (
-            <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-              <input value={newBoardName} onChange={(e) => setNewBoardName(e.target.value)} placeholder="Board name…"
-                style={{ flex: 1, padding: '7px 10px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 12 }} autoFocus />
-              <Btn onClick={createBoard}>Create</Btn>
+            <div style={{ marginTop: 14 }}>
+              <div style={{ display: 'flex', gap: 4, marginBottom: 8, padding: 3, border: '1.5px solid var(--ink-faint)', borderRadius: 999, background: 'var(--paper-soft)' }}>
+                {[{ id: 'categories', label: '📁 Category' }, { id: 'brands', label: '🏷 Brand' }].map(s => (
+                  <button key={s.id} onClick={() => setNewBoardSection(s.id)} style={{
+                    flex: 1, padding: '5px 8px', borderRadius: 999, border: 'none',
+                    background: newBoardSection === s.id ? 'var(--ink)' : 'transparent',
+                    color: newBoardSection === s.id ? 'var(--paper)' : 'var(--ink-soft)',
+                    fontFamily: 'var(--hand)', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  }}>{s.label}</button>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input value={newBoardName} onChange={(e) => setNewBoardName(e.target.value)} placeholder="Board name…"
+                  style={{ flex: 1, padding: '7px 10px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 12 }} autoFocus />
+                <Btn onClick={createBoard}>Create</Btn>
+              </div>
             </div>
           ) : (
             <button onClick={() => setShowCreate(true)} style={{
-              width: '100%', marginTop: 12, padding: '10px',
+              width: '100%', marginTop: 14, padding: '10px',
               border: '1.5px dashed var(--ink-faint)', borderRadius: 8,
               background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
             }}>+ Create new board</button>
@@ -1570,23 +1612,30 @@ function AddToBoardModal({ adId, onClose }) {
 
 // ── Boards module (Industry Insights — folder view) ──
 function BoardsModule({ screenshotMode }) {
-  const [boards, setBoards] = React.useState(BOARDS_DATA.map(b => ({ ...b })));
+  const [boards, setBoards] = React.useState({ categories: [...BOARDS_DATA.categories], brands: [...BOARDS_DATA.brands] });
   const [openBoard, setOpenBoard] = React.useState(null);
   const [search, setSearch] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [newName, setNewName] = React.useState('');
+  const [newSection, setNewSection] = React.useState('categories');
+
+  const allBoards = [...boards.categories, ...boards.brands];
 
   const createBoard = () => {
     if (!newName.trim()) return;
     const slug = newName.toLowerCase().replace(/\s+/g, '-');
-    setBoards(prev => [{ id: slug, name: newName, ads: 0, updated: 'just now', tags: [] }, ...prev]);
+    const newBoard = { id: slug, name: newName, ads: 0, updated: 'just now', tags: [], section: newSection };
+    setBoards(prev => ({ ...prev, [newSection]: [newBoard, ...prev[newSection]] }));
     setNewName('');
     setShowCreate(false);
   };
 
-  const deleteBoard = (id) => setBoards(prev => prev.filter(b => b.id !== id));
+  const deleteBoard = (id) => setBoards(prev => ({
+    categories: prev.categories.filter(b => b.id !== id),
+    brands: prev.brands.filter(b => b.id !== id),
+  }));
 
-  const filtered = boards.filter(b => !search || b.name.toLowerCase().includes(search.toLowerCase()));
+  const filterBoards = (list) => list.filter(b => !search || b.name.toLowerCase().includes(search.toLowerCase()));
 
   // Sample ads to show inside a board
   const boardAds = [
@@ -1596,7 +1645,7 @@ function BoardsModule({ screenshotMode }) {
   ];
 
   if (openBoard) {
-    const b = boards.find(x => x.id === openBoard);
+    const b = allBoards.find(x => x.id === openBoard);
     return (
       <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
         {/* Board detail header */}
@@ -1691,30 +1740,62 @@ function BoardsModule({ screenshotMode }) {
 
       {/* Create new board inline */}
       {showCreate && (
-        <Box style={{ padding: 16, marginBottom: 14, background: 'var(--paper)', display: 'flex', gap: 10 }}>
-          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Board name…"
-            style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 12 }} autoFocus />
-          <Btn onClick={createBoard}>Create</Btn>
-          <button onClick={() => setShowCreate(false)} style={{ padding: '6px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 8, background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 12, cursor: 'pointer' }}>Cancel</button>
+        <Box style={{ padding: 16, marginBottom: 14, background: 'var(--paper)' }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 10, padding: 3, border: '1.5px solid var(--ink-faint)', borderRadius: 999, background: 'var(--paper-soft)' }}>
+            {[{ id: 'categories', label: '📁 Category' }, { id: 'brands', label: '🏷 Brand' }].map(s => (
+              <button key={s.id} onClick={() => setNewSection(s.id)} style={{
+                flex: 1, padding: '5px 8px', borderRadius: 999, border: 'none',
+                background: newSection === s.id ? 'var(--ink)' : 'transparent',
+                color: newSection === s.id ? 'var(--paper)' : 'var(--ink-soft)',
+                fontFamily: 'var(--hand)', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+              }}>{s.label}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Board name…"
+              style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--ink)', borderRadius: 8, fontFamily: 'var(--hand)', fontSize: 12 }} autoFocus />
+            <Btn onClick={createBoard}>Create</Btn>
+            <button onClick={() => setShowCreate(false)} style={{ padding: '6px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 8, background: 'var(--paper)', fontFamily: 'var(--hand)', fontSize: 12, cursor: 'pointer' }}>Cancel</button>
+          </div>
         </Box>
       )}
 
-      {/* Board cards grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
-        {filtered.map(b => (
+      {/* Categories boards */}
+      <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span>📁</span> Categories <span style={{ fontWeight: 400, color: 'var(--ink-faint)' }}>({boards.categories.length})</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14, marginBottom: 28 }}>
+        {filterBoards(boards.categories).map(b => (
           <Box key={b.id} onClick={() => setOpenBoard(b.id)} style={{ padding: 16, cursor: 'pointer', background: 'var(--paper)', position: 'relative' }}>
-            <button onClick={(e) => { e.stopPropagation(); deleteBoard(b.id); }} style={{
-              position: 'absolute', top: 12, right: 12,
-              background: 'transparent', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer',
-            }} title="Delete">🗑</button>
+            <button onClick={(e) => { e.stopPropagation(); deleteBoard(b.id); }} style={{ position: 'absolute', top: 12, right: 12, background: 'transparent', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer' }} title="Delete">🗑</button>
             <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{b.name}</div>
             <div className="wf-micro" style={{ fontSize: 10, marginBottom: 2 }}>▤ {b.ads} ads</div>
             <div className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)', marginBottom: 8 }}>Updated {b.updated}</div>
             {b.tags.length > 0 ? (
               <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                {b.tags.map((t, i) => (
-                  <span key={i} style={{ fontSize: 10, padding: '2px 8px', background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 6 }}>{t}</span>
-                ))}
+                {b.tags.map((t, i) => <span key={i} style={{ fontSize: 10, padding: '2px 8px', background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 6 }}>{t}</span>)}
+              </div>
+            ) : (
+              <span className="wf-micro" style={{ fontSize: 10, fontStyle: 'italic', color: 'var(--ink-faint)' }}>*No tags*</span>
+            )}
+          </Box>
+        ))}
+      </div>
+
+      {/* Brands boards */}
+      <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span>🏷</span> Brands <span style={{ fontWeight: 400, color: 'var(--ink-faint)' }}>({boards.brands.length})</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+        {filterBoards(boards.brands).map(b => (
+          <Box key={b.id} onClick={() => setOpenBoard(b.id)} style={{ padding: 16, cursor: 'pointer', background: 'var(--paper)', position: 'relative' }}>
+            <button onClick={(e) => { e.stopPropagation(); deleteBoard(b.id); }} style={{ position: 'absolute', top: 12, right: 12, background: 'transparent', border: 'none', fontSize: 13, color: 'var(--ink-faint)', cursor: 'pointer' }} title="Delete">🗑</button>
+            <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{b.name}</div>
+            <div className="wf-micro" style={{ fontSize: 10, marginBottom: 2 }}>▤ {b.ads} ads</div>
+            <div className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)', marginBottom: 8 }}>Updated {b.updated}</div>
+            {b.tags.length > 0 ? (
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {b.tags.map((t, i) => <span key={i} style={{ fontSize: 10, padding: '2px 8px', background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 6 }}>{t}</span>)}
               </div>
             ) : (
               <span className="wf-micro" style={{ fontSize: 10, fontStyle: 'italic', color: 'var(--ink-faint)' }}>*No tags*</span>
