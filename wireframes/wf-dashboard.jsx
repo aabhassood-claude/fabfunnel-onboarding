@@ -198,43 +198,9 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           })}
         </div>
 
-        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {isTrial ? (
-            <Box soft style={{ padding: 12, borderColor: 'var(--ink)' }}>
-              <div className="wf-eyebrow" style={{ fontSize: 9 }}>Trial credits</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 4 }}>
-                <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 22, fontWeight: 700 }}>{trialCreditsTotal - trialCreditsUsed}</span>
-                <span className="wf-body" style={{ fontSize: 11 }}>/ {trialCreditsTotal}</span>
-              </div>
-              <div style={{ height: 6, background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 3, marginTop: 8, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: ((trialCreditsTotal - trialCreditsUsed) / trialCreditsTotal * 100) + '%', background: 'var(--accent)' }} />
-              </div>
-              <div className="wf-micro" style={{ fontSize: 10, marginTop: 6 }}>{trialDaysLeft} days left in trial</div>
-              <button onClick={() => openBuyNow && openBuyNow('A')} style={{
-                width: '100%', marginTop: 10,
-                padding: '6px 8px',
-                background: 'var(--ink)',
-                color: 'var(--paper)',
-                border: 'none',
-                borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
-                fontFamily: 'var(--hand)', fontSize: 11, fontWeight: 700,
-                cursor: 'pointer',
-              }}>Upgrade →</button>
-            </Box>
-          ) : (
-            <Box soft style={{ padding: 12 }}>
-              <div className="wf-eyebrow" style={{ fontSize: 9 }}>Credits this month</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 4 }}>
-                <span style={{ fontFamily: 'var(--hand-loose)', fontSize: 22, fontWeight: 700 }}>{paidCreditsRemaining}</span>
-                <span className="wf-body" style={{ fontSize: 11 }}>/ {paidCreditsTotal}</span>
-              </div>
-              <div style={{ height: 6, background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 3, marginTop: 8, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: (paidCreditsRemaining / paidCreditsTotal * 100) + '%', background: 'var(--highlight)' }} />
-              </div>
-              <div className="wf-micro" style={{ fontSize: 10, marginTop: 6 }}>{isNewUser || upgraded ? 'Full credits — ready to go!' : 'Resets in 12 days'}</div>
-            </Box>
-          )}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px' }}>
+        {/* Profile section — no credits here, moved to top bar */}
+        <div style={{ marginTop: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 10px', cursor: 'pointer', borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px' }}>
             <div style={{ width: 28, height: 28, border: '1.5px solid var(--ink)', borderRadius: '50%' }} />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 12, fontWeight: 700 }}>You</div>
@@ -319,13 +285,42 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           </div>
         )}
 
-        {/* top bar — breadcrumb only */}
-        <div style={{ display: 'flex', alignItems: 'center', padding: '14px 28px', borderBottom: '1.5px dashed var(--ink-faint)', background: 'var(--paper)' }}>
+        {/* top bar — breadcrumb + credits */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 28px', borderBottom: '1.5px dashed var(--ink-faint)', background: 'var(--paper)', gap: 14, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>Dashboard</span>
             <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>›</span>
             <span style={{ fontSize: 13, fontWeight: 700 }}>{flatNav.find(n => n.id === activeNav)?.label || 'Dashboard'}</span>
           </div>
+
+          {/* Credits widget — always visible in top bar */}
+          {isTrial ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '6px 14px', border: '1.5px solid var(--accent)', borderRadius: 999, background: 'rgba(255,91,58,0.04)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 12 }}>⚡</span>
+                <span style={{ fontSize: 14, fontWeight: 800, fontFamily: 'var(--hand-loose)' }}>{trialCreditsTotal - trialCreditsUsed}</span>
+                <span className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)' }}>/ {trialCreditsTotal} credits</span>
+              </div>
+              <div style={{ width: 60, height: 5, background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: ((trialCreditsTotal - trialCreditsUsed) / trialCreditsTotal * 100) + '%', background: 'var(--accent)' }} />
+              </div>
+              <span className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{trialDaysLeft}d left</span>
+              <button onClick={() => openBuyNow && openBuyNow('A')} style={{
+                padding: '4px 12px', border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
+                borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 10, fontWeight: 700, cursor: 'pointer',
+              }}>Upgrade</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 14px', border: '1.5px solid var(--ink-faint)', borderRadius: 999 }}>
+              <span style={{ fontSize: 12 }}>⚡</span>
+              <span style={{ fontSize: 14, fontWeight: 800, fontFamily: 'var(--hand-loose)' }}>{paidCreditsRemaining}</span>
+              <span className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)' }}>/ {paidCreditsTotal}</span>
+              <div style={{ width: 50, height: 5, background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: (paidCreditsRemaining / paidCreditsTotal * 100) + '%', background: 'var(--highlight)' }} />
+              </div>
+              <span className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{isNewUser || upgraded ? 'Full' : '12d left'}</span>
+            </div>
+          )}
         </div>
 
         {/* upsell banner — hide when in trial mode (trial banner takes the role) */}
