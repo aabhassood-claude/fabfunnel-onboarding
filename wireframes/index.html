@@ -66,6 +66,7 @@
   <script type="text/babel" src="wf-video-sage.jsx"></script>
   <script type="text/babel" src="wf-funnel-trial.jsx"></script>
   <script type="text/babel" src="wf-onboarding-insights.jsx"></script>
+  <script type="text/babel" src="wf-onboarding-variants.jsx"></script>
 
   <script type="text/babel">
     const TWEAKS = /*EDITMODE-BEGIN*/{
@@ -76,7 +77,8 @@
       "viewMode": "prototype",
       "funnel": "direct",
       "trialUpsellStyle": "subtle",
-      "product": "genie"
+      "product": "genie",
+      "onboardingVariant": "A"
     }/*EDITMODE-END*/;
 
     function useHashRoute() {
@@ -164,7 +166,11 @@
               const TWComp = tweaks.product === 'insights' ? InsightsTrialWelcome : TrialWelcome;
               return <TWComp onDone={() => nav(tweaks.product === 'insights' ? 'onboarding-insights' : 'onboarding')} />;
             }
-          case 'onboarding': return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
+          case 'onboarding': {
+              if (tweaks.onboardingVariant === 'B' && window.OnboardingFlowB) return <window.OnboardingFlowB onNav={nav} funnel={tweaks.funnel} />;
+              if (tweaks.onboardingVariant === 'C' && window.OnboardingFlowC) return <window.OnboardingFlowC onNav={nav} funnel={tweaks.funnel} />;
+              return <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />;
+            }
           case 'onboarding-insights': return <InsightsOnboardingFlow onNav={nav} />;
           case 'trial-signup': return <TrialSignup
               onComplete={() => nav('trial-welcome')}
@@ -215,6 +221,8 @@
                   return <TW onDone={() => nav(tweaks.product === 'insights' ? 'onboarding-insights' : 'onboarding')} />;
                 })()
               ) : route === 'onboarding' ? (
+                tweaks.onboardingVariant === 'B' && window.OnboardingFlowB ? <window.OnboardingFlowB onNav={nav} funnel={tweaks.funnel} /> :
+                tweaks.onboardingVariant === 'C' && window.OnboardingFlowC ? <window.OnboardingFlowC onNav={nav} funnel={tweaks.funnel} /> :
                 <OnboardingFlow onNav={nav} openBuyNow={homeBuyAction} funnel={tweaks.funnel} />
               ) : route === 'onboarding-insights' ? (
                 <InsightsOnboardingFlow onNav={nav} />
@@ -405,6 +413,16 @@
                 options={[
                   { value: 'genie',    label: '✦ Genie (Creative Gen)' },
                   { value: 'insights', label: '⊞ Industry Insights' },
+                ]}
+              />
+              <TweakRadio
+                label="Onboarding variant"
+                value={tweaks.onboardingVariant}
+                onChange={(v) => setTweak('onboardingVariant', v)}
+                options={[
+                  { value: 'A', label: 'A · Full wizard (5 steps)' },
+                  { value: 'B', label: 'B · Quick-start (2 steps)' },
+                  { value: 'C', label: 'C · Conversational (chat)' },
                 ]}
               />
               <TweakRadio
