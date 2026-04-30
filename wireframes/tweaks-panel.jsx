@@ -234,9 +234,9 @@ function TweaksPanel({ title = 'Tweaks', children }) {
       {!open && (
         <button onClick={() => setOpen(true)} aria-label="Open tweaks" style={{
           position: 'fixed', bottom: 16, right: 16, zIndex: 899,
-          width: 40, height: 40, borderRadius: '50%',
-          border: '1.5px solid #1a1a1a', background: '#fafaf7',
-          cursor: 'pointer', fontSize: 18, display: 'flex',
+          width: 56, height: 56, borderRadius: '50%',
+          border: '2px solid #1a1a1a', background: '#fafaf7',
+          cursor: 'pointer', fontSize: 26, display: 'flex',
           alignItems: 'center', justifyContent: 'center',
           boxShadow: '2px 2px 0 #1a1a1a',
           fontFamily: 'system-ui',
