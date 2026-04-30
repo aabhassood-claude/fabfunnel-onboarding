@@ -541,7 +541,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
               <div style={{ display: 'grid', gap: 8 }}>
                 {[
                   ['✕', 'Watermark on exports',           '✓', 'Clean HD exports'],
-                  ['10', 'Credits / day',                  '∞', 'Unlimited generation'],
+                  ['20', 'Total credits',                   '100', '100 credits / month'],
                   ['—', 'Insights & competitor radar',     '✓', 'Full access'],
                 ].map(([tA, lA, tB, lB], i) => (
                   <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -712,7 +712,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
 
             {/* What you get */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginBottom: 24, flexWrap: 'wrap', fontSize: 12 }}>
-              {['Unlimited creatives', 'No watermarks', 'Priority support', 'All modules'].map((f, i) => (
+              {['100 credits / month', 'No watermarks', 'Priority support', 'All modules'].map((f, i) => (
                 <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--paper)' }}>
                   <span style={{ color: 'var(--highlight)' }}>✓</span> {f}
                 </span>

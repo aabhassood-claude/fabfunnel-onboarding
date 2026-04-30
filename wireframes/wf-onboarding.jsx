@@ -224,7 +224,7 @@ function TrialWelcome({ onDone }) {
             {[
               ['20', 'Free credits'],
               ['7', 'Day trial'],
-              ['∞', 'Generations'],
+              ['~5', 'Ad generations'],
             ].map(([num, label], i) => (
               <div key={i} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 28, fontWeight: 800, fontFamily: 'var(--hand-loose)', color: 'var(--ink)' }}>{num}</div>

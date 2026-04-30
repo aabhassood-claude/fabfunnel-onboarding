@@ -424,10 +424,10 @@ function TweakColor({ label, value, onChange }) {
   );
 }
 
-function TweakButton({ label, onClick, secondary = false }) {
+function TweakButton({ label, onClick, secondary = false, children }) {
   return (
     <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
-            onClick={onClick}>{label}</button>
+            onClick={onClick}>{children || label}</button>
   );
 }
 
