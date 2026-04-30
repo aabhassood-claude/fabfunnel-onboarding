@@ -948,6 +948,7 @@ function CreativeLibrary({ screenshotMode, onGenerate }) {
   const [filter, setFilter] = React.useState('all');
   const [starredIds, setStarredIds] = React.useState(new Set([2, 5, 9]));
   const [sort, setSort] = React.useState('newest');
+  const [selectedCreative, setSelectedCreative] = React.useState(null);
 
   const toggleStar = (id) => {
     setStarredIds(prev => {
@@ -1036,7 +1037,7 @@ function CreativeLibrary({ screenshotMode, onGenerate }) {
           <div className="wf-eyebrow" style={{ marginBottom: 10, fontSize: 10 }}>✨ Recently generated</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
             {filtered.filter(c => c.isNew).map(c => (
-              <Box key={c.id} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', position: 'relative', background: 'var(--paper)' }}>
+              <Box key={c.id} onClick={() => setSelectedCreative(c)} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', position: 'relative', background: 'var(--paper)' }}>
                 <div style={{ position: 'absolute', top: 8, left: 8, padding: '2px 8px', background: 'var(--ink)', color: 'var(--paper)', fontSize: 9, fontWeight: 700, borderRadius: 10, letterSpacing: 0.5 }}>NEW</div>
                 <div style={{ position: 'absolute', top: 8, right: 8, cursor: 'pointer', fontSize: 16, color: starredIds.has(c.id) ? 'var(--highlight)' : 'var(--ink-ghost)' }} onClick={(e) => { e.stopPropagation(); toggleStar(c.id); }}>
                   {starredIds.has(c.id) ? '★' : '☆'}
@@ -1062,7 +1063,7 @@ function CreativeLibrary({ screenshotMode, onGenerate }) {
       {/* Main grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
         {filtered.filter(c => filter !== 'all' || !c.isNew).map(c => (
-          <Box key={c.id} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', position: 'relative', background: 'var(--paper)' }}>
+          <Box key={c.id} onClick={() => setSelectedCreative(c)} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', position: 'relative', background: 'var(--paper)' }}>
             <div style={{ position: 'absolute', top: 8, left: 8, padding: '2px 8px', background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)', border: '1px solid var(--ink)', fontSize: 9, fontWeight: 700, borderRadius: 10 }}>
               {c.type === 'video' ? '🎬 Video' : '🖼 Image'}
             </div>
@@ -1096,6 +1097,141 @@ function CreativeLibrary({ screenshotMode, onGenerate }) {
       <div style={{ textAlign: 'center', padding: '28px 0', marginTop: 12, borderTop: '1.5px dashed var(--ink-faint)' }}>
         <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>Showing {filtered.length} of {allCreatives.length} creatives</span>
       </div>
+
+      {/* Creative detail modal */}
+      {selectedCreative && (() => {
+        const c = selectedCreative;
+        const isSaved = starredIds.has(c.id);
+        const prompts = [
+          'Summer vibes, bright natural lighting, product laid on linen background',
+          'Minimal studio shot, soft gradient backdrop, hero product centered',
+          'Lifestyle scene in urban setting, model wearing product, golden hour',
+          'Close-up macro shot, highlight material texture, shallow depth of field',
+          'Bold offer banner, high-contrast, sale headline overlay',
+        ];
+        const strategies = ['Social Proof', 'Before / After', 'Urgency', 'Product Focus', 'Brand Story'];
+        const vibePool = ['Product Focus', 'Lifestyle', 'UGC Style', 'Offer Highlight', 'Bold'];
+        return (
+          <div onClick={() => setSelectedCreative(null)} style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(20,20,20,0.5)', backdropFilter: 'blur(3px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+            overflow: 'auto',
+          }}>
+            <div onClick={(e) => e.stopPropagation()} style={{
+              background: 'var(--paper)', border: '1.5px solid var(--ink)',
+              borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px',
+              maxWidth: 820, width: '100%', display: 'grid',
+              gridTemplateColumns: 'minmax(280px, 1fr) 1fr',
+              overflow: 'hidden', fontFamily: 'var(--hand)', position: 'relative',
+            }}>
+              {/* Close */}
+              <button onClick={() => setSelectedCreative(null)} className="wf-close" style={{ position: 'absolute', top: 14, right: 14, width: 28, height: 28, fontSize: 14, zIndex: 2 }}>✕</button>
+
+              {/* Left — preview */}
+              <div style={{ background: 'var(--paper-soft)', padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRight: '1.5px solid var(--ink-faint)', minHeight: 380 }}>
+                <div style={{ width: '100%', maxWidth: 300, position: 'relative' }}>
+                  <div style={{ position: 'absolute', top: 8, left: 8, padding: '3px 10px', fontSize: 10, fontWeight: 700, border: '1px solid var(--ink)', borderRadius: 8, background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)' }}>
+                    {c.type === 'video' ? '🎬 Video' : '🖼 Image'}
+                  </div>
+                  <div onClick={(e) => { e.stopPropagation(); toggleStar(c.id); }} style={{ position: 'absolute', top: 8, right: 8, fontSize: 20, cursor: 'pointer', color: isSaved ? 'var(--highlight)' : 'var(--ink-ghost)' }}>
+                    {isSaved ? '★' : '☆'}
+                  </div>
+                  <div style={{ aspectRatio: '4/3', background: 'var(--paper)', border: '1.5px solid var(--ink-faint)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <MockUI kind={c.type === 'video' ? 'video' : 'creative'} style={{ width: '80%', height: '80%' }} />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 16 }}>
+                  <button style={{ width: 30, height: 30, borderRadius: '50%', border: '1.5px solid var(--ink)', background: 'var(--paper)', cursor: 'pointer', fontSize: 12 }}>‹</button>
+                  <span className="wf-body" style={{ fontSize: 12 }}>1 of 4</span>
+                  <button style={{ width: 30, height: 30, borderRadius: '50%', border: '1.5px solid var(--ink)', background: 'var(--paper)', cursor: 'pointer', fontSize: 12 }}>›</button>
+                </div>
+              </div>
+
+              {/* Right — details */}
+              <div style={{ padding: '28px 24px', overflow: 'auto', maxHeight: '85vh' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18, paddingBottom: 18, borderBottom: '1.5px solid var(--ink-faint)' }}>
+                  <div>
+                    <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>{c.name}</h2>
+                    <span className="wf-body" style={{ fontSize: 13, color: 'var(--ink-faint)' }}>{c.brand} · Product Ads</span>
+                  </div>
+                  <span style={{ padding: '4px 12px', fontSize: 10, fontWeight: 700, borderRadius: 8, background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)', border: '1px solid var(--ink)' }}>
+                    {c.type === 'video' ? '🎬 Video' : '🖼 Image'}
+                  </span>
+                </div>
+
+                {/* Launch CTA */}
+                <button style={{
+                  width: '100%', padding: '14px 16px', marginBottom: 8,
+                  border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
+                  borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
+                  fontFamily: 'var(--hand)', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                }}>🚀 Launch Creative</button>
+                <div className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', textAlign: 'center', marginBottom: 20 }}>Push this creative to your connected ad platforms (Meta, TikTok, Google).</div>
+
+                {/* Meta grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: '14px 0', borderTop: '1.5px solid var(--ink-faint)', borderBottom: '1.5px solid var(--ink-faint)' }}>
+                  {[
+                    ['Brand', c.brand],
+                    ['Creative type', 'Product Ads'],
+                    ['Generated', c.daysAgo === 0 ? 'today' : c.daysAgo + ' days ago'],
+                    ['Credits used', c.type === 'video' ? '20 credits' : '4 credits'],
+                  ].map(([label, val], i) => (
+                    <div key={i}>
+                      <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 3 }}>{label}</div>
+                      <div style={{ fontSize: 13, fontWeight: 600 }}>{val}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Prompt */}
+                <div style={{ marginTop: 18 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                    <span style={{ fontSize: 13 }}>💬</span>
+                    <span style={{ fontSize: 12, fontWeight: 700 }}>Prompt used</span>
+                  </div>
+                  <div style={{ padding: '12px 14px', background: 'var(--paper-soft)', border: '1.5px solid var(--ink-faint)', borderRadius: 6, borderLeft: '3px solid var(--ink)', fontSize: 13, fontStyle: 'italic', lineHeight: 1.5 }}>
+                    "{prompts[c.id % prompts.length]}"
+                  </div>
+                </div>
+
+                {/* Strategy */}
+                <div style={{ marginTop: 18 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                    <span style={{ fontSize: 13 }}>📋</span>
+                    <span style={{ fontSize: 12, fontWeight: 700 }}>Strategy</span>
+                  </div>
+                  <div style={{ padding: '10px 14px', background: 'var(--paper-soft)', border: '1.5px solid var(--ink-faint)', borderRadius: 6, fontSize: 13 }}>
+                    {strategies[c.id % strategies.length]}
+                  </div>
+                </div>
+
+                {/* Vibes */}
+                <div style={{ marginTop: 18 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                    <span style={{ fontSize: 13 }}>✨</span>
+                    <span style={{ fontSize: 12, fontWeight: 700 }}>Vibes applied</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {[vibePool[c.id % vibePool.length], vibePool[(c.id + 1) % vibePool.length]].map((v, i) => (
+                      <Pill key={i} soft>{v}</Pill>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 24, paddingTop: 18, borderTop: '1.5px solid var(--ink-faint)' }}>
+                  <Btn variant="ghost" style={{ fontSize: 12 }}>↓ Download</Btn>
+                  <Btn variant="ghost" style={{ fontSize: 12 }}>✦ Regenerate</Btn>
+                  <Btn variant="ghost" style={{ fontSize: 12 }}>📋 Save as Template</Btn>
+                  <Btn variant="ghost" style={{ fontSize: 12, color: 'var(--accent)' }}>🗑 Delete</Btn>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
