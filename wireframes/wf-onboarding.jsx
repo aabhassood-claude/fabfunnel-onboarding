@@ -744,4 +744,4 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   return <React.Fragment>{trialBanner}{body}</React.Fragment>;
 }
 
-Object.assign(window, { OnboardingFlow, StepNav, OnbChooseMode, OnbInput, OnbProcessing, OnbDone });
+Object.assign(window, { OnboardingFlow, StepNav, OnbChooseMode, OnbCountrySelect, OnbInput, OnbProcessing, OnbDone });

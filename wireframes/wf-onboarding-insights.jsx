@@ -26,7 +26,7 @@ const StepNavInsights = window.StepNav || function StepNavFallback({ steps, acti
 function InsightsChooseMode({ onPick, onSkip, onLogin }) {
   return (
     <div style={{ padding: '48px 24px', maxWidth: 780, margin: '0 auto', fontFamily: 'var(--hand)', textAlign: 'center' }}>
-      <StepNavInsights steps={['Choose Mode', 'Details', 'Scanning', 'Ready']} active={0} />
+      <StepNavInsights steps={['Choose Mode', 'Country', 'Details', 'Scanning', 'Ready']} active={0} />
 
       <span className="wf-eyebrow" style={{ fontSize: 10 }}>Industry Insights</span>
       <h1 className="wf-h1" style={{ fontSize: 30, marginTop: 6, marginBottom: 6 }}>Quick Start</h1>
@@ -69,7 +69,7 @@ function InsightsInputEcom({ onBack, onContinue }) {
 
   return (
     <div style={{ padding: '48px 24px', maxWidth: 640, margin: '0 auto', fontFamily: 'var(--hand)' }}>
-      <StepNavInsights steps={['Choose Mode', 'Details', 'Scanning', 'Ready']} active={1} />
+      <StepNavInsights steps={['Choose Mode', 'Country', 'Details', 'Scanning', 'Ready']} active={2} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
         <span onClick={onBack} style={{ cursor: 'pointer', fontSize: 14 }}>←</span>
         <h1 className="wf-h1" style={{ fontSize: 24 }}>Tell us about your store</h1>
@@ -134,7 +134,7 @@ function InsightsInputAffiliate({ onBack, onContinue }) {
 
   return (
     <div style={{ padding: '48px 24px', maxWidth: 640, margin: '0 auto', fontFamily: 'var(--hand)' }}>
-      <StepNavInsights steps={['Choose Mode', 'Details', 'Scanning', 'Ready']} active={1} />
+      <StepNavInsights steps={['Choose Mode', 'Country', 'Details', 'Scanning', 'Ready']} active={2} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
         <span onClick={onBack} style={{ cursor: 'pointer', fontSize: 14 }}>←</span>
         <h1 className="wf-h1" style={{ fontSize: 24 }}>What niche are you promoting?</h1>
@@ -225,7 +225,7 @@ function InsightsScanning({ onDone, mode }) {
 
   return (
     <div style={{ padding: '60px 24px', maxWidth: 580, margin: '0 auto', fontFamily: 'var(--hand)', textAlign: 'center' }}>
-      <StepNavInsights steps={['Choose Mode', 'Details', 'Scanning', 'Ready']} active={2} />
+      <StepNavInsights steps={['Choose Mode', 'Country', 'Details', 'Scanning', 'Ready']} active={3} />
       <div style={{ width: 44, height: 44, border: '2px solid var(--ink)', borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 20px' }} />
       <h2 className="wf-h2" style={{ fontSize: 22 }}>Scanning the ad landscape…</h2>
       <p className="wf-body" style={{ fontSize: 13, color: 'var(--ink-faint)', marginTop: 6, marginBottom: 28 }}>This usually takes 15–30 seconds.</p>
@@ -250,7 +250,7 @@ function InsightsDoneEcom({ onBack, onStart, onRestart, data }) {
         <span onClick={onBack} style={{ cursor: 'pointer', fontSize: 13, color: 'var(--ink-faint)' }}>← Back</span>
         <span onClick={onRestart} style={{ cursor: 'pointer', fontSize: 12, color: 'var(--ink-faint)', textDecoration: 'underline' }}>Start over</span>
       </div>
-      <StepNavInsights steps={['Choose Mode', 'Details', 'Scanning', 'Ready']} active={3} />
+      <StepNavInsights steps={['Choose Mode', 'Country', 'Details', 'Scanning', 'Ready']} active={4} />
 
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <div style={{ width: 56, height: 56, border: '2px solid var(--ink)', borderRadius: '50%', background: 'var(--highlight)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', fontSize: 28 }}>✓</div>
@@ -312,7 +312,7 @@ function InsightsDoneAffiliate({ onBack, onStart, onRestart, data }) {
         <span onClick={onBack} style={{ cursor: 'pointer', fontSize: 13, color: 'var(--ink-faint)' }}>← Back</span>
         <span onClick={onRestart} style={{ cursor: 'pointer', fontSize: 12, color: 'var(--ink-faint)', textDecoration: 'underline' }}>Start over</span>
       </div>
-      <StepNavInsights steps={['Choose Mode', 'Details', 'Scanning', 'Ready']} active={3} />
+      <StepNavInsights steps={['Choose Mode', 'Country', 'Details', 'Scanning', 'Ready']} active={4} />
 
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <div style={{ width: 56, height: 56, border: '2px solid var(--ink)', borderRadius: '50%', background: 'var(--highlight)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto', fontSize: 28 }}>✓</div>
@@ -387,16 +387,20 @@ function InsightsOnboardingFlow({ onNav }) {
       onLogin={() => onNav('login')}
     />;
   } else if (step === 1) {
-    body = data.mode === 'ecom'
-      ? <InsightsInputEcom onBack={() => goto(0)} onContinue={(inputs) => { setData(d => ({ ...d, ...inputs })); goto(2); }} />
-      : <InsightsInputAffiliate onBack={() => goto(0)} onContinue={(inputs) => { setData(d => ({ ...d, ...inputs })); goto(2); }} />;
+    body = window.OnbCountrySelect
+      ? <window.OnbCountrySelect onBack={() => goto(0)} onContinue={(country) => { setData(d => ({ ...d, country })); goto(2); }} />
+      : (() => { goto(2); return null; })();
   } else if (step === 2) {
-    body = <InsightsScanning mode={data.mode} onDone={() => goto(3)} />;
+    body = data.mode === 'ecom'
+      ? <InsightsInputEcom onBack={() => goto(1)} onContinue={(inputs) => { setData(d => ({ ...d, ...inputs })); goto(3); }} />
+      : <InsightsInputAffiliate onBack={() => goto(1)} onContinue={(inputs) => { setData(d => ({ ...d, ...inputs })); goto(3); }} />;
+  } else if (step === 3) {
+    body = <InsightsScanning mode={data.mode} onDone={() => goto(4)} />;
   } else {
     const DoneComp = data.mode === 'ecom' ? InsightsDoneEcom : InsightsDoneAffiliate;
     body = <DoneComp
       data={data}
-      onBack={() => goto(1)}
+      onBack={() => goto(2)}
       onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); sessionStorage.removeItem('ff_profile_skipped'); onNav('dashboard'); }}
       onRestart={() => goto(0)}
     />;
