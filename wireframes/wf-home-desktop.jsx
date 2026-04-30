@@ -8,7 +8,7 @@ function HomeDesktop({ openBuyNow, screenshotMode, showAnnotations, onNav, embed
   const isTrial = funnel === 'trial';
   // Copy varies by funnel — direct sells; trial reduces friction.
   const heroCTA       = isTrial ? 'Start free — 7-day trial →' : 'Get fabfunnel.ai →';
-  const heroSub       = isTrial ? 'No credit card · 50 free credits' : 'Plans from $29/mo · cancel anytime';
+  const heroSub       = isTrial ? 'No credit card · 20 free credits' : 'Plans from $29/mo · cancel anytime';
   const pricingTitle  = isTrial ? 'Simple pricing. Cancel anytime.' : 'Simple pricing. Cancel anytime.';
   const pricingSub    = isTrial ? 'Both plans ship a 7-day free trial. No credit card required.' : 'Pick a plan and start generating today. No long-term contracts.';
   const planCTA       = isTrial ? 'Start free — 7-day trial' : 'Buy plan →';

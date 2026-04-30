@@ -222,7 +222,7 @@ function TrialWelcome({ onDone }) {
         <div style={{ ...fadeIn(3), marginBottom: 32 }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 18, flexWrap: 'wrap', marginBottom: 8 }}>
             {[
-              ['50', 'Free credits'],
+              ['20', 'Free credits'],
               ['7', 'Day trial'],
               ['∞', 'Generations'],
             ].map(([num, label], i) => (

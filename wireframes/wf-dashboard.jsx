@@ -900,8 +900,8 @@ function PricingModal({ onClose }) {
               border: '1.5px solid var(--ink)', background: 'var(--paper)',
               borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
               fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-            }}>Start free — 14-day trial</button>
-            <div className="wf-micro" style={{ fontSize: 10, marginTop: 8, textAlign: 'center', padding: '6px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>14 days free. No credit card required to start.</div>
+            }}>Start free — 7-day trial</button>
+            <div className="wf-micro" style={{ fontSize: 10, marginTop: 8, textAlign: 'center', padding: '6px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>7 days free. No credit card required to start.</div>
           </Box>
 
           {/* Pro */}
@@ -928,8 +928,8 @@ function PricingModal({ onClose }) {
               border: '1.5px solid var(--ink)', background: 'var(--ink)', color: 'var(--paper)',
               borderRadius: '5px 7px 6px 8px / 6px 5px 8px 7px',
               fontFamily: 'var(--hand)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-            }}>Start free — 14-day trial</button>
-            <div className="wf-micro" style={{ fontSize: 10, marginTop: 8, textAlign: 'center', padding: '6px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>14 days free. No credit card required to start.</div>
+            }}>Start free — 7-day trial</button>
+            <div className="wf-micro" style={{ fontSize: 10, marginTop: 8, textAlign: 'center', padding: '6px 10px', border: '1.5px dashed var(--ink-faint)', borderRadius: 6 }}>7 days free. No credit card required to start.</div>
           </Box>
 
           {/* Enterprise */}

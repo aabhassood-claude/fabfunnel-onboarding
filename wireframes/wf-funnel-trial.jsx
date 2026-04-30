@@ -493,7 +493,7 @@ function TrialUpgradeModal({ kind, onClose, onUpgrade }) {
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>What you unlock</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
-                'Unlimited credits per month',
+                '100 credits per month',
                 'HD downloads · no watermarks',
                 'Multi-brand workspaces',
                 'Priority queue · video Sage',
