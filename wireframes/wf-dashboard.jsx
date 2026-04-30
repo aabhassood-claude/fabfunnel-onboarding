@@ -612,7 +612,12 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
-        {!['home', 'creative', 'video', 'library', 'studio', 'templates', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
+        {/* ── Brands module (Genie) ── */}
+        {activeNav === 'brands' && (
+          <BrandsModule screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
+        )}
+
+        {!['home', 'creative', 'video', 'library', 'studio', 'templates', 'brands', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -1509,6 +1514,191 @@ function TemplatesModule({ screenshotMode }) {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <Btn variant="ghost" onClick={() => setShowUpload(false)}>Cancel</Btn>
               <Btn onClick={() => setShowUpload(false)}>Upload & Save</Btn>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Brands module (Genie) ──
+function BrandsModule({ screenshotMode, onGenerate }) {
+  const brandsData = [
+    { id: 'airbnb', name: 'Airbnb', icon: 'A', industry: 'Travel', domain: 'airbnb.com', tone: 'Warm, Adventurous, Belonging', typography: 'Cereal, Circular', guidelines: 'Belong anywhere. Focus on experiences, not just places.', products: [['🏖','Experiences','airbnb.com/experiences'],['🏡','Luxe Collection','airbnb.com/luxe']], competitors: [['B','Booking.com','booking.com · Travel',['Ad creatives','Messaging']],['V','Vrbo','vrbo.com · Travel',['Visual style','Promotions']],['E','Expedia','expedia.com · Travel',['Social posts']]] },
+    { id: 'amalfa', name: 'amalfa.com', icon: 'a', industry: 'DTC', domain: 'Amalfa', tone: 'Modern, Approachable', typography: 'Inter, Sans-serif', guidelines: 'Effortless style.', products: [], competitors: [] },
+    { id: 'apple', name: 'Apple', icon: '🍎', industry: 'Technology', domain: 'apple.com', tone: 'Minimal, Aspirational', typography: 'SF Pro Display', guidelines: 'Think different.', products: [['📱','iPhone','apple.com/iphone']], competitors: [['S','Samsung','samsung.com · Tech',['Ad creatives']]] },
+    { id: 'duolingo', name: 'Duolingo', icon: '🦉', industry: 'Education', domain: 'duolingo.com', tone: 'Playful, Encouraging', typography: 'Feather Bold', guidelines: 'Make learning addictive.', products: [], competitors: [] },
+    { id: 'glossier', name: 'Glossier', icon: 'G', industry: 'Health & Beauty', domain: 'glossier.com', tone: 'Friendly, Real', typography: 'Surveyor, Graphik', guidelines: 'Skin first.', products: [], competitors: [] },
+    { id: 'google', name: 'google', icon: 'g', industry: 'DTC', domain: 'google.com', tone: 'Helpful, Smart', typography: 'Google Sans', guidelines: 'Focus on the user.', products: [], competitors: [] },
+    { id: 'lululemon', name: 'Lululemon', icon: 'L', industry: 'Fashion & Apparel', domain: 'lululemon.com', tone: 'Aspirational, Bold', typography: 'Pangea', guidelines: 'Elevate from mediocrity.', products: [], competitors: [] },
+    { id: 'nike', name: 'Nike', icon: '✓', industry: 'Fashion & Apparel', domain: 'nike.com', tone: 'Bold, Inspirational', typography: 'Futura', guidelines: 'Just do it.', products: [], competitors: [] },
+    { id: 'notion', name: 'Notion', icon: 'N', industry: 'Technology', domain: 'notion.so', tone: 'Calm, Intelligent', typography: 'Inter', guidelines: 'One workspace.', products: [], competitors: [] },
+    { id: 'spotify', name: 'Spotify', icon: '♫', industry: 'Technology', domain: 'spotify.com', tone: 'Personal, Playful', typography: 'Spotify Circular', guidelines: 'Music for every moment.', products: [], competitors: [] },
+    { id: 'stripe', name: 'Stripe', icon: 'S', industry: 'Financial Services', domain: 'stripe.com', tone: 'Technical, Elegant', typography: 'Stripe Sans', guidelines: 'Increase the GDP of the internet.', products: [], competitors: [] },
+    { id: 'tesla', name: 'Tesla', icon: 'T', industry: 'Automotive', domain: 'tesla.com', tone: 'Bold, Futuristic', typography: 'Gotham', guidelines: 'Sustainable energy.', products: [], competitors: [] },
+  ];
+
+  const [selectedBrand, setSelectedBrand] = React.useState(null);
+  const [showAddBrand, setShowAddBrand] = React.useState(false);
+  const [detailTab, setDetailTab] = React.useState('overview');
+
+  // ── Brand detail view ──
+  if (selectedBrand) {
+    const b = brandsData.find(x => x.id === selectedBrand) || brandsData[0];
+    return (
+      <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20, flexWrap: 'wrap' }}>
+          <button onClick={() => setSelectedBrand(null)} style={{ width: 32, height: 32, borderRadius: '50%', border: '1.5px solid var(--ink)', background: 'var(--paper)', cursor: 'pointer', fontSize: 12 }}>←</button>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', border: '1.5px solid var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700 }}>{b.icon}</div>
+          <div style={{ flex: 1 }}>
+            <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>{b.name}</h1>
+            <span className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)' }}>{b.industry}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 4 }}>
+            {[1,2,3].map(i => <div key={i} style={{ width: 18, height: 18, borderRadius: '50%', background: `hsl(${i*60},0%,${30+i*15}%)`, border: '1px solid var(--ink-faint)' }} />)}
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: 'inline-flex', gap: 0, padding: 3, background: 'var(--paper-soft)', border: '1.5px solid var(--ink-faint)', borderRadius: 8, marginBottom: 20 }}>
+          {['Overview','Strategies','Library'].map(t => (
+            <button key={t} onClick={() => setDetailTab(t.toLowerCase())} style={{
+              padding: '8px 18px', borderRadius: 6, border: 'none',
+              background: detailTab === t.toLowerCase() ? 'var(--paper)' : 'transparent',
+              fontFamily: 'var(--hand)', fontSize: 13, fontWeight: detailTab === t.toLowerCase() ? 700 : 400,
+              cursor: 'pointer', boxShadow: detailTab === t.toLowerCase() ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
+            }}>{t}</button>
+          ))}
+        </div>
+
+        {detailTab === 'overview' && (
+          <React.Fragment>
+            {/* Stats row */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 16 }}>
+              {[['🌐 Website','https://'+b.domain,'✓ Connected'],['📦 Products',b.products.length,'Synced items'],['⏱ Last synced','Never','Auto-sync enabled'],['🖼 Assets created','0','+6 this week']].map(([l,v,h],i) => (
+                <Box key={i} style={{ padding: 14 }}><div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 6 }}>{l}</div><div style={{ fontSize: 14, fontWeight: 700 }}>{v}</div><div className="wf-micro" style={{ fontSize: 10, marginTop: 4 }}>{h}</div></Box>
+              ))}
+            </div>
+            {/* Style row */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 18 }}>
+              <Box style={{ padding: 14 }}><div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>🎨 Brand colors</div><div style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 11 }}>{[1,2,3].map(i=><React.Fragment key={i}><div style={{ width: 16, height: 16, borderRadius: 3, background: `hsl(${i*80},40%,${30+i*10}%)` }} /><code style={{ background: 'var(--paper-soft)', padding: '1px 4px', borderRadius: 3, fontSize: 10 }}>#{(i*111111).toString(16).slice(0,6)}</code></React.Fragment>)}</div></Box>
+              <Box style={{ padding: 14 }}><div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>🔤 Typography</div><div style={{ fontSize: 13, fontWeight: 600 }}><strong>{b.typography.split(',')[0]}</strong>{b.typography.includes(',') ? ', '+b.typography.split(',').slice(1).join(',') : ''}</div></Box>
+              <Box style={{ padding: 14 }}><div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 8 }}>💬 Brand tone</div><div style={{ fontSize: 13, fontWeight: 600 }}>{b.tone}</div></Box>
+            </div>
+            {/* CTAs */}
+            <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+              <Btn onClick={onGenerate}>✦ Generate Ad Creative</Btn>
+              <Btn variant="ghost">🖼 Generate Product Assets</Btn>
+            </div>
+            {/* Edit form */}
+            <Box style={{ padding: 22, marginBottom: 16 }}>
+              <div className="wf-eyebrow" style={{ fontSize: 10, marginBottom: 14 }}>Edit Brand Details</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 14 }}>
+                <div><div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Name</div><input className="wf-field" defaultValue={b.name} style={{ width: '100%', padding: '10px 12px', fontSize: 13 }} /></div>
+                <div><div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Domain / Website</div><input className="wf-field" defaultValue={'https://'+b.domain} style={{ width: '100%', padding: '10px 12px', fontSize: 13 }} /></div>
+                <div><div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Industry</div><select className="wf-field" defaultValue={b.industry} style={{ width: '100%', padding: '8px 12px', fontSize: 12 }}>{['Travel','Technology','Fashion & Apparel','Health & Beauty','Financial Services','Automotive','DTC','Education','Other'].map(i=><option key={i}>{i}</option>)}</select></div>
+                <div><div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Tone</div><input className="wf-field" defaultValue={b.tone} style={{ width: '100%', padding: '10px 12px', fontSize: 13 }} /></div>
+              </div>
+              <div style={{ marginBottom: 14 }}><div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Guidelines</div><textarea className="wf-field" defaultValue={b.guidelines} rows={2} style={{ width: '100%', padding: '10px 12px', fontSize: 12, resize: 'vertical' }} /></div>
+              <div style={{ display: 'flex', gap: 10 }}><Btn>Save Changes</Btn><Btn variant="ghost" style={{ color: 'var(--accent)' }}>🗑 Delete Brand</Btn></div>
+            </Box>
+            {/* Products */}
+            <Box style={{ padding: 22, marginBottom: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
+                <div className="wf-eyebrow" style={{ fontSize: 10, display: 'flex', alignItems: 'center', gap: 6 }}>📦 Product Catalog <span style={{ padding: '1px 8px', border: '1px solid var(--ink-faint)', borderRadius: 10, fontSize: 10 }}>{b.products.length}</span></div>
+                <div style={{ display: 'flex', gap: 8 }}><Btn variant="ghost" style={{ fontSize: 11 }}>🔄 Sync Now</Btn><Btn variant="ghost" style={{ fontSize: 11 }}>+ Add Product</Btn></div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
+                {b.products.map(([emoji,name,url],i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', border: '1.5px solid var(--ink-faint)', borderRadius: 6 }}>
+                    <div style={{ width: 36, height: 36, background: 'var(--paper-soft)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{emoji}</div>
+                    <div style={{ flex: 1 }}><div style={{ fontSize: 12, fontWeight: 700 }}>{name}</div><div className="wf-micro" style={{ fontSize: 10 }}>{url}</div></div>
+                    <span style={{ fontSize: 12, color: 'var(--ink-faint)' }}>↗</span>
+                  </div>
+                ))}
+              </div>
+            </Box>
+            {/* Competitors */}
+            <Box style={{ padding: 22 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
+                <div className="wf-eyebrow" style={{ fontSize: 10, display: 'flex', alignItems: 'center', gap: 6 }}>⚖ Competitors <span style={{ padding: '1px 8px', border: '1px solid var(--ink-faint)', borderRadius: 10, fontSize: 10 }}>{b.competitors.length}</span></div>
+                <Btn variant="ghost" style={{ fontSize: 11 }}>+ Add Competitor</Btn>
+              </div>
+              <p className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', marginBottom: 12 }}>Brands we track for inspiration — we'll apply their winning moves to your creatives.</p>
+              {b.competitors.map(([letter,name,meta,tags],i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < b.competitors.length-1 ? '1px solid var(--ink-ghost)' : 'none', flexWrap: 'wrap' }}>
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', border: '1.5px solid var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{letter}</div>
+                  <div style={{ flex: 1, minWidth: 120 }}><div style={{ fontSize: 13, fontWeight: 700 }}>{name}</div><div className="wf-micro" style={{ fontSize: 10 }}>{meta}</div></div>
+                  <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>{tags.map((t,j)=><Pill key={j} soft style={{ fontSize: 10 }}>{t}</Pill>)}</div>
+                  <span style={{ fontSize: 12, color: 'var(--ink-faint)', cursor: 'pointer' }}>✕</span>
+                </div>
+              ))}
+            </Box>
+          </React.Fragment>
+        )}
+        {detailTab !== 'overview' && (
+          <div style={{ textAlign: 'center', padding: 48, color: 'var(--ink-faint)' }}>
+            <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>{detailTab === 'strategies' ? '📋' : '🖼'}</div>
+            <div style={{ fontSize: 14, fontWeight: 700 }}>{detailTab === 'strategies' ? 'Strategies' : 'Library'}</div>
+            <div className="wf-body" style={{ fontSize: 12, marginTop: 4 }}>Coming next sprint</div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── Brand grid view ──
+  return (
+    <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1 className="wf-h1" style={{ fontSize: 26 }}>🏷 Brands</h1>
+          <span style={{ padding: '2px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 999, fontSize: 12, fontWeight: 700 }}>{brandsData.length}</span>
+        </div>
+        <Btn onClick={() => setShowAddBrand(true)}>+ Add Brand</Btn>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+        {brandsData.map(b => (
+          <Box key={b.id} onClick={() => { setSelectedBrand(b.id); setDetailTab('overview'); }} style={{ padding: 20, cursor: 'pointer', background: 'var(--paper)' }}>
+            <div style={{ width: 42, height: 42, borderRadius: '50%', border: '1.5px solid var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, marginBottom: 12 }}>{b.icon}</div>
+            <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 2 }}>{b.name}</div>
+            <div className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', marginBottom: 10 }}>{b.industry}</div>
+            <div style={{ display: 'flex', gap: 4, marginBottom: 10 }}>
+              {[1,2,3].map(i => <div key={i} style={{ width: 14, height: 14, borderRadius: '50%', background: `hsl(0,0%,${40+i*15}%)` }} />)}
+            </div>
+            <div className="wf-micro" style={{ fontSize: 10, borderTop: '1px solid var(--ink-ghost)', paddingTop: 8 }}>🌐 {b.domain}</div>
+          </Box>
+        ))}
+      </div>
+
+      {/* Add Brand Modal */}
+      {showAddBrand && (
+        <div onClick={() => setShowAddBrand(false)} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(20,20,20,0.45)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: 'var(--paper)', border: '1.5px solid var(--ink)', borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px', width: 440, padding: '28px', fontFamily: 'var(--hand)', position: 'relative' }}>
+            <button onClick={() => setShowAddBrand(false)} className="wf-close" style={{ position: 'absolute', top: 14, right: 14, width: 28, height: 28, fontSize: 14 }}>✕</button>
+            <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Add a new brand</h3>
+            <p className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 20 }}>We'll auto-pull products, colors, and branding.</p>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Store URL <span style={{ color: 'var(--accent)' }}>*</span></div>
+              <input className="wf-field" placeholder="https://yourstore.com" style={{ width: '100%', padding: '12px 14px', fontSize: 14 }} />
+              <div className="wf-micro" style={{ marginTop: 6, fontSize: 10 }}>Works with Shopify, WooCommerce, Amazon, and most platforms.</div>
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Brand name <span style={{ fontWeight: 400, color: 'var(--ink-faint)' }}>(optional — we'll detect from your store)</span></div>
+              <input className="wf-field" placeholder="e.g., Aurora Apparel" style={{ width: '100%', padding: '12px 14px', fontSize: 14 }} />
+            </div>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Industry</div>
+              <select className="wf-field" style={{ width: '100%', padding: '10px 12px', fontSize: 13 }}>
+                <option>Auto-detect</option><option>Travel</option><option>Technology</option><option>Fashion & Apparel</option><option>Health & Beauty</option><option>Financial Services</option><option>Automotive</option><option>DTC</option><option>Education</option><option>Other</option>
+              </select>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <Btn variant="ghost" onClick={() => setShowAddBrand(false)}>Cancel</Btn>
+              <Btn onClick={() => setShowAddBrand(false)}>Analyze & Add →</Btn>
             </div>
           </div>
         </div>
