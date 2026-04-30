@@ -367,6 +367,31 @@ function OnbInput({ onBack, onContinue, kind }) {
             className="wf-field"
             style={{ display: 'block', width: '100%', marginTop: 8, fontFamily: 'var(--hand)', fontSize: 14, padding: '10px 14px', boxSizing: 'border-box', outline: 'none' }}
           />
+
+          {/* Brand guidelines upload */}
+          <label className="wf-body" style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', display: 'block', marginTop: 24 }}>
+            Brand guidelines <span className="wf-micro" style={{ fontWeight: 400 }}>(optional — PDF with your brand kit)</span>
+          </label>
+          <div onClick={() => document.getElementById('brand-guidelines-input')?.click()} style={{
+            marginTop: 8, padding: '18px 20px',
+            border: '1.5px dashed var(--ink-faint)',
+            borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
+            background: 'var(--paper-soft)',
+            cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 14,
+            transition: 'border-color 80ms',
+          }}>
+            <div style={{ width: 40, height: 40, borderRadius: 8, background: 'var(--paper)', border: '1.5px solid var(--ink-faint)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>📄</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontWeight: 700 }}>Upload brand guidelines</div>
+              <div className="wf-micro" style={{ fontSize: 11, marginTop: 2 }}>PDF · up to 25 MB · colors, fonts, tone, logo usage</div>
+            </div>
+            <span style={{ fontSize: 12, color: 'var(--ink-faint)', fontWeight: 600 }}>Browse</span>
+            <input type="file" id="brand-guidelines-input" accept=".pdf" style={{ display: 'none' }} />
+          </div>
+          <div className="wf-micro" style={{ marginTop: 6, fontSize: 10, color: 'var(--ink-faint)' }}>
+            Genie will use your guidelines to match fonts, colors, and tone in generated creatives.
+          </div>
         </Box>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 28 }}>
