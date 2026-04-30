@@ -66,14 +66,21 @@ function ModalShell({ width = 480, step, total, onClose, onBack, children, stepS
   );
 }
 
-// ── Variant A — Direct Sales (3 steps) ──
+// ── Variant A — Direct Sales (3 steps for new users, 2 for existing) ──
 function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded }) {
+  const isExistingUser = window.location.hash.startsWith('#dashboard') || window.location.hash.startsWith('#creative') || window.location.hash.startsWith('#video');
   const [step, setStep] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [confirmed, setConfirmed] = React.useState(false);
 
-  const next = () => setStep(s => Math.min(3, s + 1));
-  const back = () => setStep(s => Math.max(1, s - 1));
+  const next = () => {
+    if (isExistingUser && step === 1) { setStep(3); return; }
+    setStep(s => Math.min(3, s + 1));
+  };
+  const back = () => {
+    if (isExistingUser && step === 3) { setStep(1); return; }
+    setStep(s => Math.max(1, s - 1));
+  };
 
   const handlePay = () => {
     setLoading(true);
@@ -83,7 +90,7 @@ function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded 
     }, 1800);
   };
 
-  const totalSteps = 3;
+  const totalSteps = isExistingUser ? 2 : 3;
 
   return (
     <ModalShell width={480} step={step} total={totalSteps} onClose={onClose} onBack={back} stepStyle={stepStyle}>
@@ -233,14 +240,18 @@ function ModalVariantA({ onClose, stepStyle = 'dots', showAnnotations, embedded 
   );
 }
 
-// ── Variant B — Free Trial (2 steps) ──
+// ── Variant B — Free Trial (2 steps for new users, 1 for existing) ──
 function ModalVariantB({ onClose, stepStyle = 'dots', showAnnotations, embedded }) {
+  const isExistingUser = window.location.hash.startsWith('#dashboard') || window.location.hash.startsWith('#creative') || window.location.hash.startsWith('#video');
   const [step, setStep] = React.useState(1);
   const [selectedPlan, setSelectedPlan] = React.useState('individual');
   const [loading, setLoading] = React.useState(false);
   const [confirmed, setConfirmed] = React.useState(false);
 
-  const next = () => setStep(s => Math.min(2, s + 1));
+  const next = () => {
+    if (isExistingUser && step === 1) { handleStart(); return; }
+    setStep(s => Math.min(2, s + 1));
+  };
   const back = () => setStep(s => Math.max(1, s - 1));
 
   const handleStart = () => {
@@ -251,7 +262,7 @@ function ModalVariantB({ onClose, stepStyle = 'dots', showAnnotations, embedded 
     }, 1400);
   };
 
-  const totalSteps = 2;
+  const totalSteps = isExistingUser ? 1 : 2;
 
   return (
     <ModalShell width={640} step={step} total={totalSteps} onClose={onClose} onBack={back} stepStyle={stepStyle}>
