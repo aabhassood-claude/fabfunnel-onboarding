@@ -397,7 +397,7 @@ function InsightsOnboardingFlow({ onNav }) {
     body = <DoneComp
       data={data}
       onBack={() => goto(1)}
-      onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
+      onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); sessionStorage.removeItem('ff_profile_skipped'); onNav('dashboard'); }}
       onRestart={() => goto(0)}
     />;
   }

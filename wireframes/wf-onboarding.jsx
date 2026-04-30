@@ -730,13 +730,13 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   else body = isAff
     ? <window.OnbDoneAffiliate
         onBack={() => goto(2)}
-        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
+        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); sessionStorage.removeItem('ff_profile_skipped'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         category={data.category}
       />
     : <OnbDone
         onBack={() => goto(2)}
-        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
+        onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); sessionStorage.removeItem('ff_profile_skipped'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         brandName={data.brand}
       />;
