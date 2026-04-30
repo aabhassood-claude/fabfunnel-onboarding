@@ -312,7 +312,6 @@ function VideoSage({ screenshotMode, showAnnotations }) {
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                 <Btn variant="outline" style={{ fontSize: 12, padding: '6px 12px' }}>↻ Regenerate</Btn>
                 <Btn variant="outline" style={{ fontSize: 12, padding: '6px 12px' }}>⎘ Copy script</Btn>
-                <Btn style={{ fontSize: 12, padding: '6px 12px' }}>→ Send to FabAgent</Btn>
               </div>
             </div>
 
