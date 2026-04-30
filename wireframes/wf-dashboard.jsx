@@ -661,6 +661,9 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
       {/* ── Pricing Modal ── */}
       {showPricing && <PricingModal onClose={() => setShowPricing(false)} />}
 
+      {/* AI Assistant floating bar */}
+      <AiAssistantBar onNav={(id) => setActiveNav(id)} />
+
       {/* 30% discount offer popup (trial users only, fires 5s after landing) */}
       {showTrialOffer && (
         <div onClick={() => { setShowTrialOffer(false); setShowOfferTimer(true); }} style={{
@@ -2595,6 +2598,183 @@ function IntelligenceModule({ screenshotMode }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ── AI Assistant floating bar ──
+function AiAssistantBar({ onNav }) {
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState('');
+  const [messages, setMessages] = React.useState([]);
+  const [thinking, setThinking] = React.useState(false);
+  const scrollRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages, thinking]);
+
+  const mockResponses = {
+    'video': { text: "I don't have video generation available right now — but I can help you create killer static assets that could work as video frames, or we could explore other creative directions.\n\nWhat's the play here? Are you thinking:", bullets: ['**Static assets for video editing** (I can generate images, variations, photoshoots)', '**Something else entirely** (walk me through it)'], ctas: ['Generate a campaign visual', 'Get product images', 'Check the brand moodboard'] },
+    'creative': { text: "Let's create something! I can generate ad creatives for any platform — Meta, TikTok, Google, you name it.\n\nWhat do you need?", bullets: ['**Product ad** — hero shot with CTA', '**Brand story** — lifestyle imagery', '**Offer banner** — sale, discount, limited time'], ctas: ['Generate Product Ads →', 'Browse templates', 'View past creatives'] },
+    'competitor': { text: "I can pull up competitor intelligence for you. Here's what I can do:", bullets: ['**Discover** — browse live ads across your industry', '**Intelligence** — deep-dive on specific competitors', '**Boards** — organize and save winning ads'], ctas: ['Open Discover', 'View competitor ads', 'Create a new board'] },
+    'help': { text: "Here's what I can help you with right now:", bullets: ['**Generate creatives** — static images or video assets', '**Analyze competitors** — see what ads are running in your space', '**Review your library** — find and reuse past creatives', '**Brand settings** — update your brand profile'], ctas: ['Generate creatives', 'Explore competitor ads', 'Open Creative Library', 'Edit brand'] },
+    'default': { text: "I'm here to help! Here are some things I can do for you:", bullets: ['**Generate ad creatives** from a prompt or template', '**Find competitor ads** in your industry', '**Analyze a video** for hooks and pacing', '**Manage your brand** profile and assets'], ctas: ['Generate a creative', 'Explore Discover', 'Try Video Sage', 'Open Library'] },
+  };
+
+  const getResponse = (q) => {
+    const lower = q.toLowerCase();
+    if (lower.includes('video')) return mockResponses.video;
+    if (lower.includes('creative') || lower.includes('generate') || lower.includes('ad') || lower.includes('image')) return mockResponses.creative;
+    if (lower.includes('competitor') || lower.includes('discover') || lower.includes('insight')) return mockResponses.competitor;
+    if (lower.includes('help') || lower.includes('what can')) return mockResponses.help;
+    return mockResponses.default;
+  };
+
+  const handleSubmit = () => {
+    if (!query.trim()) return;
+    const q = query;
+    setQuery('');
+    setMessages(prev => [...prev, { from: 'user', text: q }]);
+    setThinking(true);
+    setTimeout(() => {
+      const resp = getResponse(q);
+      setMessages(prev => [...prev, { from: 'bot', ...resp }]);
+      setThinking(false);
+    }, 1200);
+  };
+
+  const handleCta = (cta) => {
+    const lower = cta.toLowerCase();
+    if (lower.includes('product ads') || lower.includes('generate a creative') || lower.includes('campaign visual') || lower.includes('generate creatives')) { onNav('creative'); setOpen(false); }
+    else if (lower.includes('discover') || lower.includes('competitor ads')) { onNav('discover'); setOpen(false); }
+    else if (lower.includes('library') || lower.includes('past creatives')) { onNav('library'); setOpen(false); }
+    else if (lower.includes('video sage')) { onNav('video'); setOpen(false); }
+    else if (lower.includes('template')) { onNav('templates'); setOpen(false); }
+    else if (lower.includes('brand') || lower.includes('edit brand') || lower.includes('moodboard')) { onNav('brands'); setOpen(false); }
+    else if (lower.includes('board')) { onNav('boards'); setOpen(false); }
+    else { setMessages(prev => [...prev, { from: 'user', text: cta }]); }
+  };
+
+  // Floating input bar (collapsed)
+  if (!open) {
+    return (
+      <div style={{
+        position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 800,
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '10px 12px 10px 18px',
+        background: 'var(--paper)', border: '1.5px solid var(--ink-faint)',
+        borderRadius: 999, boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+        fontFamily: 'var(--hand)', width: 420, maxWidth: 'calc(100vw - 48px)',
+      }}>
+        <span style={{ color: 'var(--ink-faint)', fontSize: 16, cursor: 'pointer' }} onClick={() => setOpen(true)}>+</span>
+        <input
+          value={query} onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setOpen(true)}
+          onKeyDown={(e) => { if (e.key === 'Enter') { setOpen(true); handleSubmit(); } }}
+          placeholder="What would you like to do?"
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 14 }}
+        />
+        <div style={{ display: 'flex', gap: 4 }}>
+          <span style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--highlight)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>✦</span>
+          <span style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--paper-soft)', border: '1px solid var(--ink-faint)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700 }}>G</span>
+        </div>
+        <button onClick={() => { setOpen(true); handleSubmit(); }} style={{
+          width: 36, height: 36, borderRadius: '50%', border: 'none',
+          background: 'var(--ink)', color: 'var(--paper)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 16, cursor: 'pointer',
+        }}>▶</button>
+      </div>
+    );
+  }
+
+  // Expanded chat window
+  return (
+    <div style={{
+      position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 800,
+      width: 520, maxWidth: 'calc(100vw - 48px)', maxHeight: 'calc(100vh - 100px)',
+      background: 'var(--paper)', border: '1.5px solid var(--ink-faint)',
+      borderRadius: 18, boxShadow: '0 12px 48px rgba(0,0,0,0.16)',
+      fontFamily: 'var(--hand)', display: 'flex', flexDirection: 'column', overflow: 'hidden',
+    }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: '1px solid var(--ink-ghost)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--highlight)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>✦</span>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700 }}>Genie Assistant</div>
+            <div className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)' }}>Ask me anything about your creatives</div>
+          </div>
+        </div>
+        <button onClick={() => setOpen(false)} style={{ background: 'transparent', border: 'none', fontSize: 16, cursor: 'pointer', color: 'var(--ink-faint)', width: 28, height: 28, borderRadius: '50%' }}>✕</button>
+      </div>
+
+      {/* Messages */}
+      <div ref={scrollRef} style={{ flex: 1, overflow: 'auto', padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 14, minHeight: 200, maxHeight: 400 }}>
+        {messages.length === 0 && !thinking && (
+          <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--ink-faint)' }}>
+            <div style={{ fontSize: 28, marginBottom: 8 }}>✦</div>
+            <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>How can I help?</div>
+            <div style={{ fontSize: 12 }}>Ask me to generate creatives, find competitor ads, or explore your library.</div>
+          </div>
+        )}
+
+        {messages.map((m, i) => (
+          <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: m.from === 'user' ? 'flex-end' : 'flex-start' }}>
+            <div style={{
+              padding: '10px 14px', maxWidth: '85%',
+              borderRadius: m.from === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
+              background: m.from === 'user' ? 'var(--ink)' : 'var(--paper-soft)',
+              color: m.from === 'user' ? 'var(--paper)' : 'var(--ink)',
+              border: m.from === 'user' ? 'none' : '1px solid var(--ink-ghost)',
+              fontSize: 13, lineHeight: 1.5, whiteSpace: 'pre-line',
+            }}>
+              {m.text}
+              {m.bullets && (
+                <ul style={{ margin: '10px 0 0', padding: '0 0 0 16px', listStyle: 'disc' }}>
+                  {m.bullets.map((b, j) => <li key={j} style={{ marginBottom: 4 }} dangerouslySetInnerHTML={{ __html: b }} />)}
+                </ul>
+              )}
+            </div>
+            {m.ctas && (
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
+                {m.ctas.map((cta, j) => (
+                  <button key={j} onClick={() => handleCta(cta)} style={{
+                    padding: '6px 14px', borderRadius: 999,
+                    border: '1.5px solid var(--ink)', background: 'var(--paper)',
+                    fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  }}>{cta}</button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {thinking && (
+          <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+            <div style={{ padding: '10px 14px', borderRadius: '14px 14px 14px 4px', background: 'var(--paper-soft)', border: '1px solid var(--ink-ghost)', fontSize: 18, letterSpacing: 4 }}>···</div>
+          </div>
+        )}
+      </div>
+
+      {/* Input */}
+      <div style={{ padding: '12px 18px', borderTop: '1px solid var(--ink-ghost)', display: 'flex', gap: 10, alignItems: 'center' }}>
+        <span style={{ color: 'var(--ink-faint)', fontSize: 16, cursor: 'pointer' }}>+</span>
+        <input
+          value={query} onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          placeholder="What would you like to do?"
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 14 }}
+          autoFocus
+        />
+        <button onClick={handleSubmit} style={{
+          width: 34, height: 34, borderRadius: '50%', border: 'none',
+          background: query.trim() ? 'var(--ink)' : 'var(--ink-ghost)', color: 'var(--paper)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 14, cursor: 'pointer', transition: 'background 80ms',
+        }}>▶</button>
+      </div>
     </div>
   );
 }
