@@ -360,9 +360,14 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <CreativeLibrary screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
         )}
 
-        {/* ── Studio module (Genie — same grid as Creative Library, scoped to Genie output) ── */}
+        {/* ── Studio module ── */}
         {activeNav === 'studio' && (
           <StudioModule screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
+        )}
+
+        {/* ── Templates module (Genie) ── */}
+        {activeNav === 'templates' && (
+          <TemplatesModule screenshotMode={screenshotMode} />
         )}
 
         {/* ── Discover module (Industry Insights) ── */}
@@ -607,7 +612,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
-        {!['home', 'creative', 'video', 'library', 'studio', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
+        {!['home', 'creative', 'video', 'library', 'studio', 'templates', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -1371,6 +1376,141 @@ function StudioModule({ screenshotMode, onGenerate }) {
         <div style={{ textAlign: 'center', padding: 48, color: 'var(--ink-faint)' }}>
           <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>🎨</div>
           <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>No creatives match this filter.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Templates module (Genie) ──
+function TemplatesModule({ screenshotMode }) {
+  const [filter, setFilter] = React.useState('all');
+  const [category, setCategory] = React.useState('all');
+  const [showUpload, setShowUpload] = React.useState(false);
+
+  const templates = [
+    { id: 1, name: 'Product Hero — Minimal', cat: 'Product Ads', type: 'image', used: 24 },
+    { id: 2, name: 'Social Proof Card', cat: 'Social Proof', type: 'image', used: 18 },
+    { id: 3, name: 'Flash Sale Countdown', cat: 'Urgency', type: 'video', used: 12, duration: 15 },
+    { id: 4, name: 'Before / After', cat: 'Comparison', type: 'image', used: 21 },
+    { id: 5, name: 'Brand Story Hero', cat: 'Brand Story', type: 'image', used: 9 },
+    { id: 6, name: 'Brand Story Reel', cat: 'Brand Story', type: 'video', used: 6, duration: 30 },
+    { id: 7, name: 'Lifestyle Product Shot', cat: 'Product Ads', type: 'image', used: 15 },
+    { id: 8, name: 'Offer Highlight', cat: 'Product Ads', type: 'image', used: 11 },
+    { id: 9, name: 'Testimonial Reel', cat: 'Social Proof', type: 'video', used: 7, duration: 20 },
+    { id: 10, name: 'Limited Time Banner', cat: 'Urgency', type: 'image', used: 8 },
+  ];
+
+  const categories = [...new Set(templates.map(t => t.cat))];
+  const imgCount = templates.filter(t => t.type === 'image').length;
+  const vidCount = templates.filter(t => t.type === 'video').length;
+
+  const filtered = templates.filter(t => {
+    if (filter === 'image' && t.type !== 'image') return false;
+    if (filter === 'video' && t.type !== 'video') return false;
+    if (filter === 'uploaded') return false; // no uploaded templates in sample
+    if (category !== 'all' && t.cat !== category) return false;
+    return true;
+  });
+
+  return (
+    <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1 className="wf-h1" style={{ fontSize: 26 }}>📋 Templates</h1>
+          <span style={{ padding: '2px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 999, fontSize: 12, fontWeight: 700 }}>{templates.length}</span>
+        </div>
+        <Btn onClick={() => setShowUpload(true)}>+ Upload Template</Btn>
+      </div>
+
+      <div className="wf-divider-dashed" style={{ marginBottom: 14 }} />
+
+      <p className="wf-body" style={{ fontSize: 13, color: 'var(--ink-faint)', marginBottom: 20 }}>
+        Saved references Genie uses as inspiration. Use them from Creative Generation to draft ads in a matching style.
+      </p>
+
+      {/* Filters */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 4, padding: 3, border: '1.5px solid var(--ink)', borderRadius: 999 }}>
+          {[
+            { id: 'all', label: 'All', count: templates.length },
+            { id: 'image', label: '🖼 Image', count: imgCount },
+            { id: 'video', label: '🎬 Video', count: vidCount },
+            { id: 'uploaded', label: '📤 Uploaded', count: 0 },
+          ].map(f => (
+            <button key={f.id} onClick={() => setFilter(f.id)} style={{
+              padding: '5px 14px', borderRadius: 999, border: 'none',
+              background: filter === f.id ? 'var(--ink)' : 'transparent',
+              color: filter === f.id ? 'var(--paper)' : 'var(--ink-soft)',
+              fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>{f.label} <span style={{ opacity: 0.6 }}>{f.count}</span></button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span className="wf-eyebrow" style={{ fontSize: 9 }}>Category</span>
+          <select value={category} onChange={(e) => setCategory(e.target.value)} style={{ padding: '5px 10px', border: '1.5px solid var(--ink)', borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)', cursor: 'pointer' }}>
+            <option value="all">All categories</option>
+            {categories.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Template grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 14 }}>
+        {filtered.map(t => (
+          <Box key={t.id} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', background: 'var(--paper)' }}>
+            <div style={{ position: 'relative', aspectRatio: '1', background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ position: 'absolute', top: 8, left: 8, padding: '3px 10px', fontSize: 10, fontWeight: 700, border: '1px solid var(--ink)', borderRadius: 8, background: t.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: t.type === 'video' ? 'var(--paper)' : 'var(--ink)' }}>
+                {t.type === 'video' ? '🎬 Video' : '🖼 Image'}
+              </div>
+              {t.type === 'video' && t.duration && (
+                <div style={{ position: 'absolute', bottom: 8, right: 8, padding: '2px 8px', background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: 10, fontWeight: 700, borderRadius: 10 }}>{t.duration}s</div>
+              )}
+              <MockUI kind={t.type === 'video' ? 'video' : 'creative'} style={{ width: '70%', height: '70%' }} />
+            </div>
+            <div style={{ padding: '10px 12px' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{t.name}</div>
+              <div className="wf-micro" style={{ fontSize: 10 }}>{t.cat} · used {t.used}×</div>
+            </div>
+          </Box>
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: 48, color: 'var(--ink-faint)' }}>
+          <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>📋</div>
+          <div style={{ fontSize: 14, fontWeight: 700 }}>No templates match this filter.</div>
+        </div>
+      )}
+
+      {/* Upload modal */}
+      {showUpload && (
+        <div onClick={() => setShowUpload(false)} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(20,20,20,0.45)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: 'var(--paper)', border: '1.5px solid var(--ink)', borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px', width: 440, padding: '28px', fontFamily: 'var(--hand)', position: 'relative' }}>
+            <button onClick={() => setShowUpload(false)} className="wf-close" style={{ position: 'absolute', top: 14, right: 14, width: 24, height: 24, fontSize: 12 }}>✕</button>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Upload a template</h3>
+            <p className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 18 }}>Add your own reference — Genie will use it as inspiration.</p>
+            <div style={{ border: '2px dashed var(--ink-faint)', borderRadius: 10, padding: 28, textAlign: 'center', cursor: 'pointer', marginBottom: 16 }}>
+              <div style={{ fontSize: 28, marginBottom: 6 }}>📁</div>
+              <div style={{ fontSize: 13, fontWeight: 700 }}>Click to upload or drag & drop</div>
+              <div className="wf-micro" style={{ fontSize: 10, marginTop: 4 }}>PNG, JPG, MP4 · up to 20 MB</div>
+            </div>
+            <div style={{ marginBottom: 14 }}>
+              <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 6 }}>Template name</div>
+              <input className="wf-field" placeholder="e.g., My Brand Hero Shot" style={{ width: '100%', padding: '10px 12px', fontSize: 13 }} />
+            </div>
+            <div style={{ marginBottom: 18 }}>
+              <div className="wf-eyebrow" style={{ fontSize: 9, marginBottom: 6 }}>Category</div>
+              <select className="wf-field" style={{ width: '100%', padding: '8px 12px', fontSize: 12 }}>
+                <option>Product Ads</option><option>Brand Story</option><option>Social Proof</option><option>Urgency</option><option>Comparison</option><option>Other</option>
+              </select>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <Btn variant="ghost" onClick={() => setShowUpload(false)}>Cancel</Btn>
+              <Btn onClick={() => setShowUpload(false)}>Upload & Save</Btn>
+            </div>
+          </div>
         </div>
       )}
     </div>
