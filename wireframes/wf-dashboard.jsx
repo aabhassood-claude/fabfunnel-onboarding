@@ -360,6 +360,11 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <CreativeLibrary screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
         )}
 
+        {/* ── Studio module (Genie — same grid as Creative Library, scoped to Genie output) ── */}
+        {activeNav === 'studio' && (
+          <StudioModule screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
+        )}
+
         {/* ── Discover module (Industry Insights) ── */}
         {activeNav === 'discover' && (
           <DiscoverModule screenshotMode={screenshotMode} onSave={() => setActiveNav('boards')} />
@@ -602,7 +607,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
         )}
 
         {/* ── Fallback stub for any remaining nav items ── */}
-        {!['home', 'creative', 'video', 'library', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
+        {!['home', 'creative', 'video', 'library', 'studio', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -1239,6 +1244,139 @@ function CreativeLibrary({ screenshotMode, onGenerate }) {
 }
 
 // ── Discover module (Industry Insights — ad feed) ──
+// ── Studio module (Genie — visual grid of all generated creatives) ──
+function StudioModule({ screenshotMode, onGenerate }) {
+  const [filter, setFilter] = React.useState('all');
+  const [brand, setBrand] = React.useState('all');
+  const [sort, setSort] = React.useState('newest');
+  const [starredIds, setStarredIds] = React.useState(new Set([1, 6]));
+  const [search, setSearch] = React.useState('');
+  const [selectedCreative, setSelectedCreative] = React.useState(null);
+
+  const toggleStar = (id) => setStarredIds(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+
+  const creatives = [
+    { id: 1, name: 'Summer Tee Launch', brand: 'test', subType: 'Product Ads', type: 'image', daysAgo: 2 },
+    { id: 2, name: 'Sneaker Hero Shot', brand: 'test', subType: 'Brand Ads', type: 'image', daysAgo: 3 },
+    { id: 3, name: 'Linen Jacket Reel', brand: 'test', subType: 'Product Demo', type: 'video', daysAgo: 4, duration: 15 },
+    { id: 4, name: 'Slim Trousers Lifestyle', brand: 'test', subType: 'Product Ads', type: 'image', daysAgo: 5 },
+    { id: 5, name: 'Canvas Cap Social Post', brand: 'Glossier', subType: 'Product Asset', type: 'image', daysAgo: 7 },
+    { id: 6, name: 'Tote Bag Unboxing', brand: 'test', subType: 'UGC-style Reel', type: 'video', daysAgo: 7, duration: 30 },
+    { id: 7, name: 'Lipstick Promo', brand: 'Glossier', subType: 'Brand Ads', type: 'image', daysAgo: 7 },
+    { id: 8, name: 'Spring Collection', brand: 'test', subType: 'Offer Highlight', type: 'image', daysAgo: 14 },
+    { id: 9, name: 'Brand Story Hero', brand: 'test', subType: 'Brand Ads', type: 'image', daysAgo: 14 },
+    { id: 10, name: 'Flash Sale Teaser', brand: 'test', subType: 'Brand Story', type: 'video', daysAgo: 21, duration: 6 },
+    { id: 11, name: 'Holiday Gift Set', brand: 'test', subType: 'Product Ads', type: 'image', daysAgo: 30 },
+    { id: 12, name: 'Campaign Launch', brand: 'Glossier', subType: 'Product Asset', type: 'image', daysAgo: 30 },
+  ];
+
+  const brands = [...new Set(creatives.map(c => c.brand))];
+  const filtered = creatives.filter(c => {
+    if (filter === 'image' && c.type !== 'image') return false;
+    if (filter === 'video' && c.type !== 'video') return false;
+    if (filter === 'fav' && !starredIds.has(c.id)) return false;
+    if (brand !== 'all' && c.brand !== brand) return false;
+    if (search && !c.name.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  const imgCount = creatives.filter(c => c.type === 'image').length;
+  const vidCount = creatives.filter(c => c.type === 'video').length;
+  const favCount = creatives.filter(c => starredIds.has(c.id)).length;
+
+  return (
+    <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 6, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <span className="wf-eyebrow">Genie</span>
+          <h1 className="wf-h1" style={{ fontSize: 26, marginTop: 4 }}>🎨 Studio</h1>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1.5px solid var(--ink)', borderRadius: 999, padding: '7px 14px', minWidth: 200 }}>
+          <span style={{ color: 'var(--ink-faint)', fontSize: 13 }}>⌕</span>
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search creatives…"
+            style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 12 }} />
+        </div>
+      </div>
+      <p className="wf-body" style={{ fontSize: 13, color: 'var(--ink-faint)', marginBottom: 18 }}>All your generated creatives in one place.</p>
+
+      {/* Filters + brand + sort */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 4, padding: 3, border: '1.5px solid var(--ink)', borderRadius: 999 }}>
+          {[
+            { id: 'all', label: `All`, count: creatives.length },
+            { id: 'image', label: '🖼 Images', count: imgCount },
+            { id: 'video', label: '🎬 Videos', count: vidCount },
+            { id: 'fav', label: '☆ Favorites', count: favCount },
+          ].map(f => (
+            <button key={f.id} onClick={() => setFilter(f.id)} style={{
+              padding: '5px 12px', borderRadius: 999, border: 'none',
+              background: filter === f.id ? 'var(--ink)' : 'transparent',
+              color: filter === f.id ? 'var(--paper)' : 'var(--ink-soft)',
+              fontFamily: 'var(--hand)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>{f.label} <span style={{ opacity: 0.7 }}>{f.count}</span></button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span className="wf-eyebrow" style={{ fontSize: 9 }}>Brand</span>
+            <select value={brand} onChange={(e) => setBrand(e.target.value)} style={{ padding: '5px 10px', border: '1.5px solid var(--ink)', borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)', cursor: 'pointer' }}>
+              <option value="all">All brands</option>
+              {brands.map(b => <option key={b} value={b}>{b}</option>)}
+            </select>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span className="wf-eyebrow" style={{ fontSize: 9 }}>Sort</span>
+            <select value={sort} onChange={(e) => setSort(e.target.value)} style={{ padding: '5px 10px', border: '1.5px solid var(--ink)', borderRadius: 999, fontFamily: 'var(--hand)', fontSize: 11, background: 'var(--paper)', cursor: 'pointer' }}>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="name">By name</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Creative grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 14 }}>
+        {filtered.map(c => {
+          const isSaved = starredIds.has(c.id);
+          return (
+            <Box key={c.id} onClick={() => setSelectedCreative(c)} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', background: 'var(--paper)', position: 'relative' }}>
+              {/* Type badge */}
+              <div style={{ position: 'absolute', top: 8, left: 8, padding: '3px 10px', fontSize: 10, fontWeight: 700, border: '1px solid var(--ink)', borderRadius: 8, background: c.type === 'video' ? 'var(--ink)' : 'var(--paper)', color: c.type === 'video' ? 'var(--paper)' : 'var(--ink)', zIndex: 1 }}>
+                {c.type === 'video' ? '🎬 Video' : '🖼 Image'}
+              </div>
+              {/* Star */}
+              <div onClick={(e) => { e.stopPropagation(); toggleStar(c.id); }} style={{ position: 'absolute', top: 8, right: 8, fontSize: 18, cursor: 'pointer', color: isSaved ? 'var(--highlight)' : 'var(--ink-ghost)', zIndex: 1 }}>
+                {isSaved ? '★' : '☆'}
+              </div>
+              {/* Duration badge for video */}
+              {c.type === 'video' && c.duration && (
+                <div style={{ position: 'absolute', bottom: 62, right: 8, padding: '2px 8px', background: 'rgba(0,0,0,0.7)', color: '#fff', fontSize: 10, fontWeight: 700, borderRadius: 10, zIndex: 1 }}>{c.duration}s</div>
+              )}
+              {/* Thumbnail */}
+              <div style={{ aspectRatio: '1', background: 'var(--paper-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MockUI kind={c.type === 'video' ? 'video' : 'creative'} style={{ width: '75%', height: '75%' }} />
+              </div>
+              {/* Info */}
+              <div style={{ padding: '10px 12px' }}>
+                <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{c.name}</div>
+                <div className="wf-micro" style={{ fontSize: 10 }}>{c.brand} · {c.subType} · {c.daysAgo === 0 ? 'today' : c.daysAgo + (c.daysAgo === 1 ? ' day ago' : ' days ago')}</div>
+              </div>
+            </Box>
+          );
+        })}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: 48, color: 'var(--ink-faint)' }}>
+          <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.4 }}>🎨</div>
+          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>No creatives match this filter.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DiscoverModule({ screenshotMode, onSave }) {
   const [status, setStatus] = React.useState('all');
   const [type, setType] = React.useState('all');
