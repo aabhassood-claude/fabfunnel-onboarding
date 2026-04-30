@@ -227,10 +227,22 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     window.addEventListener('mouseup', up);
   };
 
-  if (!open) return null;
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
+      {/* Floating gear button — always visible for standalone usage */}
+      {!open && (
+        <button onClick={() => setOpen(true)} aria-label="Open tweaks" style={{
+          position: 'fixed', bottom: 16, right: 16, zIndex: 899,
+          width: 40, height: 40, borderRadius: '50%',
+          border: '1.5px solid #1a1a1a', background: '#fafaf7',
+          cursor: 'pointer', fontSize: 18, display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          boxShadow: '2px 2px 0 #1a1a1a',
+          fontFamily: 'system-ui',
+        }}>⚙</button>
+      )}
+      {open && (
       <div ref={dragRef} className="twk-panel"
            style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
         <div className="twk-hd" onMouseDown={onDragStart}>
@@ -241,6 +253,7 @@ function TweaksPanel({ title = 'Tweaks', children }) {
         </div>
         <div className="twk-body">{children}</div>
       </div>
+      )}
     </>
   );
 }
