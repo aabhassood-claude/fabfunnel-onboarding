@@ -256,7 +256,7 @@ window.TrialWelcome = TrialWelcome;
 // Choose Mode → Input → Processing → Done
 // ─────────────────────────────────────────────────────────────
 
-const ONB_STEPS = ['Choose Mode', 'Input', 'Processing', 'Done'];
+const ONB_STEPS = ['Choose Mode', 'Country', 'Input', 'Processing', 'Done'];
 
 function StepNav({ active, onBack, backLabel, onRestart }) {
   return (
@@ -264,7 +264,7 @@ function StepNav({ active, onBack, backLabel, onRestart }) {
       {onBack && (
         <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span onClick={onBack} className="wf-body" style={{ fontSize: 13, cursor: 'pointer', textDecoration: 'underline', textDecorationStyle: 'wavy', textUnderlineOffset: 4 }}>← {backLabel || 'Back'}</span>
-          {active === 3 && onRestart && (
+          {active === 4 && onRestart && (
             <span onClick={onRestart} className="wf-body" style={{ fontSize: 13, cursor: 'pointer', textDecoration: 'underline', textDecorationStyle: 'wavy', textUnderlineOffset: 4 }}>Start onboarding over</span>
           )}
         </div>
@@ -336,9 +336,9 @@ function OnbInput({ onBack, onContinue, kind }) {
   const [brand, setBrand] = React.useState('');
   return (
     <div style={{ minHeight: '100vh', background: 'var(--paper)' }}>
-      <StepNav active={1} onBack={onBack} backLabel="Back to Quick Start" />
+      <StepNav active={2} onBack={onBack} backLabel="Back to Country" />
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '40px 24px 80px' }}>
-        <Pill soft style={{ marginBottom: 12 }}>STEP 2 · INPUT</Pill>
+        <Pill soft style={{ marginBottom: 12 }}>STEP 3 · INPUT</Pill>
         <h1 className="wf-h1" style={{ fontSize: 32 }}>Tell us about your store</h1>
         <p className="wf-body" style={{ fontSize: 15, marginTop: 10 }}>We'll auto-pull your products, colors, and branding.</p>
 
@@ -398,7 +398,7 @@ function OnbProcessing({ onBack, onDone }) {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--paper)' }}>
-      <StepNav active={2} onBack={onBack} backLabel="Back to Input" />
+      <StepNav active={3} onBack={onBack} backLabel="Back to Input" />
       <div style={{ maxWidth: 640, margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
         <div style={{ width: 64, height: 64, margin: '0 auto', position: 'relative' }}>
           <svg width="64" height="64" viewBox="0 0 64 64" style={{ animation: 'spin 1.2s linear infinite' }}>
@@ -472,7 +472,7 @@ function OnbDone({ onBack, onStart, onRestart, brandName }) {
     <div style={{ minHeight: '100vh', background: 'var(--paper)' }}>
       <div style={{ height: 14, background: 'var(--highlight)', borderBottom: '1.5px dashed var(--ink-faint)' }} />
 
-      <StepNav active={3} onBack={onBack} backLabel="Back to Input" onRestart={onRestart} />
+      <StepNav active={4} onBack={onBack} backLabel="Back to Input" onRestart={onRestart} />
 
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 24px 80px' }}>
         <div style={{ textAlign: 'center', marginTop: 8 }}>
@@ -589,6 +589,99 @@ function OnbDone({ onBack, onStart, onRestart, brandName }) {
 }
 
 // ── Wrapper that drives the flow ──
+// ── Country Selection step ──
+function OnbCountrySelect({ onBack, onContinue }) {
+  const [selected, setSelected] = React.useState(null);
+  const [search, setSearch] = React.useState('');
+
+  const countries = [
+    { code: 'US', flag: '🇺🇸', name: 'United States' },
+    { code: 'GB', flag: '🇬🇧', name: 'United Kingdom' },
+    { code: 'IN', flag: '🇮🇳', name: 'India' },
+    { code: 'CA', flag: '🇨🇦', name: 'Canada' },
+    { code: 'AU', flag: '🇦🇺', name: 'Australia' },
+    { code: 'DE', flag: '🇩🇪', name: 'Germany' },
+    { code: 'FR', flag: '🇫🇷', name: 'France' },
+    { code: 'AE', flag: '🇦🇪', name: 'UAE' },
+    { code: 'SG', flag: '🇸🇬', name: 'Singapore' },
+    { code: 'BR', flag: '🇧🇷', name: 'Brazil' },
+    { code: 'JP', flag: '🇯🇵', name: 'Japan' },
+    { code: 'KR', flag: '🇰🇷', name: 'South Korea' },
+    { code: 'NL', flag: '🇳🇱', name: 'Netherlands' },
+    { code: 'ES', flag: '🇪🇸', name: 'Spain' },
+    { code: 'IT', flag: '🇮🇹', name: 'Italy' },
+    { code: 'MX', flag: '🇲🇽', name: 'Mexico' },
+    { code: 'ID', flag: '🇮🇩', name: 'Indonesia' },
+    { code: 'SA', flag: '🇸🇦', name: 'Saudi Arabia' },
+    { code: 'PH', flag: '🇵🇭', name: 'Philippines' },
+    { code: 'NG', flag: '🇳🇬', name: 'Nigeria' },
+  ];
+
+  const filtered = search
+    ? countries.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.code.toLowerCase().includes(search.toLowerCase()))
+    : countries;
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--paper)' }}>
+      <StepNav active={1} onBack={onBack} backLabel="Back to Quick Start" />
+      <div style={{ padding: '0 24px 48px', maxWidth: 700, margin: '0 auto', fontFamily: 'var(--hand)' }}>
+
+      <Pill soft style={{ marginBottom: 12 }}>STEP 2 · COUNTRY</Pill>
+      <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 6 }}>Where are you <span className="wf-hl">based</span>?</h1>
+      </div>
+      <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', marginBottom: 24, maxWidth: 480 }}>
+        This helps us tailor ad formats, compliance rules, and platform recommendations to your market.
+      </p>
+
+      {/* Search */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, border: '1.5px solid var(--ink)', borderRadius: 999, padding: '8px 16px', marginBottom: 20 }}>
+        <span style={{ color: 'var(--ink-faint)', fontSize: 14 }}>⌕</span>
+        <input value={search} onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search country…"
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--hand)', fontSize: 14 }} />
+        {search && <span onClick={() => setSearch('')} style={{ cursor: 'pointer', color: 'var(--ink-faint)', fontSize: 12 }}>✕</span>}
+      </div>
+
+      {/* Country grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10, marginBottom: 24 }}>
+        {filtered.map(c => {
+          const isActive = selected === c.code;
+          return (
+            <div key={c.code} onClick={() => setSelected(c.code)} style={{
+              padding: '14px 12px', cursor: 'pointer',
+              border: isActive ? '2px solid var(--ink)' : '1.5px solid var(--ink-faint)',
+              borderRadius: '6px 9px 7px 8px / 8px 6px 9px 7px',
+              background: isActive ? 'var(--highlight-soft)' : 'var(--paper)',
+              display: 'flex', alignItems: 'center', gap: 10,
+              transition: 'all 80ms ease',
+            }}>
+              <span style={{ fontSize: 26 }}>{c.flag}</span>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>{c.name}</div>
+                <div className="wf-micro" style={{ fontSize: 10, color: 'var(--ink-faint)' }}>{c.code}</div>
+              </div>
+              {isActive && <span style={{ marginLeft: 'auto', fontSize: 14, color: 'var(--ink)' }}>✓</span>}
+            </div>
+          );
+        })}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: 24, color: 'var(--ink-faint)', marginBottom: 24 }}>
+          <div style={{ fontSize: 14 }}>No results for "{search}"</div>
+          <div className="wf-micro" style={{ marginTop: 4, fontSize: 11 }}>Try a different spelling or country code</div>
+        </div>
+      )}
+
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Btn variant="ghost" onClick={onBack}>← Back</Btn>
+        <Btn onClick={() => selected && onContinue(selected)} style={{ opacity: selected ? 1 : 0.4 }}>Continue →</Btn>
+      </div>
+    </div>
+    </div>
+  );
+}
+
 function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   const [step, setStep] = React.useState(0);
   const [data, setData] = React.useState({ kind: 'ecom', storeUrl: '', brand: '' });
@@ -618,28 +711,32 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
     onSkip={() => { sessionStorage.setItem('ff_profile_skipped', 'genie'); sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
     onLogin={() => onNav('login')}
   />;
-  else if (step === 1) body = isAff
+  else if (step === 1) body = <OnbCountrySelect
+    onBack={() => goto(0)}
+    onContinue={(country) => { setData(d => ({ ...d, country })); goto(2); }}
+  />;
+  else if (step === 2) body = isAff
     ? <window.OnbInputAffiliate
-        onBack={() => goto(0)}
-        onContinue={(input) => { setData(d => ({ ...d, ...input })); goto(2); }}
+        onBack={() => goto(1)}
+        onContinue={(input) => { setData(d => ({ ...d, ...input })); goto(3); }}
       />
     : <OnbInput
-        onBack={() => goto(0)}
-        onContinue={(input) => { setData(d => ({ ...d, ...input })); goto(2); }}
+        onBack={() => goto(1)}
+        onContinue={(input) => { setData(d => ({ ...d, ...input })); goto(3); }}
         kind={data.kind}
       />;
-  else if (step === 2) body = isAff
-    ? <window.OnbProcessingAffiliate onBack={() => goto(1)} onDone={() => goto(3)} />
-    : <OnbProcessing onBack={() => goto(1)} onDone={() => goto(3)} />;
+  else if (step === 3) body = isAff
+    ? <window.OnbProcessingAffiliate onBack={() => goto(2)} onDone={() => goto(4)} />
+    : <OnbProcessing onBack={() => goto(2)} onDone={() => goto(4)} />;
   else body = isAff
     ? <window.OnbDoneAffiliate
-        onBack={() => goto(1)}
+        onBack={() => goto(2)}
         onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         category={data.category}
       />
     : <OnbDone
-        onBack={() => goto(1)}
+        onBack={() => goto(2)}
         onStart={() => { sessionStorage.setItem('ff_new_user', '1'); sessionStorage.setItem('ff_onboarded', '1'); onNav('dashboard'); }}
         onRestart={() => goto(0)}
         brandName={data.brand}
