@@ -628,7 +628,6 @@ function OnbCountrySelect({ onBack, onContinue }) {
 
       <Pill soft style={{ marginBottom: 12 }}>STEP 2 · COUNTRY</Pill>
       <h1 className="wf-h1" style={{ fontSize: 28, marginBottom: 6 }}>Where are you <span className="wf-hl">based</span>?</h1>
-      </div>
       <p className="wf-body" style={{ fontSize: 14, color: 'var(--ink-soft)', marginBottom: 24, maxWidth: 480 }}>
         This helps us tailor ad formats, compliance rules, and platform recommendations to your market.
       </p>
@@ -691,7 +690,7 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
   const isAff = data.kind === 'affiliate';
 
   // Trial banner — shows above the onboarding flow so users always know
-  // they're in trial mode (50 free credits, watermark, etc.)
+  // they're in trial mode (20 free credits, watermark, etc.)
   const trialBanner = isTrial ? (
     <div style={{
       background: 'var(--highlight-soft)',
@@ -701,7 +700,7 @@ function OnboardingFlow({ onNav, openBuyNow, funnel }) {
       fontFamily: 'var(--hand)', fontSize: 13,
     }}>
       <span className="wf-pill wf-pill-hl" style={{ fontSize: 10, marginRight: 10 }}>FREE TRIAL</span>
-      Setting up your trial workspace · 7 days · 50 credits · no card on file
+      Setting up your trial workspace · 7 days · 20 credits · no card on file
     </div>
   ) : null;
 

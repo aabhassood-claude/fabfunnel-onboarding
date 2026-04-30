@@ -107,7 +107,7 @@ function TrialSignup({ onComplete, onLogin, onBackToHome }) {
           </div>
           <div className="wf-h1" style={{ fontSize: 24, marginBottom: 8 }}>Start your free trial</div>
           <div className="wf-body" style={{ fontSize: 13, color: 'var(--ink-soft)' }}>
-            7 days · 50 free credits · no card required
+            7 days · 20 free credits · no card required
           </div>
         </div>
 
@@ -117,7 +117,7 @@ function TrialSignup({ onComplete, onLogin, onBackToHome }) {
           {/* Trial perks list */}
           <div style={{ marginBottom: 22 }}>
             {[
-              ['✦', '50 free credits', 'enough to test ~10 ad generations'],
+              ['✦', '20 free credits', 'enough to test ~5 ad generations'],
               ['🎬', 'All Genie modes', 'Creative · Video · Script'],
               ['🛡', 'Watermark on previews', 'remove when you upgrade'],
               ['⏱', 'Single brand', 'add more after upgrading'],
@@ -243,7 +243,7 @@ function CompareFunnels({ onNav, setFunnel }) {
     { i: 1, t: 'Landing page',           s: 'Same — but CTA is "Free Trial"' },
     { i: 2, t: 'Trial signup',           s: 'Email or Google · no card',     hot: true },
     { i: 3, t: 'Onboarding',             s: '4 steps · same as paid' },
-    { i: 4, t: 'Dashboard · trial mode', s: 'Same UI · 50 credits · watermark · upgrade CTAs' },
+    { i: 4, t: 'Dashboard · trial mode', s: 'Same UI · 20 credits · watermark · upgrade CTAs' },
     { i: 5, t: 'Upgrade prompts',        s: 'On exhaustion · download · day 7', hot: true },
     { i: 6, t: 'Buy Now modal',          s: 'Conversion to paid' },
     { i: 7, t: 'Dashboard · paid',       s: 'Same UI · limits removed' },
@@ -357,7 +357,7 @@ function CompareFunnels({ onNav, setFunnel }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
             {[
               ['7 days',           'Trial duration'],
-              ['50 credits',       'Free generations'],
+              ['20 credits',       'Free generations'],
               ['1 brand',          'No multi-brand'],
               ['No downloads',     'Watermarked previews only'],
             ].map(([k, v], i) => (
@@ -447,7 +447,7 @@ function TrialUpgradeModal({ kind, onClose, onUpgrade }) {
   const config = {
     exhausted: {
       icon: '⚡',
-      title: 'You\'ve used all 50 credits',
+      title: 'You\'ve used all 20 credits',
       sub: 'Upgrade to keep generating — pick up right where you left off.',
       cta: 'Upgrade & continue →',
       blocking: true,

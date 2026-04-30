@@ -384,6 +384,7 @@ function InsightsOnboardingFlow({ onNav }) {
     body = <InsightsChooseMode
       onPick={(mode) => { setData(d => ({ ...d, mode })); goto(1); }}
       onSkip={() => { sessionStorage.setItem('ff_profile_skipped', 'insights'); sessionStorage.setItem('ff_new_user', '1'); onNav('dashboard'); }}
+      onLogin={() => onNav('login')}
     />;
   } else if (step === 1) {
     body = data.mode === 'ecom'
