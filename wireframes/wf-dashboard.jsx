@@ -617,7 +617,12 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
           <BrandsModule screenshotMode={screenshotMode} onGenerate={() => setActiveNav('creative')} />
         )}
 
-        {!['home', 'creative', 'video', 'library', 'studio', 'templates', 'brands', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
+        {/* ── Categories module (Genie) ── */}
+        {activeNav === 'categories' && (
+          <CategoriesModule screenshotMode={screenshotMode} />
+        )}
+
+        {!['home', 'creative', 'video', 'library', 'studio', 'templates', 'brands', 'categories', 'discover', 'intelligence', 'boards', 'launch', 'reporting', 'automation', 'integrations', 'user-panel'].includes(activeNav) && (
           <div style={{ padding: '60px 28px', textAlign: 'center' }}>
             <div className="wf-eyebrow" style={{ marginBottom: 8 }}>{flatNav.find(n => n.id === activeNav)?.label || activeNav}</div>
             <div style={{ fontSize: 13, color: 'var(--ink-faint)', fontFamily: 'var(--hand)' }}>
@@ -1699,6 +1704,94 @@ function BrandsModule({ screenshotMode, onGenerate }) {
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <Btn variant="ghost" onClick={() => setShowAddBrand(false)}>Cancel</Btn>
               <Btn onClick={() => setShowAddBrand(false)}>Analyze & Add →</Btn>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Categories module (Genie) ──
+function CategoriesModule({ screenshotMode }) {
+  const [showAdd, setShowAdd] = React.useState(false);
+
+  const categories = [
+    { icon: '🚗', name: 'test category 1', industry: 'IINsurance', refs: 0 },
+    { icon: '🛡', name: 'Life Insurance', industry: 'Insurance', refs: 1 },
+    { icon: '🏠', name: 'Home Insurance', industry: 'Insurance', refs: 1 },
+    { icon: '🐾', name: 'Pet Insurance', industry: 'Insurance', refs: 1 },
+    { icon: '✈️', name: 'Travel Insurance', industry: 'Insurance', refs: 1 },
+    { icon: '🦷', name: 'Dental Plans', industry: 'Insurance', refs: 1 },
+    { icon: '👓', name: 'Vision Plans', industry: 'Insurance', refs: 1 },
+    { icon: '💳', name: 'Credit Cards', industry: 'Finance', refs: 1 },
+    { icon: '🏡', name: 'Mortgage', industry: 'Finance', refs: 1 },
+    { icon: '🎓', name: 'Student Loans', industry: 'Finance', refs: 1 },
+    { icon: '🏢', name: 'Business Loans', industry: 'Finance', refs: 1 },
+    { icon: '📉', name: 'Debt Relief', industry: 'Finance', refs: 1 },
+    { icon: '📋', name: 'Tax Services', industry: 'Finance', refs: 1 },
+    { icon: '₿', name: 'Crypto Trading', industry: 'Finance', refs: 1 },
+    { icon: '📈', name: 'Stock Trading', industry: 'Finance', refs: 1 },
+  ];
+
+  return (
+    <div style={{ padding: '28px', fontFamily: 'var(--hand)' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1 className="wf-h1" style={{ fontSize: 26 }}>📁 Categories</h1>
+          <span style={{ padding: '2px 10px', border: '1.5px solid var(--ink-faint)', borderRadius: 999, fontSize: 12, fontWeight: 700 }}>67</span>
+        </div>
+        <Btn onClick={() => setShowAdd(true)}>+ Add Category</Btn>
+      </div>
+
+      <div className="wf-divider-dashed" style={{ marginBottom: 20 }} />
+
+      {/* Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 14 }}>
+        {categories.map((c, i) => (
+          <Box key={i} style={{ padding: 20, cursor: 'pointer', background: 'var(--paper)' }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: 10,
+              background: 'var(--paper-soft)', border: '1.5px solid var(--ink-faint)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 20, marginBottom: 12,
+            }}>{c.icon}</div>
+            <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 2 }}>{c.name}</div>
+            <div className="wf-body" style={{ fontSize: 11, color: 'var(--ink-faint)', marginBottom: 8 }}>{c.industry}</div>
+            {c.refs > 0 && (
+              <div className="wf-micro" style={{ fontSize: 10, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 11 }}>🔗</span> {c.refs} reference URL
+              </div>
+            )}
+          </Box>
+        ))}
+      </div>
+
+      {/* Add Category Modal */}
+      {showAdd && (
+        <div onClick={() => setShowAdd(false)} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(20,20,20,0.45)', backdropFilter: 'blur(2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: 'var(--paper)', border: '1.5px solid var(--ink)', borderRadius: '8px 12px 9px 11px / 10px 8px 12px 9px', width: 440, padding: '28px', fontFamily: 'var(--hand)', position: 'relative' }}>
+            <button onClick={() => setShowAdd(false)} className="wf-close" style={{ position: 'absolute', top: 14, right: 14, width: 28, height: 28, fontSize: 14 }}>✕</button>
+            <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Add a new category</h3>
+            <p className="wf-body" style={{ fontSize: 12, color: 'var(--ink-faint)', marginBottom: 20 }}>Categories help Genie build dedicated knowledge for each vertical you promote.</p>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Category name <span style={{ color: 'var(--accent)' }}>*</span></div>
+              <input className="wf-field" placeholder="e.g., Auto Insurance" style={{ width: '100%', padding: '12px 14px', fontSize: 14 }} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Industry</div>
+              <select className="wf-field" style={{ width: '100%', padding: '10px 12px', fontSize: 13 }}>
+                <option>Insurance</option><option>Finance</option><option>Technology</option><option>Health & Wellness</option><option>Travel</option><option>E-commerce</option><option>Education</option><option>Other</option>
+              </select>
+            </div>
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Icon <span style={{ fontWeight: 400, color: 'var(--ink-faint)' }}>(optional)</span></div>
+              <input className="wf-field" placeholder="🏷 (or any emoji)" maxLength={4} style={{ width: 100, padding: '10px 12px', fontSize: 14 }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <Btn variant="ghost" onClick={() => setShowAdd(false)}>Cancel</Btn>
+              <Btn onClick={() => setShowAdd(false)}>Create category</Btn>
             </div>
           </div>
         </div>
