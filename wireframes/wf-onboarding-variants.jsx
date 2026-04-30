@@ -79,7 +79,7 @@ function OnboardingFlowB({ onNav, funnel }) {
             ))}
           </div>
 
-          <Btn onClick={startAnalysis} style={{ fontSize: 16, padding: '14px 36px', opacity: url.length > 5 ? 1 : 0.4 }}>
+          <Btn onClick={() => url.length > 5 && startAnalysis()} style={{ fontSize: 16, padding: '14px 36px', opacity: url.length > 5 ? 1 : 0.4, cursor: url.length > 5 ? 'pointer' : 'not-allowed' }}>
             Analyze & set up →
           </Btn>
 
@@ -191,14 +191,10 @@ function OnboardingFlowC({ onNav, funnel }) {
         }, 2000);
       }, 800);
     } else if (step === 'done') {
-      if (opt.includes('Start creating')) {
-        sessionStorage.setItem('ff_new_user', '1');
-        sessionStorage.setItem('ff_onboarded', '1');
-        sessionStorage.removeItem('ff_profile_skipped');
-        onNav('dashboard');
-      } else {
-        onNav('dashboard');
-      }
+      sessionStorage.setItem('ff_new_user', '1');
+      sessionStorage.setItem('ff_onboarded', '1');
+      sessionStorage.removeItem('ff_profile_skipped');
+      onNav('dashboard');
     }
   };
 
