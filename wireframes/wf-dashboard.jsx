@@ -80,13 +80,19 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
     { id: 'home', label: 'Dashboard', icon: '◇' },
     { id: 'genie', label: 'Genie', icon: '✦', isGroup: true, children: [
       { id: 'creative',   label: 'Creative Generation', icon: '✦' },
-      { id: 'video',      label: 'Video Sage',          icon: '▶' },
-      { id: 'script',     label: 'Script Generation',   icon: '✎' },
+      { id: 'studio',     label: 'Studio',              icon: '🎨' },
+      { id: 'templates',  label: 'Templates',           icon: '📋' },
+      { id: 'brands',     label: 'Brands',              icon: '🏷' },
+      { id: 'categories', label: 'Categories',          icon: '📁' },
     ]},
     { id: 'insights-grp', label: 'Industry Insights', icon: '⊞', isGroup: true, children: [
       { id: 'discover',     label: 'Discover',     icon: '◎' },
       { id: 'intelligence', label: 'Intelligence', icon: '⚡' },
       { id: 'boards',       label: 'Boards',       icon: '▤' },
+    ]},
+    { id: 'videosage-grp', label: 'Video Sage', icon: '▶', isGroup: true, children: [
+      { id: 'video',   label: 'Video Sage',       icon: '▶' },
+      { id: 'script',  label: 'Script Library',   icon: '✎' },
     ]},
     { id: 'library',      label: 'Creative Library',  icon: '🖼' },
     { id: 'launch',       label: 'Launch',            icon: '🚀', locked: true },
@@ -102,7 +108,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
   // Track which groups are open — open the group containing the active item
   const findParent = (id) => navItems.find(g => g.isGroup && g.children.some(c => c.id === id))?.id;
   const [openGroups, setOpenGroups] = React.useState(() => {
-    const set = new Set(['genie', 'insights-grp']);
+    const set = new Set(['genie', 'insights-grp', 'videosage-grp']);
     const p = findParent(activeNav);
     if (p) set.add(p);
     return set;
@@ -175,6 +181,7 @@ function DashboardPage({ onNav, screenshotMode, showAnnotations, initialNav, fun
                       <div key={c.id} onClick={() => {
                         setActiveNav(c.id);
                         if (c.id === 'creative') window.location.hash = 'creative';
+                        if (c.id === 'video') window.location.hash = 'video';
                       }}
                         style={{
                           padding: '6px 10px',
