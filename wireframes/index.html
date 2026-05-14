@@ -158,13 +158,22 @@
                   sessionStorage.setItem('ff_upgrade_success', '1');
                   nav('dashboard');
                 } else {
-                  nav(tweaks.product === 'insights' ? 'onboarding-insights' : 'onboarding');
+                  nav('product-chooser');
+                }
+              }} />;
+            }
+          case 'product-chooser': {
+              return <ProductChooser onChoose={(choice) => {
+                if (choice === 'insights') {
+                  nav('onboarding-insights');
+                } else {
+                  nav('onboarding');
                 }
               }} />;
             }
           case 'trial-welcome': {
               const TWComp = tweaks.product === 'insights' ? InsightsTrialWelcome : TrialWelcome;
-              return <TWComp onDone={() => nav(tweaks.product === 'insights' ? 'onboarding-insights' : 'onboarding')} />;
+              return <TWComp onDone={() => nav('product-chooser')} />;
             }
           case 'onboarding': {
               if (tweaks.onboardingVariant === 'B' && window.OnboardingFlowB) return <window.OnboardingFlowB onNav={nav} funnel={tweaks.funnel} />;
@@ -212,13 +221,18 @@
                   return <CC onDone={() => {
                     const fromDash = sessionStorage.getItem('ff_upgrade_from_dashboard');
                     if (fromDash) { sessionStorage.removeItem('ff_upgrade_from_dashboard'); sessionStorage.setItem('ff_upgrade_success', '1'); nav('dashboard'); }
-                    else nav(tweaks.product === 'insights' ? 'onboarding-insights' : 'onboarding');
+                    else nav('product-chooser');
                   }} />;
                 })()
+              ) : route === 'product-chooser' ? (
+                <ProductChooser onChoose={(choice) => {
+                  if (choice === 'insights') nav('onboarding-insights');
+                  else nav('onboarding');
+                }} />
               ) : route === 'trial-welcome' ? (
                 (() => {
                   const TW = tweaks.product === 'insights' ? InsightsTrialWelcome : TrialWelcome;
-                  return <TW onDone={() => nav(tweaks.product === 'insights' ? 'onboarding-insights' : 'onboarding')} />;
+                  return <TW onDone={() => nav('product-chooser')} />;
                 })()
               ) : route === 'onboarding' ? (
                 tweaks.onboardingVariant === 'B' && window.OnboardingFlowB ? <window.OnboardingFlowB onNav={nav} funnel={tweaks.funnel} /> :

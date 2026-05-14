@@ -136,6 +136,170 @@ function WelcomeCelebrate({ onDone }) {
 window.WelcomeCelebrate = WelcomeCelebrate;
 
 // ─────────────────────────────────────────────────────────────
+// Product Chooser — "What do you want to do first?"
+// Shown after celebrate/trial-welcome, before onboarding
+// ─────────────────────────────────────────────────────────────
+
+function ProductChooser({ onChoose }) {
+  const [phase, setPhase] = React.useState(0);
+  const [hoveredCard, setHoveredCard] = React.useState(null);
+
+  React.useEffect(() => {
+    const t = [
+      setTimeout(() => setPhase(1), 400),
+      setTimeout(() => setPhase(2), 1000),
+      setTimeout(() => setPhase(3), 1600),
+    ];
+    return () => t.forEach(clearTimeout);
+  }, []);
+
+  const fadeIn = (at) => ({
+    opacity: phase >= at ? 1 : 0,
+    transform: phase >= at ? 'translateY(0)' : 'translateY(18px)',
+    transition: 'all 0.5s ease-out',
+  });
+
+  const options = [
+    {
+      id: 'genie',
+      icon: '✦',
+      title: 'Setup your Genie',
+      subtitle: 'AI Creative Generation',
+      desc: 'Generate high performing ad creatives with AI. Static images, videos, and carousel ads — ready to launch in under 60 seconds.',
+      features: ['AI powered creatives', 'Bulk launch ready', 'Multi platform formats', 'Brand kit integration'],
+      color: 'var(--highlight)',
+      cta: 'Setup Genie →',
+    },
+    {
+      id: 'insights',
+      icon: '🔍',
+      title: 'Industry Insights',
+      subtitle: 'Competitor Intelligence',
+      desc: 'Spy on what your competitors are running. See their top performing ads, landing pages, and creative strategies — updated daily.',
+      features: ['Competitor ad library', 'Winning creative alerts', 'Landing page analysis', 'Trend detection'],
+      color: '#90CAF9',
+      cta: 'Setup Insights →',
+    },
+  ];
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--ink)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'var(--hand)', color: 'var(--paper)',
+      padding: '40px 24px', position: 'relative', overflow: 'hidden',
+    }}>
+      {/* Background decorative elements */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: '8%', left: '6%', fontSize: 70, opacity: 0.04, fontFamily: 'var(--hand-loose)' }}>✦</div>
+        <div style={{ position: 'absolute', top: '15%', right: '10%', fontSize: 50, opacity: 0.04, fontFamily: 'var(--hand-loose)' }}>🔍</div>
+        <div style={{ position: 'absolute', bottom: '12%', left: '8%', fontSize: 60, opacity: 0.04, fontFamily: 'var(--hand-loose)' }}>◎</div>
+        <div style={{ position: 'absolute', bottom: '20%', right: '6%', fontSize: 55, opacity: 0.04, fontFamily: 'var(--hand-loose)' }}>⊞</div>
+      </div>
+
+      <div style={{ maxWidth: 780, width: '100%', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+
+        {/* Eyebrow */}
+        <div style={{ ...fadeIn(0), marginBottom: 16 }}>
+          <span style={{
+            display: 'inline-block', padding: '5px 16px',
+            border: '1.5px solid rgba(255,255,255,0.2)', borderRadius: 999,
+            fontSize: 12, fontWeight: 700, letterSpacing: 0.5, color: 'var(--ink-ghost)',
+          }}>⚡ One more thing</span>
+        </div>
+
+        {/* Headline */}
+        <div style={{ ...fadeIn(1), marginBottom: 44 }}>
+          <h1 style={{ fontSize: 38, fontWeight: 800, lineHeight: 1.15, marginBottom: 10 }}>
+            What do you want to do <span style={{ color: 'var(--highlight)', position: 'relative' }}>
+              first
+              <span style={{ position: 'absolute', bottom: -3, left: 0, right: 0, height: 3, background: 'var(--highlight)', borderRadius: 2, opacity: 0.6 }}></span>
+            </span>?
+          </h1>
+          <p style={{ fontSize: 15, color: 'var(--ink-ghost)', maxWidth: 460, margin: '0 auto' }}>
+            Pick one to get started — you can always access both from your dashboard.
+          </p>
+        </div>
+
+        {/* Two option cards */}
+        <div style={{ ...fadeIn(2), display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          {options.map((opt) => {
+            const isHovered = hoveredCard === opt.id;
+            return (
+              <button
+                key={opt.id}
+                onClick={() => onChoose(opt.id)}
+                onMouseEnter={() => setHoveredCard(opt.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                style={{
+                  textAlign: 'left', cursor: 'pointer',
+                  padding: '28px 26px',
+                  border: `2px solid ${isHovered ? opt.color : 'rgba(255,255,255,0.1)'}`,
+                  borderRadius: '10px 14px 11px 13px / 12px 10px 14px 11px',
+                  background: isHovered ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                  fontFamily: 'var(--hand)', color: 'var(--paper)',
+                  transition: 'all 0.25s ease',
+                  transform: isHovered ? 'translateY(-4px)' : 'none',
+                  boxShadow: isHovered ? `0 12px 32px rgba(0,0,0,0.3)` : 'none',
+                  display: 'flex', flexDirection: 'column', gap: 16,
+                }}
+              >
+                {/* Icon + title row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div style={{
+                    width: 52, height: 52,
+                    border: `2px solid ${opt.color}`,
+                    borderRadius: '12px 15px 13px 14px / 14px 12px 15px 13px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 24, background: `${opt.color}15`,
+                  }}>{opt.icon}</div>
+                  <div>
+                    <div style={{ fontSize: 20, fontWeight: 800, lineHeight: 1.2 }}>{opt.title}</div>
+                    <div style={{ fontSize: 12, color: opt.color, fontWeight: 600, letterSpacing: 0.5, marginTop: 2 }}>{opt.subtitle}</div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <p style={{ fontSize: 13, color: 'var(--ink-ghost)', lineHeight: 1.55, margin: 0 }}>{opt.desc}</p>
+
+                {/* Feature list */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {opt.features.map((f, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+                      <span style={{ color: opt.color, fontSize: 10 }}>✓</span>
+                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <div style={{
+                  marginTop: 'auto', paddingTop: 8,
+                  fontSize: 15, fontWeight: 700, color: opt.color,
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  {opt.cta}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Footer note */}
+        <div style={{ ...fadeIn(3), marginTop: 24 }}>
+          <p style={{ fontSize: 12, color: 'var(--ink-ghost)' }}>
+            You'll have access to everything · This just sets up your first workflow
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.ProductChooser = ProductChooser;
+
+// ─────────────────────────────────────────────────────────────
 // Trial Welcome screen — lighter "few steps away" screen
 // ─────────────────────────────────────────────────────────────
 
