@@ -77,7 +77,7 @@
       "viewMode": "prototype",
       "funnel": "direct",
       "trialUpsellStyle": "subtle",
-      "product": "genie",
+      "product": "organic",
       "onboardingVariant": "A"
     }/*EDITMODE-END*/;
 
@@ -150,7 +150,9 @@
           case 'fabagent':  return <FabAgentPage {...sharedProps} />;
           case 'login':     return <LoginPage {...sharedProps} />;
           case 'welcome-celebrate': {
-              const CelebrateComp = tweaks.product === 'insights' ? InsightsCelebrate : WelcomeCelebrate;
+              const CelebrateComp = tweaks.product === 'insights' ? InsightsCelebrate
+                : tweaks.product === 'genie' ? WelcomeCelebrate
+                : WelcomeCelebrateGeneric;
               return <CelebrateComp onDone={() => {
                 const fromDash = sessionStorage.getItem('ff_upgrade_from_dashboard');
                 if (fromDash) {
@@ -217,7 +219,7 @@
                 <DashboardPage {...sharedProps} initialNav="video" funnel={tweaks.funnel} trialUpsellStyle={tweaks.trialUpsellStyle} openBuyNow={openBuyNow} />
               ) : route === 'welcome-celebrate' ? (
                 (() => {
-                  const CC = tweaks.product === 'insights' ? InsightsCelebrate : WelcomeCelebrate;
+                  const CC = tweaks.product === 'insights' ? InsightsCelebrate : tweaks.product === 'genie' ? WelcomeCelebrate : WelcomeCelebrateGeneric;
                   return <CC onDone={() => {
                     const fromDash = sessionStorage.getItem('ff_upgrade_from_dashboard');
                     if (fromDash) { sessionStorage.removeItem('ff_upgrade_from_dashboard'); sessionStorage.setItem('ff_upgrade_success', '1'); nav('dashboard'); }
@@ -425,6 +427,7 @@
                 value={tweaks.product}
                 onChange={(v) => setTweak('product', v)}
                 options={[
+                  { value: 'organic',  label: '🌐 Organic (Direct Buy)' },
                   { value: 'genie',    label: '✦ Genie (Creative Gen)' },
                   { value: 'insights', label: '⊞ Industry Insights' },
                 ]}
